@@ -1,0 +1,22 @@
+require 'haml'
+require 'fileutils'
+
+task :default do
+    Dir.mkdir("build") unless File.exists?("build")
+
+
+
+    localDir = Dir.new ('.')
+
+    subdirs = Dir['*/']
+    subdirs.each  {|x|
+        puts x.inspect
+
+        if(x != "views/" && x != "build/")
+            FileUtils.cp_r "#{x}", "build/#{x}"
+
+            engine = Haml::Engine.new(File.read("oauth_implicit/index.haml"))
+            puts engine.render #=> "<p>Haml code!</p>\n"
+        end
+    }
+end
