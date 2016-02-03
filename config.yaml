@@ -1,17 +1,17 @@
 ---
 oauth-implicit:
     title: OAuth Implicit Grant Login Flow
-    description:
+    description: Implicit grant login without a client library.
     categories:
         - OAuth
 call-list-management:
-    title: Inserting Records into a Dialer Call List
-    description:
+    title: Dialer Call List Management
+    description: Inserting records into a dialer call list and starting the dialer campaign.
     categories:
         - Dialer
 presence:
     title: User Presence with Notifications
-    description:
+    description: Getting and setting the current user's presence and listening for changes.
     categories:
         - Status
         - Notifications
