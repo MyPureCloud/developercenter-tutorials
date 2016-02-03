@@ -9,7 +9,7 @@ call-list-management:
     description:
     categories:
         - Dialer
-notifications:
+presence:
     title: User Presence with Notifications
     description:
     categories:
