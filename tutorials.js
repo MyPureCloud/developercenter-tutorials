@@ -57,6 +57,8 @@
             fileUrl = window.location.pathname + "/" + fileUrl; //HAML compile issue
         }
 
+        $('#filename').text(fileUrl);
+
         if(currentCodeUrl != fileUrl){
             $.ajax({
                 "url": fileUrl,

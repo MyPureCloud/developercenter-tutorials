@@ -41,15 +41,38 @@
                     highlight: "36-52"
                 }
             ]
+        },
+        "ruby":{
+            "displayName": "Ruby",
+            "steps": [
+                {
+                    file: "ruby/script.rb",
+                    highlight: "0-100"
+                },
+                {
+                    file: "ruby/script.rb",
+                    highlight: "28-41"
+                },
+                {
+                    file: "ruby/implicit.html",
+                    highlight: "16-27"
+                },
+                {
+                    file: "ruby/script.rb",
+                    highlight: "8-14"
+                }
+            ]
         }
     }
 
 .tutorial{:data =>{:title=>'OAuth With Implicit Grant'}}
     .step{:data=>{:title=>'Introduction'}}
         :markdown
-            This tutorial will walk through the steps of going through the OAuth implicit code grant.  For more information on the implicit grant see the (Developer Center)[http://developer.mypurecloud.com]
+            This tutorial will walk through the steps of going through the OAuth implicit code grant.  For more information on the implicit grant see the [Developer Center](http://developer.mypurecloud.com)
         .note.note-csharp
-            In a C# desktop application, we host the login window in a webbrowser control and watch for the
+            In a C# desktop application, we host the login window in a webbrowser control and watch for the navigation event to occur.  When that occurs we can grab the access_token out of the URL.
+        .note.note-ruby
+            In a Ruby, we will start a sinatra server and open a web browser for the end user to the authorization page.
 
     .step{:data=>{:title=>'Redirect to PureCloud to Handle Authentication'}}
         :markdown
@@ -63,6 +86,8 @@
     .step{:data=>{:title=>'Get the Access Token Out of the Url'}}
         :markdown
             After the redirect is followed, the url wil contain a hash (#) which contains the access token as a parameter.  We will strip out the parameter and save it to the token variable.
+        .note.note-ruby
+            We will post the token back to the server for use in the server. 
     .step{:data=>{:title=>'Make API Calls'}}
         :markdown
             Now that we have the bearer token, we can make an ajax call to PureCloud setting the value of the **Authorization** to **bearer** _token_ where _token_ is the value we got out of the hash.
