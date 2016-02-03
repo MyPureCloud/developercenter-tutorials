@@ -4,19 +4,19 @@
             "displayName": "Javascript",
             "steps": [
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/example.html",
                     highlight: "0-100"
                 },
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/example.html",
                     highlight: "29-35"
                 },
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/example.html",
                     highlight: "6-15"
                 },
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/example.html",
                     highlight: "17-24"
                 }
             ]
@@ -87,7 +87,7 @@
         :markdown
             After the redirect is followed, the url wil contain a hash (#) which contains the access token as a parameter.  We will strip out the parameter and save it to the token variable.
         .note.note-ruby
-            We will post the token back to the server for use in the server. 
+            We will post the token back to the server for use in the server.
     .step{:data=>{:title=>'Make API Calls'}}
         :markdown
             Now that we have the bearer token, we can make an ajax call to PureCloud setting the value of the **Authorization** to **bearer** _token_ where _token_ is the value we got out of the hash.
