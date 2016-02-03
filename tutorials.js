@@ -54,7 +54,13 @@
         fileUrl = stepConfig.file;
 
         if(fileUrl.indexOf(currentLanguage) == 0){
-            fileUrl = window.location.pathname + "/" + fileUrl; //HAML compile issue
+            var pathSeparator = "";
+
+            if(window.location.pathname[window.location.pathname.length-1] != "/"){
+                pathSeparator = "/";
+            }
+
+            fileUrl = window.location.pathname + pathSeparator + fileUrl; //HAML compile issue
         }
 
         $('#filename').text(fileUrl);
