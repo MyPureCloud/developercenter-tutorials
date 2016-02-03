@@ -68,11 +68,12 @@
 .tutorial{:data =>{:title=>'OAuth With Implicit Grant'}}
     .step{:data=>{:title=>'Introduction'}}
         :markdown
-            This tutorial will walk through the steps of going through the OAuth implicit code grant.  For more information on the implicit grant see the [Developer Center](http://developer.mypurecloud.com)
+            This tutorial will walk through the steps of going through the OAuth implicit code grant.  For more information on the implicit grant see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html) 
         .note.note-csharp
             In a C# desktop application, we host the login window in a webbrowser control and watch for the navigation event to occur.  When that occurs we can grab the access_token out of the URL.
         .note.note-ruby
             In a Ruby, we will start a sinatra server and open a web browser for the end user to the authorization page.
+
 
     .step{:data=>{:title=>'Redirect to PureCloud to Handle Authentication'}}
         :markdown

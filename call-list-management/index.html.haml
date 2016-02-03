@@ -28,6 +28,7 @@
         :markdown
             There might be scenarios where contact records need to be individually added to a campaign. The data field of the contact is a hash of contact list column and the value where the key is the call list column name.
 
+            For more information on the Dialer APIs see the [REST Documentation](http://developer.mypurecloud.com/api/rest/v1/outbound/index.html)
     .step{:data=>{:title=>'Introduction'}}
         :markdown
             Campaigns will most likely need to be restarted after contacts are added.  We first get the current campaign configuration, then we will set campaignStatus to "on" and update the campaign.
