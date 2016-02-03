@@ -1,3 +1,17 @@
-oauth-implicit: OAuth Implicit Grant Login Flow
-call-list-management: Inserting Records into a Dialer Call List
-notifications: Notification Subscriptions
+---
+oauth-implicit:
+    title: OAuth Implicit Grant Login Flow
+    description:
+    categories:
+        - OAuth
+call-list-management:
+    title: Inserting Records into a Dialer Call List
+    description:
+    categories:
+        - Dialer
+notifications:
+    title: User Presence with Notifications
+    description:
+    categories:
+        - Status
+        - Notifications

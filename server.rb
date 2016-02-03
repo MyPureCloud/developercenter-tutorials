@@ -17,6 +17,10 @@ get '/*' do
 
     if(viewname.include? ".")
         puts "Getting file: #{viewname}"
+
+        content_type "application/javascript" if viewname.include? ".js"
+
+
         viewname.gsub! /index/, ""
         File.read(File.dirname(__FILE__) + "/#{viewname}")
     else

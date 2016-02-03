@@ -2,47 +2,72 @@
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
-    <script src='dist/purecloud-api.js'></script>
-
+    <script src='purecloud-api-min.js'></script>
+    <title>Presence Subscription</title>
     <script>
         var webSocket = null;
-        var redirectUrl = "http://localhost:8085/authredirect.html";
-
-        if(window.location.hostname === 'mypurecloud.github.io'){
-            redirectUrl = "http://mypurecloud.github.io/purecloud_javascript_client/examples/authredirect.html";
-        }
+        var redirectUrl = window.location.href;
+        var presenceMap = {};
 
         var pureCloudSession = new PureCloudSession();
         var usersapi = new UsersApi(pureCloudSession);
         var notificationsapi = new NotificationsApi(pureCloudSession);
+        var presenceApi = new PresenceApi(pureCloudSession);
 
-        pureCloudSession.authorize('efb6698a-5f76-4f90-bf29-9a69a3555602', redirectUrl, "status_subscription").done(function(){
+        pureCloudSession.authorize('6b003ac7-eead-4f26-bf0a-a90b54908e41', redirectUrl).done(function(){
+            presenceApi.get().done(function(presenceData){
+                for (var x=0; x< Object.keys(presenceData.entities).length; x++){
+                    var presence = presenceData.entities[x];
+                    presenceMap[presence.systemPresence] = presence.id;
+                }
+            });
+
             usersapi.getMe().done(function(data){
-                var myUserId = data.id;
+                myUserId = data.id;
+                $("#currentStatus").text(data.status.name);
 
                 notificationsapi.createChannels().done(function(data){
                     //start a new web socket using the connect Uri of the channel
                     webSocket = new WebSocket(data.connectUri);
                     webSocket.onopen = function(){
                         //now that the connection is open, we can start our subscription.
-                        notificationsapi.createChannelsChannelSubscriptions(data.id, [{"id": "users."+ myUserId +".status"}]);
+                        notificationsapi.createChannelSubscriptions(data.id, [{"id": "users."+ myUserId +".status"}]);
                     };
 
                     webSocket.onmessage = function(message) {
-                        var returnData =  JSON.parse(message.data);
+                        var data =  JSON.parse(message.data);
+                        $("#currentStatus").text(data.eventBody.status.name);
+
                         $('body').html($('body').html() + "<br/>" + new Date().toLocaleTimeString() + " - " + message.data + "<hr/>");
 
                     };
                 });
+
             }).error(function(){
                 alert("error");
             });
         });
 
+        function setStatus(statusKey){
+            //Here statusKey will be "AVAILABLE" or "BUSY", not the localized text string
+            var setPresence ={
+                "presenceDefinition" : {
+                    "id": presenceMap[statusKey]
+                }
+            };
+
+            presenceApi.updateUserPresencesBySource(myUserId, "PURECLOUD", setPresence);
+        }
+
     </script>
 </head>
 
 <body>
+    <div id='currentStatus'></div>
+    <button onclick='setStatus("AVAILABLE");'>Available</button>
+    <button onclick='setStatus("BUSY");'>Busy</button>
+    <br/>
+
     <b>See information on using the notification service at <a href='http://developer.mypurecloud.com/resources/use-notification-service/'>http://developer.mypurecloud.com/resources/use-notification-service/</a></b>
     <br/>
 

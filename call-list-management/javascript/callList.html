@@ -1,0 +1,56 @@
+<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
+    <script src='purecloud-api.min.js'></script>
+
+    <script>
+    var contactListId = "3a662786-7e9e-4d2c-95d6-52b55f706900";
+    var campaignId = "d4928cd4-f6a2-40b2-9646-2ac2502fa067";
+
+    var redirectUrl = window.location.href;
+
+    var pureCloudSession = new PureCloudSession();
+    var usersapi = new UsersApi(pureCloudSession);
+    var notificationsapi = new NotificationsApi(pureCloudSession);
+
+    function addContactToList(name, number){
+        var contactData = [
+                            {
+                                "contactListId": contactListId,
+                                "data": {
+                                    "Name": name,
+                                    "Number": number
+                                },
+                                "callable": true
+                            }
+                            ];
+
+        PureCloud.outbound.contactlists.contacts.createDialerContacts(contactListId, contactData, true).done(function(){
+            console.log("contact added to list")
+        });
+    }
+
+
+    function startCampaign(){
+        //get campaign information
+        PureCloud.outbound.campaigns.getDialerCampaign(campaignId).done(function(campaignInfo){
+                    //if campaign is not on, update it so it is on.
+                    if(campaignInfo.campaignStatus !== "on"){
+                        data.campaignStatus = "on";
+                        PureCloud.outbound.campaigns.updateDialerCampaign(campaignId, data);
+                    }
+
+                });
+    }
+
+    pureCloudSession.authorize('efb6698a-5f76-4f90-bf29-9a69a3555602', redirectUrl).done(function(){
+        addContactToList("John Doe", "3172222222");
+    });
+
+    </script>
+</head>
+
+<body>
+
+</body>

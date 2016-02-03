@@ -1,0 +1,67 @@
+:javascript
+    var config = {
+        "javascript":{
+            "displayName": "Javascript",
+            "steps": [
+                {
+                    file: "javascript/presence_subscription.html",
+                    highlight: "0-100"
+                },
+                {
+                    file: "javascript/presence_subscription.html",
+                    highlight: "17-27"
+                },
+                {
+                    file: "javascript/presence_subscription.html",
+                    highlight: "29-36"
+                },
+                {
+                    file: "javascript/presence_subscription.html",
+                    highlight: "37-43"
+                },
+                {
+                    file: "javascript/presence_subscription.html",
+                    highlight: "51-60"
+                }
+            ]
+        }
+    };
+
+.tutorial{:data =>{:title=>'User Presence'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            This tutorial will walk through the steps of getting the current user's status as well as how to listen for notifications when the presence is changed and how to update their status.
+
+    .step{:data=>{:title=>'Get Current Presence State'}}
+        :markdown
+            After authorizing your application, you can get all of the presences defined in the system and create a simple map for them.  You will also want to get the current user's information which contains their current status.
+    .step{:data=>{:title=>'Registering for Notifications'}}
+        :markdown
+            In order to receive notifications, we must first create a channel.  The result of the channel create will give us a websocke uri that we can connect to.  We will then create a subscription on that channel for the current user's status.
+
+    .step{:data=>{:title=>'Receiving Web Socket Events'}}
+        :markdown
+            The web socket messages will contain a payload in the data property that looks similar to this:
+
+            ```
+            {
+                "topicName":"users.ccdbe9f9-8117-448d-b516-d124581b9b4c.status",
+                "eventBody":{
+                    "id":"ccdbe9f9-8117-448d-b516-d124581b9b4c",
+                    "status":{
+                        "id":"6a3af858-942f-489d-9700-5f9bcdcdae9b",
+                        "name":"Available",
+                        "alertable":false,
+                        "dateModified":"2016-02-03T18:07:34+0000"
+                    }
+                },
+                "metadata":{
+                    "CorrelationId":"a597c3ce-64bf-43c4-bfca-b08cc93e6c30"
+                    }
+                }
+            ```
+
+            Here, eventBody contains a value of status which should mimic what you would get from the status property on the user object.
+    .step{:data=>{:title=>'Updating Presence'}}
+        :markdown
+            Finally, we can update the presence.  The call to update the presence requires a "Source Id".  PureCloud could potentially have different status sources from external systems, but here we want to update the PureCloud status so we can pass in the key of PureCloud

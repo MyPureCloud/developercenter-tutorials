@@ -3,7 +3,7 @@ This project is based off of (Viewsaurus)[https://www.npmjs.com/package/viewsaur
 
 # Adding a tutorial
 1. Create a new folder from the project root, this folder name will show up in the url and should have a - between words.
-2. Add a new mapping in config.yaml to provide a tutorial title to the directory you just created
+2. Add a new mapping in config.yaml to provide a tutorial title to the directory you just created with a tutorial name, description and tags.  This file auto generates a listing page in th dev center.
 3. Create a index.html.haml file inside the folder you created in step 1. This will be the guide.
 4. There should be subfolders for each language. The language needs to match the language in the [ace supported languages](https://cdnjs.com/libraries/ace/) because we set the ace styling based on that folder name
 5. Write the tutorial in idex.html.haml
