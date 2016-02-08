@@ -4,6 +4,11 @@ oauth-implicit:
     description: Implicit grant login without a client library.
     categories:
         - OAuth
+oauth-client-credentials:
+    title: OAuth Client Credentials Login Flow
+    description: Client credentials grant login without a client library.
+    categories:
+        - OAuth
 call-list-management:
     title: Dialer Call List Management
     description: Inserting records into a dialer call list and starting the dialer campaign.
