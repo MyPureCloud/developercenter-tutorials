@@ -4,20 +4,16 @@
             "displayName": "Javascript",
             "steps": [
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/callList.html",
                     highlight: "0-100"
                 },
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/callList.html",
                     highlight: "29-35"
                 },
                 {
-                    file: "javascript/example.js",
+                    file: "javascript/callList.html",
                     highlight: "6-15"
-                },
-                {
-                    file: "javascript/example.js",
-                    highlight: "17-24"
                 }
             ]
         }
@@ -26,10 +22,14 @@
 .tutorial{:data =>{:title=>'Inserting Records into a Dialer Call List'}}
     .step{:data=>{:title=>'Introduction'}}
         :markdown
-            There might be scenarios where contact records need to be individually added to a campaign. The data field of the contact is a hash of contact list column and the value where the key is the call list column name.
+            There might be scenarios where contact records need to be individually added to a campaign.
 
             For more information on the Dialer APIs see the [REST Documentation](http://developer.mypurecloud.com/api/rest/v1/outbound/index.html)
-    .step{:data=>{:title=>'Introduction'}}
+    .step{:data=>{:title=>'Adding Record to Contact List'}}
+        :markdown
+            The data field of the contact is a hash of contact list column and the value where the key is the call list column name.
+
+    .step{:data=>{:title=>'Restart the campaign'}}
         :markdown
             Campaigns will most likely need to be restarted after contacts are added.  We first get the current campaign configuration, then we will set campaignStatus to "on" and update the campaign.
 
