@@ -1,0 +1,21 @@
+var tutorial_files = {
+{{#files}}
+    "{{filename}}" : "{{data}}"{{#comma}},{{/comma}}
+{{/files}}
+}
+
+var config = {
+{{#config}}
+    "{{language}}" : {
+        "displayName" : "{{displayName}}",
+        "steps" : [
+            {{#steps}}
+            {
+                "file" : "{{file}}",
+                "highlight" : "{{highlight}}"
+            }{{#comma}},{{/comma}}
+            {{/steps}}
+        ]
+    }{{#comma}},{{/comma}}
+{{/config}}
+}

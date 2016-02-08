@@ -1,22 +1,13 @@
 require 'haml'
 require 'fileutils'
+require_relative 'lib/compile_config'
 
 task :default do
-    Dir.mkdir("build") unless File.exists?("build")
+    config = YAML.load_file("config.yaml")
+    config.each do |path, tutorial|
 
+        File.open("#{path}/config.js", 'w') { |file| file.write(compile_config(path)) }
 
+    end
 
-    localDir = Dir.new ('.')
-
-    subdirs = Dir['*/']
-    subdirs.each  {|x|
-        puts x.inspect
-
-        if(x != "views/" && x != "build/")
-            FileUtils.cp_r "#{x}", "build/#{x}"
-
-            engine = Haml::Engine.new(File.read("oauth_implicit/index.haml"))
-            puts engine.render #=> "<p>Haml code!</p>\n"
-        end
-    }
 end

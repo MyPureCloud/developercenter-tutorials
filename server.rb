@@ -1,5 +1,6 @@
 require 'haml'
 require 'sinatra'
+require_relative 'lib/compile_config'
 
 get '/tutorials.js' do
     content_type "application/javascript"
@@ -11,6 +12,10 @@ get '/tutorials.css' do
     File.read(File.dirname(__FILE__) + "/tutorials.css")
 end
 
+get '/*/config.js' do
+    content_type "application/javascript"
+    compile_config params[:splat].first.gsub /js/, "yaml"
+end
 
 get '/*' do
     viewname = params[:splat].first
