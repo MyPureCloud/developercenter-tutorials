@@ -113,7 +113,13 @@
         languageConfig = config[language];
 
         var editor = ace.edit("editor");
-        editor.getSession().setMode("ace/mode/" + language);
+
+        var aceLanguage = language;
+        if(language.toLowerCase() === "nodejs"){
+            aceLanguage = "javascript";
+        }
+
+        editor.getSession().setMode("ace/mode/" + aceLanguage);
 
         editor.setValue("");
         showStep(tutorialIndex);

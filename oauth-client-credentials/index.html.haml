@@ -1,0 +1,73 @@
+:javascript
+    var config = {
+        "ruby":{
+            "displayName": "Ruby",
+            "steps": [
+                {
+                    file: "ruby/script.rb",
+                    highlight: "0-100"
+                },
+                {
+                    file: "ruby/script.rb",
+                    highlight: "5-15"
+                },
+                {
+                    file: "ruby/script.rb",
+                    highlight: "17-21"
+                }
+            ]
+        },
+        "nodejs":{
+            "displayName": "NodeJS",
+            "steps": [
+                {
+                    file: "nodejs/script.js",
+                    highlight: "0-100"
+                },
+                {
+                    file: "nodejs/script.js",
+                    highlight: "20-28"
+                },
+                {
+                    file: "nodejs/script.js",
+                    highlight: "3-18"
+                }
+            ]
+        },
+        "powershell":{
+            "displayName": "PowerShell",
+            "steps": [
+                {
+                    file: "powershell/script.ps1",
+                    highlight: "0-100"
+                },
+                {
+                    file: "powershell/script.ps1",
+                    highlight: "1-7"
+                },
+                {
+                    file: "powershell/script.ps1",
+                    highlight: "8-12"
+                }
+            ]
+        }
+    }
+
+.tutorial{:data =>{:title=>'OAuth With Client Credentials'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            This tutorial will walk through the steps of going through the OAuth client credentials grant.  For more information on the implicit grant see [Use a Client Credentials Grant](http://developer.inindca.com/api/rest/authorization/use-client-credentials.html).
+
+            The client credentials grant is useful in applications that don't have an UI and don't need to make API calls on behalf of a user. This means that if you log in using the client credentials grant, you won't be able to do operations like /api/v1/users/me because the application isn't running in the context of a user.
+
+    .step{:data=>{:title=>'Obtain an Access Token'}}
+        :markdown
+            Start by making a POST call https://login.mypurecloud.com/token using Basic authentication where the user is the client id and the password is the client id secret.
+
+            With basic authentication, you need to set the Authentication header to be ```Basic <base64EncodedUserPass>``` where base64EncodedUserPass is the base64 encoded string of the username and password joined by a ':' e.g. base64(user:password)
+
+            Some languages will handle the basic authentication for you, others you will have to base64 encode your own header.
+
+    .step{:data=>{:title=>'Make API Calls'}}
+        :markdown
+            The response of the POST will contain the access token needed to make authenticated calls.  Now you can take that access token and use it in the authorization header for api calls.
