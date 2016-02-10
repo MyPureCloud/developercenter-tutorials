@@ -1,27 +1,27 @@
 .tutorial{:data =>{:title=>'OAuth With Implicit Grant'}}
     .step{:data=>{:title=>'Introduction'}}
         :markdown
-            This tutorial will walk through the steps of going through the OAuth implicit code grant.  For more information on the implicit grant see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html)
+            This tutorial walks through how to use the OAuth implicit code grant.  For more information on the implicit grant, see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html)
         .note.note-csharp
-            In a C# desktop application, we host the login window in a webbrowser control and watch for the navigation event to occur.  When that occurs we can grab the access_token out of the URL.
+            In a C# desktop application, we host the login window in a web browser control and watch for the navigation event.  When this occurs, we pull the access_token from the URL.
         .note.note-ruby
-            In a Ruby, we will start a sinatra server and open a web browser for the end user to the authorization page.
+            In a Ruby, we start a Sinatra server and open a web browser that displays the authorization page to the end user.
 
 
     .step{:data=>{:title=>'Redirect to PureCloud to Handle Authentication'}}
         :markdown
-            When the page loads, we are going to redirect the page to the authorization url and specify.
+            When the page loads, we redirect the page to the authorization url and specify:
 
-            **response_type**: _token_ since this is an implicit (token) grant.
+            **response_type**: Use _token_ since this is an implicit (token) grant.
 
             **client_id**: The client ID for this application.
 
-            **redirect_uri**: The uri to redirect to after a successful login.
+            **redirect_uri**: The URI to which the user is redirected after login.
     .step{:data=>{:title=>'Get the Access Token Out of the Url'}}
         :markdown
-            After the redirect is followed, the url wil contain a hash (#) which contains the access token as a parameter.  We will strip out the parameter and save it to the token variable.
+            After the user follows the redirect, the URI contains a hash (#) with the access token as a parameter.  We strip the parameter and save it in the token variable.
         .note.note-ruby
-            We will post the token back to the server for use in the server.
+            We post the token to the server for use in the server.
     .step{:data=>{:title=>'Make API Calls'}}
         :markdown
-            Now that we have the bearer token, we can make an ajax call to PureCloud setting the value of the **Authorization** to **bearer** _token_ where _token_ is the value we got out of the hash.
+            Now that we have the bearer token, we can make an Ajax call to PureCloud, setting the value of the **Authorization** parameter to **bearer** _token_, where _token_ is the value from the hash.
