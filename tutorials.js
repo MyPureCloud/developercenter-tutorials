@@ -102,6 +102,8 @@
 
     function selectLanguage(language){
 
+        window.tutorial = $(".tutorial").data("title") + "#" + language;
+
         if(history.pushState) {
             history.pushState(null, null, '#' + language);
         }
@@ -136,6 +138,7 @@
         $("#editor").height($('body').height()-250);
 
         window.document.title = $(".tutorial").data("title");
+
         $("#tutorial-title").text($(".tutorial").data("title"));
 
         var editor = ace.edit("editor");
