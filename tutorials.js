@@ -77,7 +77,12 @@
     }
 
     function loadLanguages(){
-        var language = localStorage['tutorial_language'] || Object.keys(config)[0];
+        var language = window.location.hash.replace('#','');
+
+        if(language === '' || config[language] == null){
+            language = localStorage['tutorial_language'] || Object.keys(config)[0];
+        }
+
         if(config[language] == null){
             language = Object.keys(config)[0];
         }
@@ -96,6 +101,14 @@
     }
 
     function selectLanguage(language){
+
+        if(history.pushState) {
+            history.pushState(null, null, '#' + language);
+        }
+        else {
+            location.hash = '#' + language;
+        }
+
         $(".note").hide();
         $(".note-"+language).show();
 
