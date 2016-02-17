@@ -14,3 +14,18 @@ ruby:
           highlight: "8-16"
         - file: "ruby/server.rb"
           highlight: "72-77"
+nodejs:
+    displayName: NodeJS
+    steps:
+        - file: "nodejs/server.js"
+          highlight: "0-150"
+        - file: "nodejs/server.js"
+          highlight: "108-109"
+        - file: "nodejs/server.js"
+          highlight: "13-33"
+        - file: "nodejs/server.js"
+          highlight: "46-86"
+        - file: "nodejs/my_info.html"
+          highlight: "8-16"
+        - file: "nodejs/server.js"
+          highlight: "89-106"

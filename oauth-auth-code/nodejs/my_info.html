@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>NodeJS Authorization Code</title>
+
+  <script src='//code.jquery.com/jquery-1.11.2.min.js'></script>
+  <script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+  <script>
+  $.ajax({
+   url: "/me",
+   type: "GET",
+   success: function(data) {
+       $('#data').text(JSON.stringify(data));
+
+   }});
+  </script>
+</head>
+<body>
+    <h1>My Information</h1>
+    <pre class="prettyprint">
+        <code id='data' >
+        </code>
+    </pre>
+
+</body>
+</html>
