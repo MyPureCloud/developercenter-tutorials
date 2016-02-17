@@ -1,0 +1,16 @@
+---
+ruby:
+    displayName: Ruby
+    steps:
+        - file: "ruby/server.rb"
+          highlight: "0-100"
+        - file: "ruby/server.rb"
+          highlight: "1-13"
+        - file: "ruby/server.rb"
+          highlight: "24-45"
+        - file: "ruby/server.rb"
+          highlight: "53-70"
+        - file: "ruby/my_info.html"
+          highlight: "8-16"
+        - file: "ruby/server.rb"
+          highlight: "72-77"

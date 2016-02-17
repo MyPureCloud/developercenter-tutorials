@@ -11,37 +11,24 @@ This project is based off of (Viewsaurus)[https://www.npmjs.com/package/viewsaur
 7. Open your browser and browser to http://localhost:4567/<tutorialdir>/index
 
 # Tutorial guidelines
-The tutorial should start with a javascript block as follows
+The tutorial should have a config.yaml file which maps to the language and files to highlight for each step
 ```
-:javascript
-    var config = {
-        "javascript":{
-            "displayName": "Javascript",
-            "steps": [
-                {
-                    file: "javascript/example.js",
-                    highlight: "0-100"
-                },
-                {
-                    file: "javascript/example.js",
-                    highlight: "29-35"
-                },
-                {
-                    file: "javascript/example.js",
-                    highlight: "6-15"
-                },
-                {
-                    file: "javascript/example.js",
-                    highlight: "17-24"
-                }
-            ]
-        }
-    }
+---
+ruby:
+    displayName: Ruby
+    steps:
+        - file: "ruby/server.rb"
+          highlight: "0-100"
+        - file: "ruby/server.rb"
+          highlight: "5-15"
+        - file: "ruby/server.rb"
+          highlight: "17-21"
+
 ```
 
-where the keys in the config object map to the language folders and the steps define the file and what lines need to be highlighted.  There needs to be as many steps in that array as there are steps in the tutorial.
+There needs to be as many steps in that array as there are steps in the tutorial.
 
-Next comes the definition of the tutorial ```.tutorial{:data =>{:title=>'OAuth With Implicit Grant'}}``` which also contains the title that is displayed in the tutorial.  After that line, you can put your individual steps inside ```.step{:data=>{:title=>'Introduction'}}``` divs.  Make sure to specify a title for the step.
+The index.html.ham file starts with the definition of the tutorial ```.tutorial{:data =>{:title=>'OAuth With Implicit Grant'}}``` which also contains the title that is displayed in the tutorial.  After that line, you can put your individual steps inside ```.step{:data=>{:title=>'Introduction'}}``` divs.  Make sure to specify a title for the step.
 
 If you need to add a special note for a specific language, you can do that by putting it in a div with a .note.note-<language> class, i.e. ```.note.note-csharp```.  This block will only show for csharp examples.  
 

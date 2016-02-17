@@ -1,0 +1,31 @@
+.tutorial{:data =>{:title=>'OAuth With Authorization Code Grant'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            This tutorial walks through the steps of setting up a server that will authenticate to PureCloud using the [Authorization Code Grant](http://developer.mypurecloud.com/api/rest/authorization/use-authorization-code.html).
+
+            The authorization code grant is useful in applications that have a secure server side component where the client secret can remain a secret and have a mapping to a web user session so that the PureCloud authorization token isn't sent to the web browser.
+
+            The method of keeping track of the user via cookies is just one of many ways to track your web users, it may or may not be the best option for your scenario.
+
+
+    .step{:data=>{:title=>'Start a Web Server'}}
+        :markdown
+            We will start a web server which will use cookies to keep track of the web users and inspect the requests coming in to determine if there is a session token and if the user needs to be redirected to the PureCloud login screen.
+    .step{:data=>{:title=>'Check for Valid PureCloud Session on Requests'}}
+        :markdown
+            When a request comes in, we can check our session map for a PureCloud token for that given web browser session. If a session is not found, then we will create a redirect URI that contains our client id and redirect uri and issue a 301 for the browser to redirect to the PureCloud login screen.
+    .step{:data=>{:title=>'Request Access Token'}}
+        :markdown
+            After the user has logged into PureCloud, their browser is redirected to the URL of the web server. In the handler for the request we now have to make a post to PureCloud with a token that is part of the query string on the request to our web server. This request to PureCloud validates that the web server behind the redirect url is the correct web server for this client id.
+
+            The response from this post contains the PureCloud access token for that user which our web server needs to keep track of so will store it in the local session map.
+
+            Finally, we redirect to a more useful (my_info.html) page.
+    .step{:data=>{:title=>'Making an AJAX Request from the Web Page'}}
+        :markdown
+            The web page can now make requests to the server, here we will call GET /me to get the current users information. Since the web server is using cookies, the cookie will be sent with this web request automatically.
+    .step{:data=>{:title=>'Make a Request Server Side for the Authenticated User'}}
+        :markdown
+            Finally, back in the server we will pull the PureCloud authentication token out of our mapping and make a request to PureCloud on behalf of this user.
+
+            An alternative to this approach would be when the my_info.html page was requested, the web server could have made the request and automatically put the users information in the page that was sent back. 

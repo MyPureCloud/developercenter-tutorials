@@ -10,10 +10,11 @@ set :public_folder, File.dirname(__FILE__)
 set :port, 8085
 enable :sessions
 
-@@client_id = 'bfadf7a0-3364-4f65-9fda-00d37877113f';
-@@client_secret = 'my-client-secret';
-
 @@sessionMap = {}
+
+@@client_id = 'efb6698a-5f76-4f90-bf29-9a69a3555602';
+@@client_secret = '3pDfUuU1h8nK5XZigBp2ogc1GZkII4KvJKBmKqEGnt0';
+
 class InspectValidationMiddleware
 
   def initialize(app)
@@ -23,10 +24,10 @@ class InspectValidationMiddleware
   def call(env)
     #if we don't have a session then redirect them to the login page
     req = Rack::Request.new(env)
-    if(!@@sessionMap.has_key?(session["purecloudsession"]) &&
+    if(!@@sessionMap.has_key?(req.session["purecloudsession"]) &&
         !req.url.include?("oauth"))
 
-        redirectUri = "https://login.inindca.com/authorize?" +
+        redirectUri = "https://login.mypurecloud.com/authorize?" +
                     "response_type=code" +
                     "&client_id=" + @@client_id +
                     "&redirect_uri=http://localhost:8085/oauth2/callback";
@@ -46,7 +47,7 @@ end
 use InspectValidationMiddleware
 
 get '/' do
-  redirect to('/auth_code.html')
+  redirect to('/my_info.html')
 end
 
 get '/oauth2/callback' do
@@ -58,19 +59,19 @@ get '/oauth2/callback' do
         "redirect_uri" => "http://localhost:8085/oauth2/callback"
     }
 
-    tokenResponse =JSON.parse RestClient.post "https://#{@@client_id}:#{@@client_secret}@login.inindca.com/token", tokenFormData
+    tokenResponse =JSON.parse RestClient.post "https://#{@@client_id}:#{@@client_secret}@login.mypurecloud.com/token", tokenFormData
 
     puts "Access token " + tokenResponse['access_token'];
     sessionId = SecureRandom.uuid;
     @@sessionMap[sessionId] = tokenResponse['access_token'];
     session["purecloudsession"] = sessionId;
 
-    redirect to('auth_code.html')
+    redirect to('my_info.html')
 end
 
 get '/me' do
     authToken = @@sessionMap[session["purecloudsession"]];
 
-    return RestClient.get 'https://api.inindca.com/api/v1/users/me', {:Authorization => 'Bearer ' + authToken}
+    return RestClient.get 'https://api.mypurecloud.com/api/v1/users/me', {:Authorization => 'Bearer ' + authToken}
 
 end

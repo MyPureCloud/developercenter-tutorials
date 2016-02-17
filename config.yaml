@@ -9,6 +9,11 @@ oauth-client-credentials:
     description: Client credentials grant login without a client library.
     categories:
         - OAuth
+oauth-auth-code:
+    title: OAuth Authorization Code Grant Flow
+    description: Authorization code grant login without a client library.
+    categories:
+        - OAuth
 call-list-management:
     title: Dialer Call List Management
     description: Inserting records into a dialer call list and starting the dialer campaign.
