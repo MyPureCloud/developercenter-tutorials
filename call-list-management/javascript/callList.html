@@ -11,7 +11,7 @@
     var redirectUrl = window.location.href;
 
     var pureCloudSession = new PureCloudSession();
-    var usersapi = new UsersApi(pureCloudSession);
+    var outboundApi = new OutboundApi(pureCloudSession);
     var notificationsapi = new NotificationsApi(pureCloudSession);
 
     function addContactToList(name, number){
@@ -26,7 +26,7 @@
                             }
                             ];
 
-        PureCloud.outbound.contactlists.contacts.createDialerContacts(contactListId, contactData, true).done(function(){
+        outboundApi.postContactlistContacts(contactListId, contactData, true).done(function(){
             console.log("contact added to list")
         });
     }
@@ -34,11 +34,11 @@
 
     function startCampaign(){
         //get campaign information
-        PureCloud.outbound.campaigns.getDialerCampaign(campaignId).done(function(campaignInfo){
+        outboundApi.getCampaign(campaignId).done(function(campaignInfo){
                     //if campaign is not on, update it so it is on.
                     if(campaignInfo.campaignStatus !== "on"){
                         data.campaignStatus = "on";
-                        PureCloud.outbound.campaigns.updateDialerCampaign(campaignId, data);
+                        outboundApi.postCampaigns(campaignId, data);
                     }
 
                 });
