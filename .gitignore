@@ -238,3 +238,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# ASP.NET libs
+oauth-auth-code/asp-dot-net/authorization_code_aspdotnet/wwwroot/lib/**
