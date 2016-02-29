@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "_EmptyLayout";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (ViewData["AccessToken"] == null)
+{
+    <button onclick="javascript:window.location = '/home/login'">Log In</button>
+}
+else
+{
+    <span>Welcome, @ViewData["Username"]</span><br/>
+    <span>Access Token: @ViewData["AccessToken"]</span>
+}
