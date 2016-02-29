@@ -15,10 +15,17 @@ namespace authorization_code_aspdotnet.Controllers
 {
     public class HomeController : Controller
     {
-
-        public async Task<ViewResult> Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Home page";
+
+            var authToken = GetAuthTokenFromSession();
+            if (string.IsNullOrEmpty(authToken))
+            {
+                return Redirect("https://login.ininsca.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
+                                "&response_type=code&redirect_uri=" +
+                                UrlEncoder.Default.UrlEncode("http://localhost:51643/home/AuthCodeRedirect"));
+            }
 
             if (Request.Query.ContainsKey("code"))
             {
@@ -43,9 +50,7 @@ namespace authorization_code_aspdotnet.Controllers
 
         public IActionResult Login()
         {
-            var clientId = "a0bda580-cb41-4ff6-8f06-28ffb4227594";
-
-            return Redirect("https://login.ininsca.com/authorize?client_id=" + clientId +
+            return Redirect("https://login.ininsca.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
                             "&response_type=code&redirect_uri=" +
                             UrlEncoder.Default.UrlEncode("http://localhost:51643/home/AuthCodeRedirect"));
         }
@@ -82,6 +87,17 @@ namespace authorization_code_aspdotnet.Controllers
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await client.GetAsync("https://api.ininsca.com/api/v1/users/me");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+        private string GetAuthTokenFromSession()
+        {
+            //TODO: ASP.NET 5 MVC 6 preview does not have native sessions. Implement your own session handling here
+            return "";
+        }
+
+        private void SetAuthTokenToSession(string authToken)
+        {
+            //TODO: ASP.NET 5 MVC 6 preview does not have native sessions. Implement your own session handling here
         }
     }
 }
