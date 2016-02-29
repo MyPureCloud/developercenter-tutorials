@@ -22,7 +22,7 @@ namespace authorization_code_aspdotnet.Controllers
             var authToken = GetAuthTokenFromSession();
             if (string.IsNullOrEmpty(authToken))
             {
-                return Redirect("https://login.ininsca.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
+                return Redirect("https://login.mypurecloud.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
                                 "&response_type=code&redirect_uri=" +
                                 UrlEncoder.Default.UrlEncode("http://localhost:51643/home/AuthCodeRedirect"));
             }
@@ -50,7 +50,7 @@ namespace authorization_code_aspdotnet.Controllers
 
         public IActionResult Login()
         {
-            return Redirect("https://login.ininsca.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
+            return Redirect("https://login.mypurecloud.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
                             "&response_type=code&redirect_uri=" +
                             UrlEncoder.Default.UrlEncode("http://localhost:51643/home/AuthCodeRedirect"));
         }
@@ -76,7 +76,7 @@ namespace authorization_code_aspdotnet.Controllers
             });
             var basicAuth = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("a0bda580-cb41-4ff6-8f06-28ffb4227594:e-meQ53cXGq53j6uffdULVjRl8It8M3FVsupKei0nSg"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);
-            var response = await client.PostAsync("https://login.ininsca.com/token", content);
+            var response = await client.PostAsync("https://login.mypurecloud.com/token", content);
             var token = JObject.Parse(await response.Content.ReadAsStringAsync())["access_token"].ToString();
             return token;
         }
@@ -85,7 +85,7 @@ namespace authorization_code_aspdotnet.Controllers
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync("https://api.ininsca.com/api/v1/users/me");
+            var response = await client.GetAsync("https://api.mypurecloud.com/api/v1/users/me");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
