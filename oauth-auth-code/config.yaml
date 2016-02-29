@@ -29,3 +29,18 @@ nodejs:
           highlight: "8-16"
         - file: "nodejs/server.js"
           highlight: "89-106"
+csharp:
+    displayName: ASP.NET
+    steps:
+        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+          highlight: "0-104"
+        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+          highlight: "16-16"
+        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+          highlight: "22-28"
+        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+          highlight: "68-82"
+        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+          highlight: "84-90"
+        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+          highlight: "84-90"

@@ -21,9 +21,20 @@
             The response from this post contains the PureCloud access token for that user which our web server needs to keep track of so will store it in the local session map.
 
             Finally, we redirect to a more useful (my_info.html) page.
+
+            <div class="note note-csharp">
+                ASP.NET 5 does not allow the server-side code to read URI fragments. The OAuth spec defines that the 
+                auth code must be returned in a URI fragment, so this example requires a workaround. The AuthCodeRedirect view (Views/Home/AuthCodeRedirect.cshtml) contains a simple JavaScript script to extract the code parameter from the fragment and redirect the user to a URL with the code appended to the querystring. This example code then retrieves the code from the querystring (line 34) and then requests the auth token.
+
+                Additionally, the ASP.NET example does not redirect the user after this step.
+            </div>
     .step{:data=>{:title=>'Making an AJAX Request from the Web Page'}}
         :markdown
             The web page can now make requests to the server, here we will call GET /me to get the current users information. Since the web server is using cookies, the cookie will be sent with this web request automatically.
+
+            <div class="note note-csharp">
+                the ASP.NET example is not using cookies and instead sets the Authorization header with the bearer token. This request is made server-side, but could be made client-side using JavaScript.
+            </div>
     .step{:data=>{:title=>'Make a Request Server Side for the Authenticated User'}}
         :markdown
             Finally, back in the server we will pull the PureCloud authentication token out of our mapping and make a request to PureCloud on behalf of this user.
