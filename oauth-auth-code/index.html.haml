@@ -23,10 +23,7 @@
             Finally, we redirect to a more useful (my_info.html) page.
 
             <div class="note note-csharp">
-                ASP.NET 5 does not allow the server-side code to read URI fragments. The OAuth spec defines that the 
-                auth code must be returned in a URI fragment, so this example requires a workaround. The AuthCodeRedirect view (Views/Home/AuthCodeRedirect.cshtml) contains a simple JavaScript script to extract the code parameter from the fragment and redirect the user to a URL with the code appended to the querystring. This example code then retrieves the code from the querystring (line 34) and then requests the auth token.
-
-                Additionally, the ASP.NET example does not redirect the user after this step.
+                The ASP.NET example does not redirect the user after this step. Instead, the user remains on the main page.
             </div>
     .step{:data=>{:title=>'Making an AJAX Request from the Web Page'}}
         :markdown

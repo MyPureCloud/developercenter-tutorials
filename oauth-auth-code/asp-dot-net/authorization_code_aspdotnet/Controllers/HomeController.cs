@@ -15,27 +15,23 @@ namespace authorization_code_aspdotnet.Controllers
 {
     public class HomeController : Controller
     {
+        private string host = "ininsca";
+
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Home page";
 
             var authToken = GetAuthTokenFromSession();
-            if (string.IsNullOrEmpty(authToken))
-            {
-                return Redirect("https://login.mypurecloud.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
-                                "&response_type=code&redirect_uri=" +
-                                UrlEncoder.Default.UrlEncode("http://localhost:51643/home/AuthCodeRedirect"));
-            }
 
             if (Request.Query.ContainsKey("code"))
             {
                 try
                 {
                     var code = Request.Query["code"];
-                    var token = await GetTokenFromCode(code);
-                    ViewData["AccessToken"] = token;
+                    authToken = await GetTokenFromCode(code);
+                    ViewData["AccessToken"] = authToken;
 
-                    var user = GetUserInfo(token);
+                    var user = GetUserInfo(authToken);
                     ViewData["Username"] = user.Result["name"].ToString();
                 }
                 catch (Exception ex)
@@ -45,18 +41,13 @@ namespace authorization_code_aspdotnet.Controllers
                 }
             }
 
-            return View();
-        }
+            if (string.IsNullOrEmpty(authToken))
+            {
+                return Redirect("https://login." + host + ".com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
+                                "&response_type=code&redirect_uri=" +
+                                UrlEncoder.Default.UrlEncode("http://localhost:51643/home/"));
+            }
 
-        public IActionResult Login()
-        {
-            return Redirect("https://login.mypurecloud.com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
-                            "&response_type=code&redirect_uri=" +
-                            UrlEncoder.Default.UrlEncode("http://localhost:51643/home/AuthCodeRedirect"));
-        }
-
-        public IActionResult AuthCodeRedirect()
-        {
             return View();
         }
 
@@ -72,11 +63,11 @@ namespace authorization_code_aspdotnet.Controllers
             {
                 new KeyValuePair<string, string>("grant_type", "authorization_code"),
                 new KeyValuePair<string, string>("code", code),
-                new KeyValuePair<string, string>("redirect_uri", "http://localhost:51643/home/AuthCodeRedirect")
+                new KeyValuePair<string, string>("redirect_uri", "http://localhost:51643/home/")
             });
             var basicAuth = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("a0bda580-cb41-4ff6-8f06-28ffb4227594:e-meQ53cXGq53j6uffdULVjRl8It8M3FVsupKei0nSg"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);
-            var response = await client.PostAsync("https://login.mypurecloud.com/token", content);
+            var response = await client.PostAsync("https://login." + host + ".com/token", content);
             var token = JObject.Parse(await response.Content.ReadAsStringAsync())["access_token"].ToString();
             return token;
         }
@@ -85,7 +76,7 @@ namespace authorization_code_aspdotnet.Controllers
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync("https://api.mypurecloud.com/api/v1/users/me");
+            var response = await client.GetAsync("https://api." + host + ".com/api/v1/users/me");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
