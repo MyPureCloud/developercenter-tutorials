@@ -2,11 +2,11 @@ This repo is pulled into the [PureCloud Developer Center](http://developer.mypur
 This project is based off of [Viewsaurus](https://www.npmjs.com/package/viewsaurus) which is MIT licensed at version 0.3.1 but adds multi language support.
 
 # Adding a tutorial
-1. Create a new folder from the project root, this folder name will show up in the url and should have a - between words.
-2. Add a new mapping in config.yaml to provide a tutorial title to the directory you just created with a tutorial name, description, and categories.  This file auto generates a listing page in the dev center.
-3. Create an index.html.haml file inside the folder you created in step 1. This will be the guide.
-4. There should be subfolders for each language. The language needs to match the language in the [ace supported languages](https://cdnjs.com/libraries/ace/) because we set the ace styling based on that folder name
-5. Write the tutorial in index.html.haml
+1. Create a new folder from the project root, this folder name will show up in the url and should have a hyphen between words.
+2. Add a new mapping in _/config.yaml_ to provide a tutorial title to the directory you just created with a tutorial name, description, and categories.  This file auto generates a listing page in the dev center.
+3. Create the file  _/\<tutorialdir>/index.html.haml_ for the tutorial directory created in step 1. Write the step-by-step walkthrough for the tutorial in this file.
+4. To create the tutorial for each language, subfolders should be created at _/\<tutorialdir>/\<language>/_ that share an exact name with an [ace supported language](https://cdnjs.com/libraries/ace/). The ace-specific folder name is used to infer a particular ace language for styling, formatting, and identifying which languages exist for a tutorial. Put the source code for the tutorial in the _\<language>_ directory.
+5. For each language, add the lines to highlight for each step to _/\<tutorialdir>/config.yaml_.
 6. Run a local server by running ```ruby server.rb```
 	1. If necessary, ```gem install sinatra````
 7. Open your browser and browser to http://localhost:4567/\<tutorialdir>/index
