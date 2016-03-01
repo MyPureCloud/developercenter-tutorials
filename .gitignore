@@ -240,4 +240,4 @@ _Pvt_Extensions
 .fake/
 
 # ASP.NET libs
-oauth-auth-code/asp-dot-net/authorization_code_aspdotnet/wwwroot/lib/**
+oauth-auth-code/csharp/authorization_code_aspdotnet/wwwroot/lib/**
