@@ -32,15 +32,15 @@ nodejs:
 csharp:
     displayName: ASP.NET
     steps:
-        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+        - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "0-95"
-        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+        - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "16-16"
-        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+        - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "44-49"
-        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+        - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "59-73"
-        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+        - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "75-81"
-        - file: "asp-dot-net/authorization_code_aspdotnet/Controllers/HomeController.cs"
+        - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "75-81"
