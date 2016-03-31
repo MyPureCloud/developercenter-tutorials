@@ -1,73 +1,129 @@
+<!DOCTYPE html>
 <html>
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
     <script src='purecloud-api-min.js'></script>
     <title>Presence Subscription</title>
-    <script>
+    <style type="text/css">
+        body {
+            padding: 5px;
+        }
+
+        button {
+            margin: 2px 5px;
+        }
+
+        #currentPresence:before {
+            content: "Current presence: ";
+        }
+
+        #logoutButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+    <script type="text/javascript">
         var webSocket = null;
         var redirectUrl = window.location.href;
-        var presenceMap = {};
 
-        var pureCloudSession = new PureCloudSession();
+        var pureCloudSession = new PureCloudSession('ininsca.com');
         var usersapi = new UsersApi(pureCloudSession);
         var notificationsapi = new NotificationsApi(pureCloudSession);
         var presenceApi = new PresenceApi(pureCloudSession);
+        var userPresenceTopic = '';
 
-        pureCloudSession.authorize('6b003ac7-eead-4f26-bf0a-a90b54908e41', redirectUrl).done(function(){
-            presenceApi.getPresencedefinitions().done(function(presenceData){
-                for (var x=0; x< Object.keys(presenceData.entities).length; x++){
-                    var presence = presenceData.entities[x];
-                    presenceMap[presence.systemPresence] = presence.id;
-                }
-            });
+        $(document).ready(function() {
+            $('button#logoutButton').click(function() { window.location = 'https://login.ininsca.com/logout'; });
 
-            usersapi.getMe().done(function(data){
-                myUserId = data.id;
-                $("#currentStatus").text(data.status.name);
+            pureCloudSession.authorize('238838c0-f9f4-4fd5-8ff8-8f62b0984a07', redirectUrl)
+                .done(function() {
+                    // Get list of presences available
+                    presenceApi.getPresencedefinitions().done(function(presenceData){
+                        for (var x=0; x< Object.keys(presenceData.entities).length; x++){
+                            var presence = presenceData.entities[x];
+                            $('div#presenceButtons').append('<button onclick="setPresence(\'' + presence.id +'\')">' + 
+                                presence.languageLabels.en_US +'</button>');
+                        }
+                    });
 
-                notificationsapi.postChannels().done(function(data){
-                    //start a new web socket using the connect Uri of the channel
-                    webSocket = new WebSocket(data.connectUri);
-                    webSocket.onopen = function(){
-                        //now that the connection is open, we can start our subscription.
-                        notificationsapi.postChannelSubscriptions(data.id, [{"id": "users."+ myUserId +".status"}]);
-                    };
+                    // Get logged in user's presence
+                    usersapi.getMe('presence','presence')
+                        .done(function(data){
+                            // Store user ID
+                            myUserId = data.id;
 
-                    webSocket.onmessage = function(message) {
-                        var data =  JSON.parse(message.data);
-                        $("#currentStatus").text(data.eventBody.status.name);
+                            // Get presence definition
+                            var presenceDefinitionId = data.presence.presenceDefinition.id;
+                            presenceApi.getPresenceId(presenceDefinitionId).done(function(data) {
+                                $("#currentPresence").text(data.languageLabels.en_US);
+                            });
 
-                        $('body').html($('body').html() + "<br/>" + new Date().toLocaleTimeString() + " - " + message.data + "<hr/>");
+                            // Create a notification channel
+                            notificationsapi.postChannels().done(function(data){
+                                // Start a new web socket using the connect Uri of the channel
+                                webSocket = new WebSocket(data.connectUri);
+                                webSocket.onopen = function(){
+                                    // Now that the connection is open, we can start our subscription.
+                                    userPresenceTopic = 'users.' + myUserId + '.status';
+                                    notificationsapi.postChannelsChannelIdSubscriptions(data.id, [{"id": userPresenceTopic}]);
+                                };
 
-                    };
+                                // Message received callback function
+                                webSocket.onmessage = function(message) {
+                                    // Parse string message into JSON object
+                                    var data = JSON.parse(message.data);
+
+                                    // Presence update
+                                    if (data.topicName == userPresenceTopic){
+                                        $("#currentPresence").text(data.eventBody.status.name);
+                                    }
+                                    // Heartbeat
+                                    else if (data.topicName == 'channel.metadata') {
+                                        console.log('thump... THUMP...');
+                                    }
+                                    // Unknown
+                                    else {
+                                        console.warn('Unexpected topic: ' + data.topicName)
+                                        console.debug(data);
+                                    }
+
+                                    // Log message
+                                    $('div#messages').append('<pre>' + new Date().toLocaleTimeString() + ' - ' + 
+                                        JSON.stringify(JSON.parse(message.data),null,2) + '</pre>');
+                                };
+                            });
+
+                        }).error(function(){
+                            alert("error");
+                        });
                 });
-
-            }).error(function(){
-                alert("error");
             });
-        });
 
-        function setStatus(statusKey){
-            //Here statusKey will be "AVAILABLE" or "BUSY", not the localized text string
-            var setPresence ={
+        function setPresence(presenceId){
+            // Create request body
+            var setPresence = {
                 "presenceDefinition" : {
-                    "id": presenceMap[statusKey]
+                    "id": presenceId
                 }
             };
 
-            presenceApi.putUserPresences(myUserId, "PURECLOUD", setPresence);
+            // Patch presence
+            presenceApi.patchUserIdPresencesSource(myUserId, 'PURECLOUD', setPresence);
         }
-
     </script>
 </head>
-
 <body>
-    <div id='currentStatus'></div>
-    <button onclick='setStatus("AVAILABLE");'>Available</button>
-    <button onclick='setStatus("BUSY");'>Busy</button>
+    <button id="logoutButton">Log Out</button>
+    <div id="currentPresence"></div>
+    <div id="presenceButtons">Set presence: </div>
     <br/>
 
-    <b>See information on using the notification service at <a href='http://developer.mypurecloud.com/api/rest/v1/notifications/notification_service.html'>http://developer.mypurecloud.com/api/rest/v1/notifications/notification_service.html</a></b>
-    <br/>
+    <b>See information on using the notification service at <a href='http://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html'>http://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html</a></b>
+    <br/><br/>
+
+    <h4>Messages</h4>
+    <div id="messages"></div>
 </body>
+</html>

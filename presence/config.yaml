@@ -3,12 +3,12 @@ javascript:
     displayName: Javascript
     steps:
         - file: "javascript/presence_subscription.html"
-          highlight: "0-100"
+          highlight: "0-129"
         - file: "javascript/presence_subscription.html"
-          highlight: "17-27"
+          highlight: "42-61"
         - file: "javascript/presence_subscription.html"
-          highlight: "29-36"
+          highlight: "63-71"
         - file: "javascript/presence_subscription.html"
-          highlight: "37-43"
+          highlight: "73-95"
         - file: "javascript/presence_subscription.html"
-          highlight: "51-60"
+          highlight: "104-114"
