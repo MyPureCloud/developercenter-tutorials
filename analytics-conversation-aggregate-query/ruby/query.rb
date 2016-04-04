@@ -1,16 +1,16 @@
 require 'purecloud'
 
-secret = 'RnT-yKT2hQHjWCnX6JPg0OnQdJYeyCNnqtIx0NgWlpU' #ENV['purecloud_secret']
-id = '08c0f624-c2b3-4f8c-bf3c-3b810ce777cf' # ENV['purecloud_client_id']
+secret = ENV['PURECLOUD_SECRET']
+id = ENV['PURECLOUD_CLIENT_ID']
 
-PureCloud.authenticate_with_client_credentials id, secret, "inindca.com"
+PureCloud.authenticate_with_client_credentials id, secret, "mypurecloud.com"
 #PureCloud.configure.debugging = true
 
 def get_queue_id
-    #for the purposes of this example, just grab the first queue
+    #Grab the queue named Support
     routing_api = PureCloud::RoutingApi.new
-    queues = routing_api.get_queues
-    "c6fc6f57-4c1e-4812-980a-5154f500b5c6" #queueId = queues.entities[0].id;
+    queues = routing_api.get_queues :name => "Support"
+    queueId = queues.entities[0].id;
 end
 
 def get_interval_string

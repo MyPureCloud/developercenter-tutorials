@@ -28,14 +28,14 @@
         var webSocket = null;
         var redirectUrl = window.location.href;
 
-        var pureCloudSession = new PureCloudSession('ininsca.com');
+        var pureCloudSession = new PureCloudSession('mypurecloud.com');
         var usersapi = new UsersApi(pureCloudSession);
         var notificationsapi = new NotificationsApi(pureCloudSession);
         var presenceApi = new PresenceApi(pureCloudSession);
         var userPresenceTopic = '';
 
         $(document).ready(function() {
-            $('button#logoutButton').click(function() { window.location = 'https://login.ininsca.com/logout'; });
+            $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
 
             pureCloudSession.authorize('238838c0-f9f4-4fd5-8ff8-8f62b0984a07', redirectUrl)
                 .done(function() {
@@ -43,7 +43,7 @@
                     presenceApi.getPresencedefinitions().done(function(presenceData){
                         for (var x=0; x< Object.keys(presenceData.entities).length; x++){
                             var presence = presenceData.entities[x];
-                            $('div#presenceButtons').append('<button onclick="setPresence(\'' + presence.id +'\')">' + 
+                            $('div#presenceButtons').append('<button onclick="setPresence(\'' + presence.id +'\')">' +
                                 presence.languageLabels.en_US +'</button>');
                         }
                     });
@@ -90,7 +90,7 @@
                                     }
 
                                     // Log message
-                                    $('div#messages').append('<pre>' + new Date().toLocaleTimeString() + ' - ' + 
+                                    $('div#messages').append('<pre>' + new Date().toLocaleTimeString() + ' - ' +
                                         JSON.stringify(JSON.parse(message.data),null,2) + '</pre>');
                                 };
                             });

@@ -18,3 +18,22 @@ ruby:
           highlight: "46-49"
         - file: "results.json"
           highlight: "1-100"
+javascript:
+    displayName: Javascript
+    steps:
+        - file: "javascript/query.html"
+          highlight: "0-100"
+        - file: "javascript/query.html"
+          highlight: "35-53"
+        - file: "javascript/query.html"
+          highlight: "21-27"
+        - file: "javascript/query.html"
+          highlight: "37-37"
+        - file: "javascript/query.html"
+          highlight: "38-38"
+        - file: "javascript/query.html"
+          highlight: "39-52"
+        - file: "javascript/query.html"
+          highlight: "55-59"
+        - file: "results.json"
+          highlight: "1-100"
