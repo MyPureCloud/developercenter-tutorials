@@ -1,0 +1,45 @@
+.tutorial{:data =>{:title=>'Querying Queue Historical Statistics'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            The Analytics API provides a flexible way to query historical information from PureCloud.  For full details see [Analytics Overview](/api/rest/v2/analytics/overview.html).
+
+            When querying historical statistics for a queue, we'll need to build up an aggregation query to send to the [PureCloud API](/api/rest/v2/analytics/index.html).
+
+    .step{:data=>{:title=>'Build Query'}}
+        :markdown
+            The aggregation query contains a number of different parameters.
+
+    .step{:data=>{:title=>'Get Query Interval'}}
+        :markdown
+            First, we need to specify the timespan for the query. The format of this parameter will look like
+
+            ```
+            2015-11-10T00:00:00.000Z/2015-11-11T00:00:00.000Z
+            ```
+
+            Where it is starttime/endtime with the times being in [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601).  This example will use an interval for the past seven days.
+
+    .step{:data=>{:title=>'Statistics Grouping'}}
+        :markdown
+            We are looking to get statistics based on queue so we will group by queueId. See [Group using multidemsional fields](/api/rest/v2/analytics/groupby.html) for advanced grouping options.
+
+    .step{:data=>{:title=>'Query Metrics'}}
+        :markdown
+            The metrics parameter is where we can specify which metrics we want returned from this query.  Here we just want:
+
+            * nOffered - The number of interactions offered to a queue.
+            * tAnswered - The number of assigned interactions answered by an agent in the time interval.
+            * tTalk - The total talk time.
+
+            A full list of available metrics can be found on the [Metrics](/api/rest/v2/analytics/metrics.html) page.
+
+    .step{:data=>{:title=>'Query Filter'}}
+        :markdown
+            Finally we need to build the query filter. A list of dimensions used to build the query [is available](/api/rest/v2/analytics/dimensions.html) but we are simply going to query by queueId.  For the purposes of this example are just pulling the first queue retrieved from PureCloud.
+
+    .step{:data=>{:title=>'Send Query'}}
+        :markdown
+            Now that the query is built, we can send the query to PureCloud and handle the result set as needed.
+    .step{:data=>{:title=>'Results'}}
+        :markdown
+            Here is an example response containing the results of the query. For this query, we can see that the only media type presented in the queue were chats, there were 5 calls offered as well as details on the talk time and answer time. 

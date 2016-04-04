@@ -1,0 +1,20 @@
+---
+ruby:
+    displayName: Ruby
+    steps:
+        - file: "ruby/query.rb"
+          highlight: "0-100"
+        - file: "ruby/query.rb"
+          highlight: "24-44"
+        - file: "ruby/query.rb"
+          highlight: "16-22"
+        - file: "ruby/query.rb"
+          highlight: "27-27"
+        - file: "ruby/query.rb"
+          highlight: "28-28"
+        - file: "ruby/query.rb"
+          highlight: "29-42"
+        - file: "ruby/query.rb"
+          highlight: "46-49"
+        - file: "results.json"
+          highlight: "1-100"

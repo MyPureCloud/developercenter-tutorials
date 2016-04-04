@@ -1,4 +1,9 @@
 ---
+analytics-conversation-aggregate-query:
+    title: Querying Queue Historical Statistics
+    description: See how to query historical statistics for a queue using the Analytics API.
+    categories:
+        - Analytics
 oauth-implicit:
     title: OAuth Implicit Grant Login Flow
     description: Implicit grant login without a client library.

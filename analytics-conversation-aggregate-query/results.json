@@ -1,0 +1,39 @@
+{
+  "results": [
+    {
+      "group": {
+        "mediaType": "chat",
+        "queueId": "c6fc6f57-4c1e-4812-980a-5154f500b5c6"
+      },
+      "data": [
+        {
+          "interval": "2016-03-28T15:07:00.000Z/2016-04-04T15:07:00.000Z",
+          "metrics": [
+            {
+              "metric": "tTalk",
+              "stats": {
+                "max": 1164481,
+                "count": 5,
+                "sum": 3125952
+              }
+            },
+            {
+              "metric": "tAnswered",
+              "stats": {
+                "max": 9806,
+                "count": 5,
+                "sum": 32296
+              }
+            },
+            {
+              "metric": "nOffered",
+              "stats": {
+                "count": 5
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

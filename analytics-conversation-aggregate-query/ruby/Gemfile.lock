@@ -1,0 +1,35 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    domain_name (0.5.20160310)
+      unf (>= 0.0.5, < 1.0.0)
+    ethon (0.8.1)
+      ffi (>= 1.3.0)
+    ffi (1.9.10)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    json (1.8.3)
+    mime-types (2.99.1)
+    netrc (0.11.0)
+    purecloud (0.31.1)
+      json (~> 1.8, >= 1.8.3)
+      rest-client (~> 1.8)
+      typhoeus (~> 1.0, >= 1.0.1)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    typhoeus (1.0.1)
+      ethon (>= 0.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  purecloud (= 0.31.1)
+
+BUNDLED WITH
+   1.11.2
