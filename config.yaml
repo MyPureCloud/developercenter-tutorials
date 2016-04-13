@@ -24,6 +24,11 @@ call-list-management:
     description: Inserting records into a dialer call list and starting the dialer campaign.
     categories:
         - Dialer
+create-campaign:
+    title: Creating an Outbound Dialing Campaign
+    description: Creating a campaign that can be run to place outbound calls.
+    categories:
+        - Dialer
 presence:
     title: User Presence with Notifications
     description: Getting and setting the current user's presence and listening for changes.

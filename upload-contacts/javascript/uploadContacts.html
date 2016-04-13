@@ -1,0 +1,53 @@
+<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
+    <script src='purecloud-api-min.js'></script>
+
+    <script>
+        var contactListId, authToken;
+        var redirectUrl = window.location.href;
+        var pureCloudSession = new PureCloudSession();
+
+        pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).done(function () {
+            authToken = pureCloudSession.getAuthToken();
+
+            var outboundApi = new OutboundApi(pureCloudSession);
+            outboundApi.getContactlists(false, false, false, 25, 1, 'EQUALS', 'My Contact List')
+                .done(function (response) {
+                    var contactLists = response.entities;
+                    contactListId = contactLists && contactLists.length > 0 ? contactLists[0].id : '';
+                });
+        });
+
+        function uploadContacts(file) {
+            var data = new FormData();
+            data.append('id', contactListId);
+            data.append('file', file);
+            data.append('fileType', 'contactlist');
+            data.append('contact-id-name', 'Contact ID');
+
+            $.ajax({
+                url: 'https://apps.inindca.com/uploads/v2/contactlist',
+                type: 'POST',
+                headers: {
+                    Authorization: 'bearer ' + authToken
+                },
+                data: data,
+                processData: false,
+                contentType: false
+            });
+        }
+
+        $('document').ready(function () {
+            $('#file-input').change(function (event) {
+                uploadContacts(event.target.files[0]);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <input type="file" id="file-input">
+</body>
+</html>

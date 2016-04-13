@@ -1,0 +1,16 @@
+.tutorial{:data =>{:title=>'Creating an Outbound Dialing Campaign'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            Campaigns are the workhorses for outbound dialing. Before you can create a campaign, you'll need to have [created a contact list](https://developer.mypurecloud.com/api/tutorials/create-contact-list/#javascript) and, for most dialing modes, a queue. Most dialing modes also require a script, but you can use the default outbound script that's provided.
+    .step{:data=>{:title=>'Session Initialization'}}
+        :markdown
+            To start off, you'll need to instantiate a [PureCloudSession](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/PureCloudSession.html) and authorize with your [OAuth client](https://developer.mypurecloud.com/api/rest/authorization/create-oauth-client-id.html).
+    .step{:data=>{:title=>'Getting Your IDs'}}
+        :markdown
+            For your campaign configuration, you'll need the ids of your contact list, queue, and script. To get these ids, you can either open your contact list/queue/script in the PureCloud app and get the id from the url, or you can search for them by name using the [OutboundApi](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/OutboundApi.html), [RoutingApi](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/RoutingApi.html), and [ScriptsApi](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/ScriptsApi.html).
+    .step{:data=>{:title=>'Campaign Configuration'}}
+        :markdown
+            Once you have your ids, you can set the configuration for your campaign. Here is a bare-bones configuration for a preview dialing campaign. More information about dialing modes and their options can be found on the [Outbound Dialing API Resource documentation](https://developer.mypurecloud.com/api/rest/v2/outbound/index.html) under POST /api/v2/outbound/campaigns.
+    .step{:data=>{:title=>'Create the Campaign'}}
+        :markdown
+            Lastly, make the call to the [OutboundApi](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/OutboundApi.html) to create your campaign! You can use the 'done' and 'error' methods to take further action depending on whether or not creating the campaign succeeded.

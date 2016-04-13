@@ -1,0 +1,16 @@
+---
+javascript:
+    displayName: Javascript
+    steps:
+        - file: "javascript/uploadContacts.html"
+          highlight: "0-53"
+        - file: "javascript/uploadContacts.html"
+          highlight: "10-12"
+        - file: "javascript/uploadContacts.html"
+          highlight: "13-21"
+        - file: "javascript/uploadContacts.html"
+          highlight: "42-52"
+        - file: "javascript/uploadContacts.html"
+          highlight: "23-40"
+        - file: "javascript/uploadContacts.html"
+          highlight: "0-53"
