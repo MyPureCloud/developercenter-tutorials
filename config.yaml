@@ -29,6 +29,16 @@ create-campaign:
     description: Creating a campaign that can be run to place outbound calls.
     categories:
         - Dialer
+create-contact-list:
+    title: Creating an Outbound Dialing Contact List
+    description: Creating a contact list for use with outbound dialing campaigns.
+    categories:
+        - Dialer
+upload-contacts:
+    title: Uploading Contacts to a Contact List
+    description: Uploading contacts to an existing outbound dialing contact list.
+    categories:
+        - Dialer
 presence:
     title: User Presence with Notifications
     description: Getting and setting the current user's presence and listening for changes.

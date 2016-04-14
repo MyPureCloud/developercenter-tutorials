@@ -3,10 +3,10 @@ javascript:
     displayName: Javascript
     steps:
         - file: "javascript/createContactList.html"
-          highlight: "0-44"
+          highlight: "0-40"
         - file: "javascript/createContactList.html"
           highlight: "9-11"
         - file: "javascript/createContactList.html"
-          highlight: "12-27"
+          highlight: "12-25"
         - file: "javascript/createContactList.html"
-          highlight: "29-38"
+          highlight: "27-36"

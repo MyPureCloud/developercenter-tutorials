@@ -15,14 +15,14 @@
 
             var contactListId, queueId, scriptId;
 
-            var contactListPromise = outboundApi.getContactlists(false, false, false, 25, 1, 'EQUALS', 'My Contact List')
+            var contactListPromise = outboundApi.getContactlists(false, false, 25, 1, 'EQUALS', 'My Contact List')
                 .done(function (response) {
                     var contactLists = response.entities;
                     if (contactLists && contactLists.length > 0) {
                         contactListId = contactLists[0].id;
                     }
                 });
-            var queuePromise = routingApi.getQueues(false, 25, 1, null, 'My Queue', false)
+            var queuePromise = routingApi.getQueues(25, 1, null, 'My Queue', false)
                 .done(function (response) {
                     var queues = response.entities;
                     if (queues && queues.length > 0) {
