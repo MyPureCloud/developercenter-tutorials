@@ -11,9 +11,8 @@
         pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).done(function(){
             var outboundApi = new OutboundApi(pureCloudSession);
             var routingApi = new RoutingApi(pureCloudSession);
-            var scriptsApi = new ScriptsApi(pureCloudSession);
 
-            var contactListId, queueId, scriptId;
+            var contactListId, queueId;
 
             var contactListPromise = outboundApi.getContactlists(false, false, 25, 1, 'EQUALS', 'My Contact List')
                 .done(function (response) {
@@ -29,15 +28,8 @@
                         queueId = queues[0].id;
                     }
                 });
-            var scriptPromise = scriptsApi.getScripts(25, 1, false, 'Default Outbound Script', null)
-                .done(function (response) {
-                    var scripts = response.entities;
-                    if (scripts && scripts.length > 0) {
-                        scriptId = scripts[0].id;
-                    }
-                });
 
-            $.when(contactListPromise, queuePromise, scriptPromise).done(function () {
+            $.when(contactListPromise, queuePromise).done(function () {
                 var campaignConfiguration = {
                     "name": "My Campaign II",
                     "dialingMode": "preview",
@@ -54,7 +46,7 @@
                         "id": queueId
                     },
                     "script": {
-                        "id": scriptId
+                        "id": "e631fc80-ce96-11e5-8c05-473ec65a1df8"
                     },
                     "callerName": "Caller ID",
                     "callerAddress": "2223334444"
