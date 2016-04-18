@@ -3,12 +3,12 @@ javascript:
     displayName: Javascript
     steps:
         - file: "javascript/createCampaign.html"
-          highlight: "0-77"
+          highlight: "0-69"
         - file: "javascript/createCampaign.html"
           highlight: "9-11"
         - file: "javascript/createCampaign.html"
-          highlight: "12-38"
+          highlight: "12-30"
         - file: "javascript/createCampaign.html"
-          highlight: "40-61"
+          highlight: "32-53"
         - file: "javascript/createCampaign.html"
-          highlight: "63-71"
+          highlight: "55-63"
