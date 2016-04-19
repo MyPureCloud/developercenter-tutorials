@@ -1,0 +1,14 @@
+---
+javascript:
+    displayName: Javascript
+    steps:
+        - file: "javascript/createCampaign.html"
+          highlight: "0-69"
+        - file: "javascript/createCampaign.html"
+          highlight: "9-11"
+        - file: "javascript/createCampaign.html"
+          highlight: "12-30"
+        - file: "javascript/createCampaign.html"
+          highlight: "32-53"
+        - file: "javascript/createCampaign.html"
+          highlight: "55-63"

@@ -1,0 +1,20 @@
+.tutorial{:data=>{:title=>'Uploading Contacts to a Contact List'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            Once you've [created a contact list](https://developer.mypurecloud.com/api/tutorials/create-contact-list/#javascript), you'll want to upload contacts to it from a CSV file (an example CSV file of contacts is included in the [source code](https://github.com/MyPureCloud/developercenter-tutorials/tree/master/upload-contacts) for this tutorial).
+    .step{:data=>{:title=>'Session Initialization'}}
+        :markdown
+            First, you'll need to instantiate a [PureCloudSession](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/PureCloudSession.html) and authorize with your [OAuth client](https://developer.mypurecloud.com/api/rest/authorization/create-oauth-client-id.html).
+    .step{:data=>{:title=>'Fetching Your Contact List ID'}}
+        :markdown
+            Then, save the session authorization token and get your contact list id. You'll need these to make the upload request. To get the contact list id, you can either open your contact list in the PureCloud app and get the id from the url, or you can search for it by name using the [OutboundApi](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/OutboundApi.html).
+    .step{:data=>{:title=>'File Selection UI'}}
+        :markdown
+            Next, create a way to select the file you want to upload. Here we have a plain input element that will trigger the request to upload contacts when the file selection changes.
+    .step{:data=>{:title=>'The Upload Request'}}
+        :markdown
+            This is the actual request to upload contacts. The fileType should be contactlist or dnclist, depending on which kind of list you're uploading to. For contact lists, you can specify a column from the selected file to use as a contact id. The domain name of the url should be the same as the one you use when using the PureCloud app (e.g., apps.mypurecloud.com.au, if you're based in Australia).
+    .step{:data=>{:title=>'Select a File'}}
+        :markdown
+            Lastly, select a CSV file and your upload will start! Bear in mind that large files may take a while to upload before the contacts will begin importing into the contact list. Also, when you select a CSV file, make sure the columns match the ones that were configured on the contact list.
+
