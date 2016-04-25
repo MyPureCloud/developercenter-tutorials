@@ -37,7 +37,7 @@
         $(document).ready(function() {
             $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
 
-            pureCloudSession.authorize('238838c0-f9f4-4fd5-8ff8-8f62b0984a07', redirectUrl)
+            pureCloudSession.authorize('babbc081-0761-4f16-8f56-071aa402ebcb', redirectUrl)
                 .done(function() {
                     // Get list of presences available
                     presenceApi.getPresencedefinitions().done(function(presenceData){
@@ -66,7 +66,7 @@
                                 webSocket = new WebSocket(data.connectUri);
                                 webSocket.onopen = function(){
                                     // Now that the connection is open, we can start our subscription.
-                                    userPresenceTopic = 'users.' + myUserId + '.status';
+                                    userPresenceTopic = 'v2.users.' + myUserId + '.presence';
                                     notificationsapi.postChannelsChannelIdSubscriptions(data.id, [{"id": userPresenceTopic}]);
                                 };
 
@@ -77,7 +77,11 @@
 
                                     // Presence update
                                     if (data.topicName == userPresenceTopic){
-                                        $("#currentPresence").text(data.eventBody.status.name);
+                                        // Get presence display text from presence definition ID
+                                        presenceApi.getPresenceId(data.eventBody.presenceDefinition.id).done(function(presence) {
+                                            // Write presence to body
+                                            $('div#currentPresence').text(presence.languageLabels.en_US);
+                                        });
                                     }
                                     // Heartbeat
                                     else if (data.topicName == 'channel.metadata') {
@@ -110,7 +114,7 @@
             };
 
             // Patch presence
-            presenceApi.patchUserIdPresencesSource(myUserId, 'PURECLOUD', setPresence);
+            presenceApi.patchUserIdPresencesSourceId(myUserId, 'PURECLOUD', setPresence);
         }
     </script>
 </head>
