@@ -12,11 +12,11 @@
         var webSocket = null;
         var redirectUrl = window.location.href;
 
-        var pureCloudSession = new PureCloudSession('inindca.com');
+        var pureCloudSession = new PureCloudSession();
         var routingapi = new RoutingApi(pureCloudSession);
 
         $(document).ready(function() {
-            $('button#logoutButton').click(function() { window.location = 'https://login.inindca.com/logout'; });
+            $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
 
             function getIntervalString(){
                 var end = new Date();
