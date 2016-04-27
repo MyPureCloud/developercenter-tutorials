@@ -21,7 +21,7 @@ namespace implicit_winform
             webBrowser1.Visible = true;
 
             //Redirect the browser to the login window.
-            webBrowser1.Url = new Uri( "https://login.mypurecloud.com/authorize?" +
+            webBrowser1.Url = new Uri( "https://login.mypurecloud.com/oauth/authorize?" +
                                             "response_type=token" +
                                             "&client_id=bfadf7a0-3364-4f65-9fda-00d37877113f" +
                                             "&redirect_uri=http://localhost:8085/oauth2/callback");

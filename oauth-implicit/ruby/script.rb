@@ -30,7 +30,7 @@ Thread.new {
   sleep(1)
   client_id = 'bfadf7a0-3364-4f65-9fda-00d37877113f';
 
-  redirectUri = "https://login.inindca.com/authorize?" +
+  redirectUri = "https://login.inindca.com/oauth/authorize?" +
               "response_type=token" +
               "&client_id=" + client_id +
               "&redirect_uri=http://localhost:8085/oauth2/callback";
