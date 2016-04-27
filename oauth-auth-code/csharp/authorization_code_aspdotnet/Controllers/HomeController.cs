@@ -15,7 +15,7 @@ namespace authorization_code_aspdotnet.Controllers
 {
     public class HomeController : Controller
     {
-        private string host = "ininsca";
+        private string host = "mypurecloud.com";
 
         public async Task<IActionResult> Index()
         {
@@ -43,7 +43,7 @@ namespace authorization_code_aspdotnet.Controllers
 
             if (string.IsNullOrEmpty(authToken))
             {
-                return Redirect("https://login." + host + ".com/authorize?client_id=a0bda580-cb41-4ff6-8f06-28ffb4227594" +
+                return Redirect("https://login." + host + "/oauth/authorize?client_id=6220730c-d0e4-4fde-af3d-5ffgdca94e22" +
                                 "&response_type=code&redirect_uri=" +
                                 UrlEncoder.Default.UrlEncode("http://localhost:51643/home/"));
             }
@@ -65,9 +65,9 @@ namespace authorization_code_aspdotnet.Controllers
                 new KeyValuePair<string, string>("code", code),
                 new KeyValuePair<string, string>("redirect_uri", "http://localhost:51643/home/")
             });
-            var basicAuth = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("a0bda580-cb41-4ff6-8f06-28ffb4227594:e-meQ53cXGq53j6uffdULVjRl8It8M3FVsupKei0nSg"));
+            var basicAuth = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("6220730c-d0e4-4fde-af3d-5ffgdca94e22:BC2GlOXcBXof56PSR8CA0TB6tHdlj3DLPEQ8hwf87kI"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);
-            var response = await client.PostAsync("https://login." + host + ".com/token", content);
+            var response = await client.PostAsync("https://login." + host + "/oauth/token", content);
             var token = JObject.Parse(await response.Content.ReadAsStringAsync())["access_token"].ToString();
             return token;
         }
@@ -76,7 +76,7 @@ namespace authorization_code_aspdotnet.Controllers
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync("https://api." + host + ".com/api/v1/users/me");
+            var response = await client.GetAsync("https://api." + host + "/api/v1/users/me");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
