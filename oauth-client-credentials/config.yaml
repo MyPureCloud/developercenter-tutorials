@@ -26,3 +26,12 @@ powershell:
           highlight: "1-7"
         - file: "powershell/script.ps1"
           highlight: "8-12"
+python:
+    displayName: Python
+    steps:
+        - file: "python/script.py"
+          highlight: "0-54"
+        - file: "python/script.py"
+          highlight: "7-22"
+        - file: "python/script.py"
+          highlight: "31-52"
