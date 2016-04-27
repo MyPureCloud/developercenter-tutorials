@@ -5,7 +5,9 @@
         .note.note-csharp
             In a C# desktop application, we host the login window in a web browser control and watch for the navigation event.  When this occurs, we pull the access_token from the URL.
         .note.note-ruby
-            In a Ruby, we start a Sinatra server and open a web browser that displays the authorization page to the end user.
+            In Ruby, we start a Sinatra server and open a web browser that displays the authorization page to the end user.
+        .note.note-python
+            In Python, we start a server via listening on a socket and open a web browser that displays the authorization page to the end user.
 
 
     .step{:data=>{:title=>'Redirect to PureCloud to Handle Authentication'}}
@@ -21,6 +23,8 @@
         :markdown
             After the user follows the redirect, the URI contains a hash (#) with the access token as a parameter.  We strip the parameter and save it in the token variable.
         .note.note-ruby
+            We post the token to the server for use in the server.
+        .note.note-python
             We post the token to the server for use in the server.
     .step{:data=>{:title=>'Make API Calls'}}
         :markdown

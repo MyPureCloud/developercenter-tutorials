@@ -32,3 +32,14 @@ ruby:
           highlight: "16-27"
         - file: "ruby/script.rb"
           highlight: "8-14"
+python:
+    displayName: Python
+    steps:
+        - file: "python/server.py"
+          highlight: "0-62"
+        - file: "python/implicit.html"
+          highlight: "29-35"
+        - file: "python/server.py"
+          highlight: "51-55"
+        - file: "python/server.py"
+          highlight: "3-21"
