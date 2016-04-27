@@ -20,7 +20,7 @@ function handleTokenCallback(body){
 secret = process.env.purecloud_secret;
 id = process.env.purecloud_client_id;
 
-request.post({url:'https://login.mypurecloud.com/token', form: {grant_type:'client_credentials'}}, function(err,httpResponse,body){
+request.post({url:'https://login.mypurecloud.com/oauth/token', form: {grant_type:'client_credentials'}}, function(err,httpResponse,body){
     if(err == null){
         handleTokenCallback(JSON.parse(body));
     }

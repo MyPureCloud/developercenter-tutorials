@@ -7,7 +7,7 @@ id = ENV['purecloud_client_id']
 
 basic = Base64.strict_encode64("#{id}:#{secret}")
 
-tokenData = JSON.parse RestClient.post('https://login.mypurecloud.com/token',
+tokenData = JSON.parse RestClient.post('https://login.mypurecloud.com/oauth/token',
                         {:grant_type => 'client_credentials'},
                         :Authorization => "Basic " + basic,
                         'content-type'=> 'application/x-www-form-urlencoded',

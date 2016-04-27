@@ -3,7 +3,7 @@ $id = $Env:purecloud_client_id;
 
 $auth  = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("${id}:${secret}"))
 
-$response = Invoke-WebRequest -Uri https://login.mypurecloud.com/token -Method POST -Body @{grant_type='client_credentials'} -Headers @{"Authorization"="Basic ${auth}"}
+$response = Invoke-WebRequest -Uri https://login.mypurecloud.com/oauth/token -Method POST -Body @{grant_type='client_credentials'} -Headers @{"Authorization"="Basic ${auth}"}
 
 $responseData = $response.content  | ConvertFrom-Json
 
