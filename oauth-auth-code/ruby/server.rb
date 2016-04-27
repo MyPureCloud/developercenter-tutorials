@@ -27,7 +27,7 @@ class InspectValidationMiddleware
     if(!@@sessionMap.has_key?(req.session["purecloudsession"]) &&
         !req.url.include?("oauth"))
 
-        redirectUri = "https://login.mypurecloud.com/authorize?" +
+        redirectUri = "https://login.mypurecloud.com/oauth/authorize?" +
                     "response_type=code" +
                     "&client_id=" + @@client_id +
                     "&redirect_uri=http://localhost:8085/oauth2/callback";
@@ -59,7 +59,7 @@ get '/oauth2/callback' do
         "redirect_uri" => "http://localhost:8085/oauth2/callback"
     }
 
-    tokenResponse =JSON.parse RestClient.post "https://#{@@client_id}:#{@@client_secret}@login.mypurecloud.com/token", tokenFormData
+    tokenResponse =JSON.parse RestClient.post "https://#{@@client_id}:#{@@client_secret}@login.mypurecloud.com/oauth/token", tokenFormData
 
     puts "Access token " + tokenResponse['access_token'];
     sessionId = SecureRandom.uuid;

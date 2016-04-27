@@ -16,7 +16,7 @@ var authvalidation = function(req, res, next) {
             req.url.indexOf("oauth") !== -1){
 
         //redirect the user to authorize with purecloud
-        var redirectUri = "https://login.mypurecloud.com/authorize?" +
+        var redirectUri = "https://login.mypurecloud.com/oauth/authorize?" +
                     "response_type=code" +
                     "&client_id=" + client_id +
                     "&redirect_uri=http://localhost:8085/oauth2/callback";
@@ -57,7 +57,7 @@ app.get("/oauth2/callback", function(req,res){
     }
 
     var postData = {
-        url:'https://login.mypurecloud.com/token',
+        url:'https://login.mypurecloud.com/oauth/token',
         form: tokenFormData,
         auth: { //basic auth here
             user: client_id,
@@ -65,7 +65,7 @@ app.get("/oauth2/callback", function(req,res){
         }
     }
 
-    //post back to /token with the client id and secret as well as the auth code that was sent to us.
+    //post back to /oauth/token with the client id and secret as well as the auth code that was sent to us.
     request.post(postData, function(err,httpResponse,body){
         console.log("got token data back: ")
         console.log(body);
