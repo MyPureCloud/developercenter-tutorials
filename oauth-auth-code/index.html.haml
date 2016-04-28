@@ -22,16 +22,18 @@
 
             Finally, we redirect to a more useful (my_info.html) page.
 
-            <div class="note note-csharp">
+            .note.note-csharp
                 The ASP.NET example does not redirect the user after this step. Instead, the user remains on the main page.
-            </div>
+            .note.note-python
+                The python example does not use cookies to track sessions and instead generates a random GUID to identify the session between the browser and the python server. This GUID is passed back and forth in the sessionKey query string parameter.
     .step{:data=>{:title=>'Making an AJAX Request from the Web Page'}}
         :markdown
             The web page can now make requests to the server, here we will call GET /me to get the current users information. Since the web server is using cookies, the cookie will be sent with this web request automatically.
 
-            <div class="note note-csharp">
+            .note.note-csharp
                 the ASP.NET example is not using cookies and instead sets the Authorization header with the bearer token. This request is made server-side, but could be made client-side using JavaScript.
-            </div>
+            .note.note-python
+                The python example does not use cookies and instead makes use of the sessionKey GUID created in the previous step.
     .step{:data=>{:title=>'Make a Request Server Side for the Authenticated User'}}
         :markdown
             Finally, back in the server we will pull the PureCloud authentication token out of our mapping and make a request to PureCloud on behalf of this user.

@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Ruby Authorization Code</title>
+
+  <script src='//code.jquery.com/jquery-1.11.2.min.js'></script>
+  <script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+  <script>
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+      var results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var sessionKey = getParameterByName('sessionKey');
+    console.debug(sessionKey);
+
+    $.ajax({
+      url: "/me?sessionKey=" + sessionKey,
+      type: "GET",
+      success: function(data) {
+        $('#data').html('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+        console.debug(data);
+      }
+    });
+  </script>
+</head>
+<body>
+    <h1>My Information</h1>
+    <pre class="prettyprint">
+        <code id='data' >
+        </code>
+    </pre>
+
+</body>
+</html>

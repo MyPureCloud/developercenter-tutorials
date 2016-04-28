@@ -44,3 +44,18 @@ csharp:
           highlight: "75-81"
         - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
           highlight: "75-81"
+python:
+    displayName: Python
+    steps:
+        - file: "python/server.py"
+          highlight: "0-166"
+        - file: "python/server.py"
+          highlight: "98-133"
+        - file: "python/server.py"
+          highlight: "124-133"
+        - file: "python/server.py"
+          highlight: "28-94"
+        - file: "python/my_info.html"
+          highlight: "19-29"
+        - file: "python/server.py"
+          highlight: "12-26"
