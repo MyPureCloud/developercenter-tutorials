@@ -11,10 +11,10 @@ var client_id = 'efb6698a-5f76-4f90-bf29-9a69a3555602';
 var client_secret = '3pDfUuU1h8nK5XZigBp2ogc1GZkII4KvJKBmKqEGnt0';
 
 var authvalidation = function(req, res, next) {
+    console.log('\n['+req.method+' '+req.url+']');
     //if we don't have a session then redirect them to the login page
     if((req.cookies && !(req.cookies.session && sessionMap[req.cookies.session])) &&
-            req.url.indexOf("oauth") !== -1){
-
+            req.url.indexOf("oauth") == -1){
         //redirect the user to authorize with purecloud
         var redirectUri = "https://login.mypurecloud.com/oauth/authorize?" +
                     "response_type=code" +
@@ -33,9 +33,9 @@ var authvalidation = function(req, res, next) {
 }
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(authvalidation);
 app.use(express.static(__dirname));
-app.use(cookieParser());
 
 var sessionMap ={};
 
@@ -85,13 +85,13 @@ app.get("/oauth2/callback", function(req,res){
     });
 });
 
-//wrap up the api/v1/users/me call inside a /me route
+//wrap up the api/v2/users/me call inside a /me route
 app.get("/me", function(req, res){
     //get the session from map using the cookie
     var oauthId = sessionMap[req.cookies.session];
 
     var getData = {
-        url:'https://api.mypurecloud.com/api/v1/users/me',
+        url:'https://api.mypurecloud.com/api/v2/users/me',
         auth: {
             bearer: oauthId
         }
