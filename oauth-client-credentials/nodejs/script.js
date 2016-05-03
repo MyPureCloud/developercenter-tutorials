@@ -2,7 +2,7 @@ var request = require('request');
 
 function handleTokenCallback(body){
     var options = {
-      url: 'https://api.mypurecloud.com/api/v1/authorization/roles',
+      url: 'https://api.mypurecloud.com/api/v2/authorization/roles',
       headers: {
         'Authorization': body.token_type + " " + body.access_token
       }

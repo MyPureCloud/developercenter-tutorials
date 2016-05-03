@@ -16,6 +16,6 @@ tokenData = JSON.parse RestClient.post('https://login.mypurecloud.com/oauth/toke
 
 authHeader = tokenData["token_type"] + ' ' + tokenData["access_token"]
 
-puts RestClient.get('https://api.mypurecloud.com/api/v1/authorization/roles',
+puts RestClient.get('https://api.mypurecloud.com/api/v2/authorization/roles',
                         :Authorization => authHeader,
                         :accept => :json)

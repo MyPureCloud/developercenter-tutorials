@@ -7,5 +7,5 @@ $response = Invoke-WebRequest -Uri https://login.mypurecloud.com/oauth/token -Me
 
 $responseData = $response.content  | ConvertFrom-Json
 
-$roleResponse = Invoke-WebRequest -Uri https://api.mypurecloud.com/api/v1/authorization/roles -Method GET -Headers @{"Authorization"= $responseData.token_type + " " + $responseData.access_token}
+$roleResponse = Invoke-WebRequest -Uri https://api.mypurecloud.com/api/v2/authorization/roles -Method GET -Headers @{"Authorization"= $responseData.token_type + " " + $responseData.access_token}
 write-host $roleResponse.content
