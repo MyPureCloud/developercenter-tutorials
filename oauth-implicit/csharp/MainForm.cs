@@ -32,8 +32,8 @@ namespace implicit_winform
         {
             webBrowser1.Visible = false;
 
-            //Make a request to /api/v1/users/me
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.mypurecloud.com/api/v1/users/me");
+            //Make a request to /api/v2/users/me
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.mypurecloud.com/api/v2/users/me");
             request.Method = "GET";
             request.Headers.Add("Authorization", "Bearer " + bearerToken);
 

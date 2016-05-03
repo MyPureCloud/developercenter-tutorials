@@ -7,7 +7,7 @@ set :port, 8085
 #this method will be called once we get our authentication token
 def post_auth_method authToken
     #just get the current user's information and print it out to the console
-    userInfo = RestClient.get('https://api.mypurecloud.com/api/v1/users/me', {:Authorization => 'Bearer ' + authToken})
+    userInfo = RestClient.get('https://api.mypurecloud.com/api/v2/users/me', {:Authorization => 'Bearer ' + authToken})
 
     puts JSON.pretty_generate (JSON.parse(userInfo))
 

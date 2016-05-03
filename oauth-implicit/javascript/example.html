@@ -15,7 +15,7 @@
         var token = getParameterByName('access_token');
 
         $.ajax({
-            url: "https://api.mypurecloud.com/api/v1/users/me",
+            url: "https://api.mypurecloud.com/api/v2/users/me",
             type: "GET",
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'bearer ' + token);},
             success: function(data) {
