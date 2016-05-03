@@ -76,7 +76,7 @@ namespace authorization_code_aspdotnet.Controllers
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync("https://api." + host + "/api/v1/users/me");
+            var response = await client.GetAsync("https://api." + host + "/api/v2/users/me");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 

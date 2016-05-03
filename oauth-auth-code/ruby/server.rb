@@ -72,6 +72,6 @@ end
 get '/me' do
     authToken = @@sessionMap[session["purecloudsession"]];
 
-    return RestClient.get 'https://api.mypurecloud.com/api/v1/users/me', {:Authorization => 'Bearer ' + authToken}
+    return RestClient.get 'https://api.mypurecloud.com/api/v2/users/me', {:Authorization => 'Bearer ' + authToken}
 
 end
