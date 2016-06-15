@@ -43,7 +43,7 @@ Don't get hung up on the styles of the tutorial.  We are using a pretty vanilla 
 
 # Coding Standards
 
-Please adhere to the following guidelines when creating tutorials:
+Please consider these guidelines when contributing tutorials:
 
 ## General Guidelines
 
@@ -51,6 +51,8 @@ Please adhere to the following guidelines when creating tutorials:
 * Keep it simple - Don't write any more code than is necessary to accomplish the happy path and log errors. Don't assume the reader has more than a basic understanding of the language or the API. Keep helper libraries and advanced design patterns to a minimum.
 * Synchronous is good - Tutorials should focus on consumption of the APIs and SDKs, not coding best practices. It is preferable to have synchronous code that locks the UI rather than async and multi-threaded code; multi-threaded tutorials can be hard to follow.
 * Use SDKs - Unless the tutorial is explicitly demonstrating how to do a non-SDK task, like OAuth, use the language-specific SDK to interact with the Platform API. 
+* Project structure - Keep the file structure as flat as is reasonable and keep the file count as small as possible. Prefer to combine code into a single file when it is reasonable rather than creating a verbose project structure to follow a design pattern. Fewer files means less jumping around for the reader.
+* Tutorials aren't cool - Have a neat idea to showcase an API feature? Write an example app, not a tutorial. Tutorials should be simple, boring, and concise. 
 
 ## Code Style
 
