@@ -52,7 +52,7 @@ Please consider these guidelines when contributing tutorials:
 * Synchronous is good - Tutorials should focus on consumption of the APIs and SDKs, not coding best practices. It is preferable to have synchronous code that locks the UI rather than async and multi-threaded code; multi-threaded tutorials can be hard to follow.
 * Use SDKs - Unless the tutorial is explicitly demonstrating how to do a non-SDK task, like OAuth, use the language-specific SDK to interact with the Platform API. 
 * Project structure - Keep the file structure as flat as is reasonable and keep the file count as small as possible. Prefer to combine code into a single file when it is reasonable rather than creating a verbose project structure to follow a design pattern. Fewer files means less jumping around for the reader.
-* Tutorials aren't cool - Have a neat idea to showcase an API feature? Write an example app, not a tutorial. Tutorials should be simple, boring, and concise. 
+* Tutorials aren't exciting - Have a neat idea to showcase an API feature? Write an example app! Tutorials should be simple, boring, and concise. 
 
 ## Code Style
 
