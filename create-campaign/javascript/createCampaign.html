@@ -6,7 +6,11 @@
 
     <script>
         var redirectUrl = window.location.href;
-        var pureCloudSession = new PureCloudSession();
+        var pureCloudSession = purecloud.platform.PureCloudSession({
+              strategy: 'implicit',
+              clientId: '6b003ac7-eead-4f26-bf0a-a90b54908e41',
+              redirectUrl: window.location.href
+            });
 
         pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).done(function(){
             var outboundApi = new OutboundApi(pureCloudSession);
@@ -15,21 +19,21 @@
             var contactListId, queueId;
 
             var contactListPromise = outboundApi.getContactlists(false, false, 25, 1, 'EQUALS', 'My Contact List')
-                .done(function (response) {
+                .then(function (response) {
                     var contactLists = response.entities;
                     if (contactLists && contactLists.length > 0) {
                         contactListId = contactLists[0].id;
                     }
                 });
             var queuePromise = routingApi.getQueues(25, 1, null, 'My Queue', false)
-                .done(function (response) {
+                .then(function (response) {
                     var queues = response.entities;
                     if (queues && queues.length > 0) {
                         queueId = queues[0].id;
                     }
                 });
 
-            $.when(contactListPromise, queuePromise).done(function () {
+            $.when(contactListPromise, queuePromise).then(function () {
                 var campaignConfiguration = {
                     "name": "My Campaign II",
                     "dialingMode": "preview",
@@ -53,11 +57,11 @@
                 };
 
                 outboundApi.postCampaigns(campaignConfiguration)
-                    .done(function(campaign){
+                    .then(function(campaign){
                         console.log('Successfully created the campaign!');
                         console.log(campaign);
                     })
-                    .error(function (error) {
+                    .catch(function (error) {
                         console.log('There was an error creating the campaign.');
                         console.log(error);
                     });
