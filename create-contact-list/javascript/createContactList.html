@@ -12,7 +12,7 @@
               redirectUrl: window.location.href
             });
 
-        pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).then(function () {
+        pureCloudSession.login().then(function () {
             var contactListConfiguration = {
                 "name": "My Contact List",
                 "columnNames": [
@@ -28,7 +28,7 @@
                 ]
             };
 
-            var outboundApi = new OutboundApi(pureCloudSession);
+            var outboundApi = new purecloud.platform.OutboundApi(pureCloudSession);
             outboundApi.postContactlists(contactListConfiguration)
                 .then(function(contactList){
                     console.log('Successfully created the contact list! Your contact list id is ' + contactList.id);
