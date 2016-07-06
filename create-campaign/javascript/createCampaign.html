@@ -12,9 +12,9 @@
               redirectUrl: window.location.href
             });
 
-        pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).done(function(){
-            var outboundApi = new OutboundApi(pureCloudSession);
-            var routingApi = new RoutingApi(pureCloudSession);
+        pureCloudSession.login().then(function(){
+            var outboundApi = new purecloud.platform.OutboundApi(pureCloudSession);
+            var routingApi = new purecloud.platform.RoutingApi(pureCloudSession);
 
             var contactListId, queueId;
 
