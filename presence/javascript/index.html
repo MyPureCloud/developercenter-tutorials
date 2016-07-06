@@ -3,7 +3,7 @@
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
-    <script src='purecloud-api-min.js'></script>
+    <script src='purecloud-api.min.js'></script>
     <title>Presence Subscription</title>
     <style type="text/css">
         body {
@@ -26,21 +26,26 @@
     </style>
     <script type="text/javascript">
         var webSocket = null;
-        var redirectUrl = window.location.href;
 
-        var pureCloudSession = new PureCloudSession('mypurecloud.com');
-        var usersapi = new UsersApi(pureCloudSession);
-        var notificationsapi = new NotificationsApi(pureCloudSession);
-        var presenceApi = new PresenceApi(pureCloudSession);
+        var pureCloudSession = purecloud.platform.PureCloudSession({
+              strategy: 'implicit',
+              clientId: '6b003ac7-eead-4f26-bf0a-a90b54908e41',
+              redirectUrl: window.location.href
+            });
+
+
+        var usersapi = new purecloud.platform.UsersApi(pureCloudSession);
+        var notificationsapi = new purecloud.platform.NotificationsApi(pureCloudSession);
+        var presenceApi = new purecloud.platform.PresenceApi(pureCloudSession);
         var userPresenceTopic = '';
 
         $(document).ready(function() {
             $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
 
-            pureCloudSession.authorize('babbc081-0761-4f16-8f56-071aa402ebcb', redirectUrl)
-                .done(function() {
+            pureCloudSession.login()
+                .then(function() {
                     // Get list of presences available
-                    presenceApi.getPresencedefinitions().done(function(presenceData){
+                    presenceApi.getPresencedefinitions().then(function(presenceData){
                         for (var x=0; x< Object.keys(presenceData.entities).length; x++){
                             var presence = presenceData.entities[x];
                             $('div#presenceButtons').append('<button onclick="setPresence(\'' + presence.id +'\')">' +
@@ -49,19 +54,19 @@
                     });
 
                     // Get logged in user's presence
-                    usersapi.getMe('presence','presence')
-                        .done(function(data){
+                    usersapi.getMe('presence')
+                        .then(function(data){
                             // Store user ID
                             myUserId = data.id;
 
                             // Get presence definition
                             var presenceDefinitionId = data.presence.presenceDefinition.id;
-                            presenceApi.getPresenceId(presenceDefinitionId).done(function(data) {
+                            presenceApi.getPresenceId(presenceDefinitionId).then(function(data) {
                                 $("#currentPresence").text(data.languageLabels.en_US);
                             });
 
                             // Create a notification channel
-                            notificationsapi.postChannels().done(function(data){
+                            notificationsapi.postChannels().then(function(data){
                                 // Start a new web socket using the connect Uri of the channel
                                 webSocket = new WebSocket(data.connectUri);
                                 webSocket.onopen = function(){
@@ -78,7 +83,7 @@
                                     // Presence update
                                     if (data.topicName == userPresenceTopic){
                                         // Get presence display text from presence definition ID
-                                        presenceApi.getPresenceId(data.eventBody.presenceDefinition.id).done(function(presence) {
+                                        presenceApi.getPresenceId(data.eventBody.presenceDefinition.id).then(function(presence) {
                                             // Write presence to body
                                             $('div#currentPresence').text(presence.languageLabels.en_US);
                                         });
@@ -99,7 +104,7 @@
                                 };
                             });
 
-                        }).error(function(){
+                        }).catch(function(){
                             alert("error");
                         });
                 });

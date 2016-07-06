@@ -2,13 +2,13 @@
 javascript:
     displayName: Javascript
     steps:
-        - file: "javascript/presence_subscription.html"
+        - file: "javascript/index.html"
           highlight: "0-133"
-        - file: "javascript/presence_subscription.html"
-          highlight: "42-61"
-        - file: "javascript/presence_subscription.html"
-          highlight: "63-71"
-        - file: "javascript/presence_subscription.html"
-          highlight: "73-99"
-        - file: "javascript/presence_subscription.html"
-          highlight: "108-118"
+        - file: "javascript/index.html"
+          highlight: "47-66"
+        - file: "javascript/index.html"
+          highlight: "68-76"
+        - file: "javascript/index.html"
+          highlight: "78-104"
+        - file: "javascript/index.html"
+          highlight: "113-123"
