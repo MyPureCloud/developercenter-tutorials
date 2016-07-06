@@ -10,7 +10,13 @@
 
     var redirectUrl = window.location.href;
 
-    var pureCloudSession = new PureCloudSession();
+    var pureCloudSession = PureCloudSession({
+                              strategy: 'implicit',
+                              clientId: 'efb6698a-5f76-4f90-bf29-9a69a3555602',
+                              redirectUrl: window.location.href
+                            });
+
+
     var outboundApi = new OutboundApi(pureCloudSession);
     var notificationsapi = new NotificationsApi(pureCloudSession);
 
@@ -26,7 +32,7 @@
                             }
                             ];
 
-        outboundApi.postContactlistsContactlistIdContacts(contactListId, contactData, true).done(function(){
+        outboundApi.postContactlistsContactlistIdContacts(contactListId, contactData, true).then(function(){
             console.log("contact added to list")
         });
     }
@@ -34,7 +40,7 @@
 
     function startCampaign(){
         //get campaign information
-        outboundApi.getCampaign(campaignId).done(function(campaignInfo){
+        outboundApi.getCampaign(campaignId).then(function(campaignInfo){
                     //if campaign is not on, update it so it is on.
                     if(campaignInfo.campaignStatus !== "on"){
                         data.campaignStatus = "on";
@@ -44,7 +50,8 @@
                 });
     }
 
-    pureCloudSession.authorize('efb6698a-5f76-4f90-bf29-9a69a3555602', redirectUrl).done(function(){
+
+    pureCloudSession.login().then(function(){
         addContactToList("John Doe", "3172222222");
     });
 
