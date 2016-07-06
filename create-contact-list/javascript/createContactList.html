@@ -2,13 +2,17 @@
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
-    <script src='purecloud-api-min.js'></script>
+    <script src='purecloud-api.min.js'></script>
 
     <script>
         var redirectUrl = window.location.href;
-        var pureCloudSession = new PureCloudSession();
+        var pureCloudSession = purecloud.platform.PureCloudSession({
+              strategy: 'implicit',
+              clientId: '6b003ac7-eead-4f26-bf0a-a90b54908e41',
+              redirectUrl: window.location.href
+            });
 
-        pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).done(function () {
+        pureCloudSession.authorize('de3058hd-b86a-4f19-af67-a7ad9763966d', redirectUrl).then(function () {
             var contactListConfiguration = {
                 "name": "My Contact List",
                 "columnNames": [
@@ -26,11 +30,11 @@
 
             var outboundApi = new OutboundApi(pureCloudSession);
             outboundApi.postContactlists(contactListConfiguration)
-                .done(function(contactList){
+                .then(function(contactList){
                     console.log('Successfully created the contact list! Your contact list id is ' + contactList.id);
                     console.log(contactList);
                 })
-                .error(function (error) {
+                .catch(function (error) {
                     console.log('There was an error creating the contact list.');
                     console.log(error);
                 });
