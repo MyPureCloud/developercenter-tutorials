@@ -29,7 +29,7 @@
 
         var pureCloudSession = purecloud.platform.PureCloudSession({
               strategy: 'implicit',
-              clientId: '6b003ac7-eead-4f26-bf0a-a90b54908e41',
+              clientId: 'babbc081-0761-4f16-8f56-071aa402ebcb',
               redirectUrl: window.location.href
             });
 
@@ -38,6 +38,7 @@
         var notificationsapi = new purecloud.platform.NotificationsApi(pureCloudSession);
         var presenceApi = new purecloud.platform.PresenceApi(pureCloudSession);
         var userPresenceTopic = '';
+        var conversationsTopic = '';
 
         $(document).ready(function() {
             $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
@@ -70,9 +71,16 @@
                                 // Start a new web socket using the connect Uri of the channel
                                 webSocket = new WebSocket(data.connectUri);
                                 webSocket.onopen = function(){
-                                    // Now that the connection is open, we can start our subscription.
+                                    // Now that the connection is open, we can start our subscriptions.
                                     userPresenceTopic = 'v2.users.' + myUserId + '.presence';
-                                    notificationsapi.postChannelsChannelIdSubscriptions(data.id, [{"id": userPresenceTopic}]);
+                                    conversationsTopic = 'v2.users.' + myUserId + '.conversations';
+                                    notificationsapi.postChannelsChannelIdSubscriptions(data.id, [
+                                        {
+                                            "id": userPresenceTopic
+                                        },
+                                        {
+                                            "id": conversationsTopic
+                                        }]);
                                 };
 
                                 // Message received callback function
@@ -91,6 +99,10 @@
                                     // Heartbeat
                                     else if (data.topicName == 'channel.metadata') {
                                         console.log('thump... THUMP...');
+                                    }
+                                    // Conversation event
+                                    else if (data.topicName == conversationsTopic) {
+                                        console.debug(data);
                                     }
                                     // Unknown
                                     else {
