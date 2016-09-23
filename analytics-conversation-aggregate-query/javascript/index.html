@@ -18,7 +18,7 @@
               redirectUrl: window.location.href
             });
 
-        var routingapi = new RoutingApi(pureCloudSession);
+        var routingapi = new purecloud.platform.RoutingApi(pureCloudSession);
 
         $(document).ready(function() {
             $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
@@ -33,7 +33,7 @@
 
             pureCloudSession.login()
                 .then(function() {
-                    // Get list of presences available
+                    // support queue
                     routingapi.getQueues(null, null, null, "Support").then(function(queueData){
                         var queueId = queueData.entities[0].id;
 
@@ -57,7 +57,7 @@
                             }
                         };
 
-                        var analyticsapi = new AnalyticsApi(pureCloudSession);
+                        var analyticsapi = new purecloud.platform.AnalyticsApi(pureCloudSession);
                         analyticsapi.postConversationsAggregatesQuery(query).then(function(queryResult){
                             console.log(queryResult);
                             document.getElementById('results').innerText = JSON.stringify(queryResult, null, "  ")
