@@ -45,3 +45,9 @@ presence:
     categories:
         - Status
         - Notifications
+callbacks:
+    title: Create Callback
+    description: Using the Platform API to create callbacks. 
+    categories:
+        - Callback
+        - Conversations
