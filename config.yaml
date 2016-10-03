@@ -47,7 +47,13 @@ presence:
         - Notifications
 callbacks:
     title: Create Callback
-    description: Using the Platform API to create callbacks. 
+    description: Using the Platform API to create callbacks.
     categories:
         - Callback
+        - Conversations
+calls:
+    title: Call Handling
+    description: Overview of basic call operations.
+    categories:
+        - Call
         - Conversations
