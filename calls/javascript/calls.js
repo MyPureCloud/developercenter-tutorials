@@ -21,7 +21,7 @@ var pureCloudSession = new purecloud.platform.PureCloudSession({
     strategy: 'implicit',
     clientId: clientId,
     redirectUrl: redirectUri,
-    environment: 'inindca.com'
+    environment: 'mypurecloud.com'
 });
 pureCloudSession.login();
 
