@@ -53,6 +53,8 @@ public class Main {
                 throw new Exception("Failed to find presences!");
             }
 
+            //Notifications not implemented in the Java tutorial
+
             // Wait for user input
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.print("Press enter to set status to available");

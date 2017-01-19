@@ -12,3 +12,16 @@ javascript:
           highlight: "86-116"
         - file: "javascript/index.html"
           highlight: "125-135"
+java:
+    displayName: Java
+    steps:
+        - file: "java/src/com/inin/Main.java"
+          highlight: "0-151"
+        - file: "java/src/com/inin/Main.java"
+          highlight: "31-49"
+        - file: "java/src/com/inin/Main.java"
+          highlight: "56-56"
+        - file: "java/src/com/inin/Main.java"
+          highlight: "56-56"
+        - file: "java/src/com/inin/Main.java"
+          highlight: "64-66"
