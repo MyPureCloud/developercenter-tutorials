@@ -1,0 +1,12 @@
+---
+nodejs:
+    displayName: NodeJS
+    steps:
+        - file: "nodejs/index.js"
+          highlight: "0-100"
+        - file: "nodejs/index.js"
+          highlight: "41-54"
+        - file: "nodejs/index.js"
+          highlight: "20-37"
+        - file: "nodejs/index.js"
+          highlight: "57-70"

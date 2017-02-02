@@ -57,3 +57,9 @@ calls:
     categories:
         - Call
         - Conversations
+chat-email-routing:
+    title: 3rd Party Chat and Email Routing
+    description: Introduction on how to route external objects through PureCloud ACD
+    categories:
+        - Chat
+        - Email
