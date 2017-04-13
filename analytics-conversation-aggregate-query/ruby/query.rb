@@ -1,4 +1,5 @@
-require 'purecloud'
+require 'purecloudplatformclientv2'
+require 'json'
 
 secret = ENV['PURECLOUD_SECRET']
 id = ENV['PURECLOUD_CLIENT_ID']
@@ -44,7 +45,6 @@ def create_query
 end
 
 analytics_api = PureCloud::AnalyticsApi.new
-result = analytics_api.post_conversations_aggregates_query :body=> create_query
+result = analytics_api.post_analytics_conversations_aggregates_query :body=> create_query
 
-require 'json'
 puts result
