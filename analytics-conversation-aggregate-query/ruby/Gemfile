@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'purecloud', '0.31.1'
+gem 'purecloudplatformclientv2', '3.0.0'
