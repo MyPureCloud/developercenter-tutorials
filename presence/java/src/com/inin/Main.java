@@ -1,4 +1,4 @@
-package com.inin;
+package com.genesys;
 
 import com.mypurecloud.sdk.v2.ApiClient;
 import com.mypurecloud.sdk.v2.Configuration;
