@@ -1,0 +1,23 @@
+.tutorial{:data =>{:title=>'Adding External Contacts'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+            External Contacts is a comprehensive repository of data about your external organizations and contacts. You can see a streamlined view of all contact and organization data and start a call, send an email, or visit a contact’s website directly from a contact’s record.
+
+            Loading external contacts doesn't have to be a manual process and this tutorial will walk through the steps of creating external contacts sourced by a csv file.
+
+            For mor information on external contacts see the [Resource Center](https://help.mypurecloud.com/articles/about-external-contacts/)
+    .step{:data=>{:title=>'Create an Organization'}}
+        :markdown
+            Assuming we already have an established authenticated session to PureCloud, the first thing we are going to do is create a new organization which all of our contacts will be a part of.
+
+            We can create the ExternalOrganization entity, specifiying the fields that are relevant to our use case, and then call postOrganizations to create the organization.
+
+            The response from this post will contain an id property which we will use to associate our contacts to this organization.
+
+    .step{:data=>{:title=>'Create Users'}}
+        :markdown
+            After we read our csv file we can iterate over each user. In our csv file the first row is the colum names so we will start at index = 1.
+
+             In order to tie the new user to the organization we just created, we need to set the organization id to the externalOrganization.id property of the new user.
+
+             Once we have the new user created, we can call postContacts and create the user.

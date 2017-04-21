@@ -1,0 +1,15 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-string": "^2.3.2",
+    "purecloud_api_sdk_javascript": "^0.88.8"
+  }
+}

@@ -63,3 +63,8 @@ chat-email-routing:
     categories:
         - Chat
         - Email
+external-contacts:
+    title: Creating External Contacts
+    description: Overview of creating External Contacts from a CSV file
+    categories:
+        - Contacts
