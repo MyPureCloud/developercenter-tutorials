@@ -2,7 +2,7 @@
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
-    <script src='purecloud-api.min.js'></script>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/0.88.8/purecloud-api.min.js"></script>
 
     <script>
         var contactListId, authToken;
@@ -14,17 +14,22 @@
             });
 
         pureCloudSession.login().then(function () {
-            authToken = pureCloudSession.getAuthToken();
+            authToken = pureCloudSession.options.token;
 
             var outboundApi = new purecloud.platform.OutboundApi(pureCloudSession);
-            outboundApi.getContactlists(false, false, false, 25, 1, 'EQUALS', 'My Contact List')
+            outboundApi.getContactlists(false, false, 100, 1)
                 .then(function (response) {
-                    var contactLists = response.entities;
-                    contactListId = contactLists && contactLists.length > 0 ? contactLists[0].id : '';
+                    response.entities.forEach(function(contactList) {
+                        $("#contactLists").append($("<option></option>")
+                            .attr("value", contactList.id)
+                            .text(contactList.name));
+                    });
                 });
         });
 
         function uploadContacts(file) {
+            var contactListId = $("#contactLists").find(":selected").val();
+            console.log("contactListId: " + contactListId);
             var data = new FormData();
             data.append('id', contactListId);
             data.append('file', file);
@@ -37,9 +42,23 @@
                 headers: {
                     Authorization: 'bearer ' + authToken
                 },
-                data: data,
+                //data: data,
                 processData: false,
-                contentType: false
+                contentType: false,
+                success: function(data, textStatus, jqXHR) {
+                    console.log("UPLOAD SUCCESS");
+                    $("body").append('<p>UPLOAD SUCCESS</p>');
+                    console.log(data);
+                    console.log(textStatus);
+                    console.log(jqXHR);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("UPLOAD FAILURE");
+                    $("body").append('<p>UPLOAD FAILURE</p>');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
             });
         }
 
@@ -52,6 +71,7 @@
 </head>
 
 <body>
-    <input type="file" id="file-input">
+    Contact Lists: <select id="contactLists"></select><br />
+    Choose file to upload: <input type="file" id="file-input" />
 </body>
 </html>
