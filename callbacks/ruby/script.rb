@@ -1,4 +1,4 @@
-require 'purecloud'
+require 'purecloudplatformclientv2'
 
 secret = ENV['purecloud_secret']
 id = ENV['purecloud_client_id']

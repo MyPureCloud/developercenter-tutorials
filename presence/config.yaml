@@ -16,12 +16,12 @@ java:
     displayName: Java
     steps:
         - file: "java/src/com/inin/Main.java"
-          highlight: "0-151"
+          highlight: "0-92"
         - file: "java/src/com/inin/Main.java"
-          highlight: "31-49"
+          highlight: "28-63"
         - file: "java/src/com/inin/Main.java"
-          highlight: "56-56"
+          highlight: "1-1"
         - file: "java/src/com/inin/Main.java"
-          highlight: "56-56"
+          highlight: "1-1"
         - file: "java/src/com/inin/Main.java"
-          highlight: "64-66"
+          highlight: "72-84"

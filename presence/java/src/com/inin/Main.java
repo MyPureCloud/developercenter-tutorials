@@ -1,12 +1,14 @@
-package com.inin;
+package com.genesys;
 
-import com.mypurecloud.sdk.Configuration;
-import com.mypurecloud.sdk.api.PresenceApi;
-import com.mypurecloud.sdk.api.UsersApi;
-import com.mypurecloud.sdk.model.OrganizationPresence;
-import com.mypurecloud.sdk.model.OrganizationPresenceEntityListing;
-import com.mypurecloud.sdk.model.UserMe;
-import com.mypurecloud.sdk.model.UserPresence;
+import com.mypurecloud.sdk.v2.ApiClient;
+import com.mypurecloud.sdk.v2.Configuration;
+import com.mypurecloud.sdk.v2.api.PresenceApi;
+import com.mypurecloud.sdk.v2.api.UsersApi;
+import com.mypurecloud.sdk.v2.api.request.GetPresencedefinitionsRequest;
+import com.mypurecloud.sdk.v2.model.OrganizationPresence;
+import com.mypurecloud.sdk.v2.model.OrganizationPresenceEntityListing;
+import com.mypurecloud.sdk.v2.model.UserMe;
+import com.mypurecloud.sdk.v2.model.UserPresence;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,19 +19,26 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Configure SDK settings
-            Configuration.getDefaultApiClient().setAccessToken("accesstoken");
-            Configuration.getDefaultApiClient().setBasePath("https://api.mypurecloud.com");
+            String accessToken = "accesstoken";
+            Configuration.setDefaultApiClient(ApiClient.Builder.standard()
+                    .withAccessToken(accessToken)
+                    .withBasePath("https://api.mypurecloud.com")
+                    .build());
 
             // Instantiate APIs
             UsersApi usersApi = new UsersApi();
             PresenceApi presenceApi = new PresenceApi();
 
             // Validate token with GET /api/v2/users/me (throws an exception if unauthorized)
-            UserMe me = usersApi.getMe(Arrays.asList("presence"));
+            UserMe me = usersApi.getUsersMe(Arrays.asList("presence"));
             System.out.println("Hello " + me.getName());
 
             // Get presences
-            OrganizationPresenceEntityListing presences = presenceApi.getPresencedefinitions(1, 25, "false");
+            GetPresencedefinitionsRequest presencedefinitionsRequest = GetPresencedefinitionsRequest.builder()
+                    .withPageNumber(1)
+                    .withPageSize(25)
+                    .build();
+            OrganizationPresenceEntityListing presences = presenceApi.getPresencedefinitions(presencedefinitionsRequest);
 
             // Find Available and Break org presences
             OrganizationPresence availablePresence = null;
@@ -63,7 +72,7 @@ public class Main {
             // Set presence to Available
             UserPresence body = new UserPresence();
             body.setPresenceDefinition(availablePresence);
-            UserPresence presenceResponse = presenceApi.patchUserIdPresencesSourceId(me.getId(), "PURECLOUD", body);
+            UserPresence presenceResponse = presenceApi.patchUserPresence(me.getId(), "PURECLOUD", body);
 
             // Wait for user input
             System.out.print("Press enter to set status to break");
@@ -72,7 +81,7 @@ public class Main {
             // Set presence to Available
             body = new UserPresence();
             body.setPresenceDefinition(breakPresence);
-            presenceResponse = presenceApi.patchUserIdPresencesSourceId(me.getId(), "PURECLOUD", body);
+            presenceResponse = presenceApi.patchUserPresence(me.getId(), "PURECLOUD", body);
 
             System.out.print("Application complete");
         } catch (Exception e) {
