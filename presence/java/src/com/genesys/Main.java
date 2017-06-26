@@ -5,10 +5,7 @@ import com.mypurecloud.sdk.v2.Configuration;
 import com.mypurecloud.sdk.v2.api.PresenceApi;
 import com.mypurecloud.sdk.v2.api.UsersApi;
 import com.mypurecloud.sdk.v2.api.request.GetPresencedefinitionsRequest;
-import com.mypurecloud.sdk.v2.model.OrganizationPresence;
-import com.mypurecloud.sdk.v2.model.OrganizationPresenceEntityListing;
-import com.mypurecloud.sdk.v2.model.UserMe;
-import com.mypurecloud.sdk.v2.model.UserPresence;
+import com.mypurecloud.sdk.v2.model.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Configure SDK settings
-            String accessToken = "accesstoken";
+            String accessToken = "nzdoJHtTSLVB9GRiBFddTDqQWa7NgvYrU_CNnr3AK7mMYChBNu2vqnpwFipLErCQgH4Wh5lJZb09NnSddV8TEg";
             Configuration.setDefaultApiClient(ApiClient.Builder.standard()
                     .withAccessToken(accessToken)
                     .withBasePath("https://api.mypurecloud.com")
@@ -41,8 +38,8 @@ public class Main {
             OrganizationPresenceEntityListing presences = presenceApi.getPresencedefinitions(presencedefinitionsRequest);
 
             // Find Available and Break org presences
-            OrganizationPresence availablePresence = null;
-            OrganizationPresence breakPresence = null;
+            PresenceDefinition availablePresence = null;
+            PresenceDefinition breakPresence = null;
             for (int i = 0; i < presences.getEntities().size(); i++) {
                 OrganizationPresence presence = presences.getEntities().get(i);
 
@@ -51,9 +48,11 @@ public class Main {
 
                 // Check system presences
                 if (presence.getSystemPresence().equalsIgnoreCase("available")) {
-                    availablePresence = presence;
+                    availablePresence = new PresenceDefinition();
+                    availablePresence.setId(presence.getId());
                 } else if (presence.getSystemPresence().equalsIgnoreCase("break")) {
-                    breakPresence = presence;
+                    breakPresence = new PresenceDefinition();
+                    breakPresence.setId(presence.getId());
                 }
             }
 
