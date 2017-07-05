@@ -15,13 +15,13 @@ javascript:
 java:
     displayName: Java
     steps:
-        - file: "java/src/com/inin/Main.java"
+        - file: "java/src/com/genesys/Main.java"
           highlight: "0-92"
-        - file: "java/src/com/inin/Main.java"
+        - file: "java/src/com/genesys/Main.java"
           highlight: "28-63"
-        - file: "java/src/com/inin/Main.java"
+        - file: "java/src/com/genesys/Main.java"
           highlight: "1-1"
-        - file: "java/src/com/inin/Main.java"
+        - file: "java/src/com/genesys/Main.java"
           highlight: "1-1"
-        - file: "java/src/com/inin/Main.java"
+        - file: "java/src/com/genesys/Main.java"
           highlight: "72-84"
