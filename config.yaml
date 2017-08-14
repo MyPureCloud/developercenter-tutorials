@@ -4,6 +4,11 @@ analytics-conversation-aggregate-query:
     description: See how to query historical statistics for a queue using the Analytics API.
     categories:
         - Analytics
+architect-schedules:
+    title: Evaluating Architect Schedules
+    description: See how to query architect flows for their schedule and determine if an IVR is currently open or closed.
+    categories:
+        - Architect
 oauth-implicit:
     title: OAuth Implicit Grant Login Flow
     description: Implicit grant login without a client library.
