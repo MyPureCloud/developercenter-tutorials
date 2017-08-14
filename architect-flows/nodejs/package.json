@@ -1,0 +1,15 @@
+{
+  "name": "architect-flows-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "isOpen.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.18.1",
+    "rrule": "^2.2.0"
+  }
+}
