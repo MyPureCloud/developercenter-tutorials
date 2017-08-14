@@ -1,0 +1,12 @@
+---
+javascript:
+    displayName: Javascript
+    steps:
+        - file: "javascript/isOpen.js"
+          highlight: "0-100"
+        - file: "javascript/isOpen.js"
+          highlight: "72-82"
+        - file: "javascript/isOpen.js"
+          highlight: "27-61"
+        - file: "javascript/isOpen.js"
+          highlight: "5-24"
