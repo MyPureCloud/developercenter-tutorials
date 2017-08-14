@@ -1,6 +1,6 @@
 ---
-javascript:
-    displayName: Javascript
+nodejs:
+    displayName: NodeJS
     steps:
         - file: "javascript/isOpen.js"
           highlight: "0-100"
