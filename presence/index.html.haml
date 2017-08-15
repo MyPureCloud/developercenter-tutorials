@@ -6,15 +6,15 @@
             For more information on the Presence APIs see the [REST Documentation](https://developer.mypurecloud.com/api/rest/v2/presence/index.html) and the [Understanding Presence](https://developer.mypurecloud.com/api/rest/v2/presence/understanding_presence.html) guide.
     .step{:data=>{:title=>'Get Current Presence State'}}
         :markdown
-            After authorizing your application, you can get all of the presences defined in the system to provide the user with controls to change their presence. 
+            After authorizing your application, you can get all of the presences defined in the system to provide the user with controls to change their presence.
 
             You will also want to get the current user's information, which contains a reference to their presence. Using the presence definition ID, you can get the presence definition data.
     .step{:data=>{:title=>'Registering for Notifications'}}
         :markdown
             In order to receive notifications, we must first create a channel.  The result of the channel create will give us a websocket URI that we can connect to. We will then create a subscription on that channel for the current user's status.
-            
-            .note.note-java
-                The java example currently does not implement presence notifications.
+
+        .note.note-java
+            The java example currently does not implement presence notifications.
     .step{:data=>{:title=>'Receiving Web Socket Events'}}
         :markdown
             The web socket messages will contain a payload in the eventBody property that looks similar to this:
@@ -40,8 +40,8 @@
 
             Here, eventBody contains a value of status which should mimic what you would get from the status property on the user object.
 
-            .note.note-java
-                The java example currently does not implement presence notifications.
+        .note.note-java
+            The java example currently does not implement presence notifications.
     .step{:data=>{:title=>'Updating Presence'}}
         :markdown
             Finally, we can update the presence.  The call to update the presence requires a "Source Id". PureCloud could potentially have different status sources from external systems, but here we want to update the PureCloud status so we can pass in the key of _PURECLOUD_.
