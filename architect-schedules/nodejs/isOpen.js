@@ -71,7 +71,7 @@ client.loginClientCredentialsGrant(clientId, clientSecret)
   .then(()=> {
       var architectApi = new purecloud.ArchitectApi();
 
-      const IVR_NAME = "*glinski*";
+      const IVR_NAME = "*mainivr*";
       client.callApi("/api/v2/architect/ivrs", "GET", null, {"name": IVR_NAME}, null, null, null, ['PureCloud Auth'], ['application/json'], ['application/json']).then((ivrs) => {
           let ivr = ivrs.entities[0];
 
