@@ -1,5 +1,4 @@
 ---
-ruby:
 python:
     displayName: Python
     steps:
