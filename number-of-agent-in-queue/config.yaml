@@ -1,0 +1,12 @@
+---
+python:
+    displayName: Python
+    steps:
+        - file: "python/script.py"
+          highlight: "0-76"
+        - file: "python/script.py"
+          highlight: "8-32"
+        - file: "python/script.py"
+          highlight: "32-38"
+        - file: "python/script.py"
+          highlight: "38-76"
