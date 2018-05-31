@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "purecloud_api_sdk_javascript": "^0.52.1"
+    "purecloud-platform-client-v2": "^27.0.0"
   }
 }
