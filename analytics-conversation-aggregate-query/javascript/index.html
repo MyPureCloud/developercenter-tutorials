@@ -24,9 +24,6 @@
 		client.setPersistSettings(true, 'test_app');
 
 		$(document).ready(function() {
-			// Set logout button handler
-			$('button#logoutButton').click(() => window.location = 'https://login.mypurecloud.com/logout');
-
 			// Authenticate with PureCloud
 			client.loginImplicitGrant(clientId, redirectUri)
 				.then(() => {
