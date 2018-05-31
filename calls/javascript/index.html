@@ -2,10 +2,9 @@
 <html>
 <head>
   <title>Conversations Tutorial</title>
-  <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script src="https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
@@ -14,12 +13,6 @@
 <body>
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      <h1>Buttons</h1>
-      <p>
-        <button id="togglePolling" class="btn btn-default">Start Queue Polling</button>
-      </p>
-
-
       <h1>User Queue</h1>
 
       <p class="form-inline">
@@ -43,8 +36,8 @@
     {{/unlessCond}}
     <table id="queue" class="table table-striped table-bordered">
       <tr>
-          <th>Conversation</th>
-          <th>Participants</th>
+        <th>Conversation</th>
+        <th>Participants</th>
       </tr>
       {{#each .}}
         <tr id='{{id}}'>
@@ -62,11 +55,9 @@
             {{#each participants}}
               {{address}}<br />
               {{id}}<br/>
-              {{#unlessCond state 'disconnected'}}
               <button class="btn btn-default btn-sm {{#if muted}} btn-info {{/if}}" onclick="mute('{{../id}}','{{id}}',{{muted}})">{{#if muted}}Unmute{{else}}Mute{{/if}}</button>
               <button class="btn btn-default btn-sm {{#if held}} btn-info {{/if}}" onclick="hold('{{../id}}','{{id}}',{{held}})">{{#if held}}Unhold{{else}}Hold{{/if}}</button>
               <button class="btn btn-default btn-sm" onclick="disconnect('{{../id}}','{{id}}')">Disconnect</button>
-              {{/unlessCond}}
               <br />
             {{/each}}
           </td>
