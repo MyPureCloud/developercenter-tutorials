@@ -199,6 +199,7 @@ function disconnect(callId, participantId) {
 		}).catch((err) => console.error(err));
 }
 
+// Initiate a consult transfer
 function startConsult() {
 	console.debug(conversationList);
 	let callId = conversationList[Object.keys(conversationList)[0]].id;
@@ -222,6 +223,7 @@ function startConsult() {
 		}).catch((err) => console.error(err));
 }
 
+// Change which parties in the consult transfer are speaking
 function consultSpeakTo(speakTo) {
 	let callId = conversationList[Object.keys(conversationList)[0]].id;
 
