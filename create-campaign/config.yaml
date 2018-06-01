@@ -2,13 +2,11 @@
 javascript:
     displayName: Javascript
     steps:
-        - file: "javascript/createCampaign.html"
-          highlight: "0-69"
-        - file: "javascript/createCampaign.html"
-          highlight: "13-15"
-        - file: "javascript/createCampaign.html"
-          highlight: "16-34"
-        - file: "javascript/createCampaign.html"
-          highlight: "36-57"
-        - file: "javascript/createCampaign.html"
-          highlight: "59-67"
+        - file: "javascript/index.html"
+          highlight: "0-127"
+        - file: "javascript/index.html"
+          highlight: "33-35"
+        - file: "javascript/index.html"
+          highlight: "37-89"
+        - file: "javascript/index.html"
+          highlight: "91-121"
