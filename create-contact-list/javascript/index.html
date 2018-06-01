@@ -1,0 +1,54 @@
+<html>
+<head>
+	<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' rel='stylesheet' integrity='sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==' crossorigin='anonymous'>
+	
+	<script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+	<script src='https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js'></script>
+
+	<script type='text/javascript'>
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const redirectUri = window.location.href;
+
+		// Set purecloud objects
+		const platformClient = require('platformClient');
+		const client = platformClient.ApiClient.instance;
+		const outboundApi = new platformClient.OutboundApi();
+
+		// Set PureCloud settings
+		client.setEnvironment('mypurecloud.com');
+		client.setPersistSettings(true, 'test_app');
+
+		$(document).ready(function() {
+			// Authenticate with PureCloud
+			client.loginImplicitGrant(clientId, redirectUri)
+				.then(() => {
+					console.log('Logged in');
+
+					const contactListConfiguration = {
+						name: 'My Contact List',
+						columnNames: [
+							'First Name',
+							'Last Name',
+							'Home',
+							'Work',
+							'Cell',
+							'Contact ID'
+						],
+						phoneColumns: [
+							{ columnName: 'Cell', type: 'cell'},
+							{ columnName: 'Home', type: 'home'}
+						]
+					};
+
+					// Create contact list
+					return outboundApi.postOutboundContactlists(contactListConfiguration);
+				})
+				.then((contactList) => {
+					console.log('Contact list: ', contactList);
+				})
+				.catch((err) => console.error(err));
+		});
+	</script>
+</head>
+</html>
