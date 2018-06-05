@@ -1,0 +1,126 @@
+<html>
+<head>
+	<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' rel='stylesheet' integrity='sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==' crossorigin='anonymous'>
+	<script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+	<script src='https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js'></script>
+
+	<script type='text/javascript'>
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const redirectUri = window.location.href;
+
+		// Set purecloud objects
+		const platformClient = require('platformClient');
+		const client = platformClient.ApiClient.instance;
+		const outboundApi = new platformClient.OutboundApi();
+		const scriptsApi = new platformClient.ScriptsApi();
+		const routingapi = new platformClient.RoutingApi();
+
+		// Set PureCloud settings
+		client.setEnvironment('mypurecloud.com');
+		client.setPersistSettings(true, 'test_app');
+
+		// Set your own values here
+		const CONTACT_LIST_NAME = 'A List';
+		const QUEUE_NAME = 'Queue 1';
+		const SCRIPT_NAME = 'Outbound 1';
+
+		// Local vars
+		let contactListId, queueId, scriptId;
+
+		$(document).ready(function() {
+			// Authenticate with PureCloud
+			client.loginImplicitGrant(clientId, redirectUri)
+				.then(() => {
+					console.log('Logged in');
+
+					/* Collect promises for multiple API requests to be processed before continuing.
+					 * These API request promise chains purposefully do not catch/handle errors so that the error 
+					 * is propigated up and prevents further processing in the promise chain if either of the 
+					 * requests fail.
+					 */
+					const promises = [];
+
+					// Get contact list by name
+					const getOutboundContactlistsPromise = outboundApi.getOutboundContactlists({ name: CONTACT_LIST_NAME })
+						.then((res) => {
+							console.log('Contact lists: ', res);
+							
+							// Verify result
+							if (res.entities.length === 0 || res.entities[0].name !== CONTACT_LIST_NAME) 
+								throw new Error('Failed to find contact list!');
+
+							contactListId = res.entities[0].id;
+							console.log(`Found contact list ${contactListId}`);
+						});
+
+					// Get queue by name
+					const getRoutingQueuesPromise = routingapi.getRoutingQueues({ name: QUEUE_NAME})
+						.then((res) => {
+							console.log('Queues: ', res);
+							
+							// Verify result
+							if (res.entities.length === 0 || res.entities[0].name !== QUEUE_NAME) 
+								throw new Error('Failed to find queue!');
+
+							queueId = res.entities[0].id;
+							console.log(`Found queue ${queueId}`);
+						});
+
+					// Get script by name
+					const getScriptsPromise = scriptsApi.getScripts({ name: SCRIPT_NAME })
+						.then((res) => {
+							console.log('Scripts: ', res);
+							
+							// Verify result
+							if (res.entities.length === 0 || res.entities[0].name !== SCRIPT_NAME) 
+								throw new Error('Failed to find script!');
+
+							scriptId = res.entities[0].id;
+							console.log(`Found script ${scriptId}`);
+						});
+
+					// Add promises to list
+					promises.push(getOutboundContactlistsPromise);
+					promises.push(getRoutingQueuesPromise);
+					promises.push(getScriptsPromise);
+
+					// Wait for all promises to resolve before continuing
+					return Promise.all(promises);
+				})
+				.then(() => {
+					// Build create campaign request. Configure this based on your call list configuration
+					const campaignConfiguration = {
+						name: 'My Campaign 1',
+						dialingMode: 'preview',
+						contactList: {
+							id: contactListId
+						},
+						phoneColumns: [
+							{
+								columnName: 'phone',
+								type: 'home'
+							}
+						],
+						queue: {
+							id: queueId
+						},
+						script: {
+							id: scriptId
+						},
+						callerName: 'Caller ID',
+						callerAddress: '5551231234'
+					};
+
+					// Create campaign
+					console.log('Creating campaign...');
+					return outboundApi.postOutboundCampaigns(campaignConfiguration);
+				})
+				.then((campaign) => {
+					console.log('Campaign created: ', campaign);
+				})
+				.catch((err) => console.error(err));
+		});
+	</script>
+</head>
+</html>

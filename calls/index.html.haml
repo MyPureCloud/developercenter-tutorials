@@ -8,13 +8,35 @@
         :markdown
             Creating a call using the [POST /api/v2/conversations/calls](https://developer.mypurecloud.com/api/rest/v2/conversations/index.html#postConversationsCalls) resource can be as simple as posting just a body with the phoneNumber, but can also be placed to a queue or user given their id or placed on behalf of a queue.
 
-            Here we will create the body with the phoneNumber field and get that value out of the dialstring input box.  That body is then passed into the postCalls sdk function.
+            Here we will create the body with the phoneNumber field and get that value out of the dialstring input box.  That body is then passed into the postConversationsCalls sdk function.
 
-    .step{:data=>{:title=>'Retrieving Queue Contents'}}
+    .step{:data=>{:title=>'Getting the User\'s Conversations'}}
         :markdown
-            The proper way to get the contents of your user's queue is to [use the notification service](https://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html) but subscribing to web sockets deserves its own [tutorial](https://developer.mypurecloud.com/api/tutorials/presence/#javascript) so for simplicity sake here we will just poll for the conversations on a one second interval.
+            This block of code sets up notifications for the authenticated user's conversations. Proceed to dive into each step.
 
-            This tutorial then takes the result from getCalls and sends the data through a [handlebars](http://handlebarsjs.com/) template to render in the web page.
+    .step{:data=>{:title=>'Getting the User\'s Conversations'}}
+        :markdown
+            First, the app must retrieve the authenticated user's information and store it for later use.
+
+    .step{:data=>{:title=>'Getting the User\'s Conversations'}}
+        :markdown
+            Next, a new notification channel is created for the application.
+
+    .step{:data=>{:title=>'Getting the User\'s Conversations'}}
+        :markdown
+            With the notification channel's information, a new web socket is created and configured. 
+
+            After setting up the web socket, the topic `v2.users.{userId}.conversations` is subscribed to. This topic will provide real-time notifications for any conversations the specified user participates in.
+
+    .step{:data=>{:title=>'Getting the User\'s Conversations'}}
+        :markdown
+            This is the callback function that handles incoming notifications from PureCloud. It performs the following steps:
+
+            1. Parses the notification payload to JSON. Web socket message payloads are always received as a string.
+            2. Unwanted notification topics are filtered out.
+            3. The conversation object (event body) is manipulated to copy properties from the call object to the participant. This is done to reconcile differences between the data model used by conversation notifications and conversation API responses.
+            4. If the conversation is disconnected, it is removed from the list of conversations.
+            5. The UI is re-rendered with the latest conversation data.
 
     .step{:data=>{:title=>'Holding and Muting the Call'}}
         :markdown
@@ -28,9 +50,9 @@
         :markdown
             When initiating a consult transfer a call needs to be made to [POST /api/v2/conversations/calls/{callId}/participants/{participantId}/consult](https://developer.mypurecloud.com/api/rest/v2/conversations/index.html#postConversationsCallsCallIdParticipantsParticipantIdConsult) to start the transfer.  In this case the participant id is the remote participant that you want to transfer. In our example since we are making outbound calls, the first participant in the conversation is ourself, the second is who we called. We want to transfer the person we called, so we take the second participant id to pass into the consult function.
 
-        .step{:data=>{:title=>'Consult Transfer Switch Parties'}}
-            :markdown
-                When we initiated the consult transfer, we specified that we wanted to speak to only the destination.  We can change the participants who we are speaking to by calling [PATCH /api/v2/conversations/calls/{callId}/participants/{participantId}/consult](https://developer.mypurecloud.com/api/rest/v2/conversations/index.html#patchConversationsCallsCallIdParticipantsParticipantIdConsult) and setting the **speakTo** property on the request body.  The valid values for **speakTo** are **DESTINATION** this is the party that was conferenced into the existing call, **OBJECT** which is the initial participant of the call, the one whos participantId was used to initiate the consult, and finally **BOTH** which established a conference call between all participants.
+    .step{:data=>{:title=>'Consult Transfer Switch Parties'}}
+        :markdown
+            When we initiated the consult transfer, we specified that we wanted to speak to only the destination.  We can change the participants who we are speaking to by calling [PATCH /api/v2/conversations/calls/{callId}/participants/{participantId}/consult](https://developer.mypurecloud.com/api/rest/v2/conversations/index.html#patchConversationsCallsCallIdParticipantsParticipantIdConsult) and setting the **speakTo** property on the request body.  The valid values for **speakTo** are **DESTINATION** this is the party that was conferenced into the existing call, **OBJECT** which is the initial participant of the call, the one whos participantId was used to initiate the consult, and finally **BOTH** which established a conference call between all participants.
     
     .step{:data=>{:title=>'Disconnecting the Call'}}
         :markdown

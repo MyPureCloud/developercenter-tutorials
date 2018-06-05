@@ -1,80 +1,91 @@
-var WebSocket = require('websocket').w3cwebsocket;
-var purecloud = require('purecloud_api_sdk_javascript');
+const platformClient = require('purecloud-platform-client-v2');
+const WebSocket = require('websocket').w3cwebsocket;
 
-const PROVIDER_NAME = "Developer Center Tutorial";
-const QUEUE_ID = "6b156afe-b9c1-49b4-82f3-6dfa5409c71c";
+// Set purecloud objects
+const client = platformClient.ApiClient.instance;
+const notificationsApi = new platformClient.NotificationsApi();
+const conversationsApi = new platformClient.ConversationsApi();
 
-var session = purecloud.PureCloudSession({
-    strategy: 'client-credentials',
-    clientId: process.env.PURECLOUD_CLIENT_ID,
-    clientSecret: process.env.PURECLOUD_SECRET,
-    timeout: 10000,
-    environment: 'mypurecloud.com'
-});
+// Set PureCloud settings
+client.setEnvironment('mypurecloud.com');
+client.setPersistSettings(true, 'test_app');
 
-var conversationsTopic = null;
-var webSocket = null;
-var conversationApi = null;
+// Get client credentials from environment variables
+const PURECLOUD_CLIENT_ID = process.env.PURECLOUD_CLIENT_ID;
+const PURECLOUD_CLIENT_SECRET = process.env.PURECLOUD_CLIENT_SECRET;
 
-function createEmail(){
-    var emailData = {
-       "queueId": QUEUE_ID,
-       "provider": PROVIDER_NAME,
-       "toAddress": "Developer Tutorial",
-       "toName": "Developer Tutorial",
-       "fromAddress": "e4f980d8-e8a1-11e6-806b-600308a98970",
-       "fromName": "John Doe",
-       "subject": "External system email"
-    };
+// Use your own data here
+const PROVIDER_NAME = 'Developer Center Tutorial';
+const QUEUE_ID = '636f60d4-04d9-4715-9350-7125b9b553db';
 
-    conversationApi = new purecloud.ConversationsApi(session);
-    conversationApi.postEmails(emailData).then(function(conversation){
-        var conversationId = conversation.id;
-        console.log("Created email " + conversationId);
-    })
-    .catch(function(error) {
-        console.error(error);
-    });
+// Local vars
+let conversationsTopic = null;
+let webSocket = null;
+
+// Authenticate with PureCloud
+client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
+	.then(() => {
+		console.log('Authenticated with PureCloud');
+
+		// Create a new notification channel for this app
+		return notificationsApi.postNotificationsChannels();
+	})
+	.then((channel) => {
+		// Subscribe to conversation notifications for the queue
+		conversationsTopic = 'v2.routing.queues.' + QUEUE_ID + '.conversations.emails';
+		notificationsApi.putNotificationsChannelSubscriptions(channel.id, [ { id: conversationsTopic } ])
+			.catch((err) => console.log(err));
+
+		// Open a new web socket using the connect Uri of the channel
+		webSocket = new WebSocket(channel.connectUri);
+		webSocket.onopen = () => {
+			// Create a new 3rd party email
+			createEmail();
+		};
+
+		// Message received callback function
+		webSocket.onmessage = (message) => {
+			// Parse string message into JSON object
+			let data = JSON.parse(message.data);
+
+			// Filter out unwanted messages
+			if (data.topicName.toLowerCase() === 'channel.metadata') {
+				console.log(`Heartbeat ${new Date()}`);
+				return;
+			} else if (data.topicName.toLowerCase() !== conversationsTopic.toLowerCase()) {
+				console.log(`Unexpected notification: ${JSON.stringify(data)}`);
+				return;
+			}
+			
+			// Color text red if it matches this provider
+			let providerText = data.eventBody.participants[0].provider;
+			if(data.eventBody.participants[0].provider === PROVIDER_NAME) {
+				providerText = `\x1b[31m${providerText}\x1b[0m`;	
+			}
+			
+			// Log some info
+			console.log(`[${providerText}] id:${data.eventBody.id} from:${data.eventBody.participants[0].name} <${data.eventBody.participants[0].address}>`);
+		};
+	})
+	.catch((err) => console.log(err));
+
+// Creates a 3rd party email
+// https://developer.mypurecloud.com/api/rest/v2/conversations/third-party-object-routing.html
+function createEmail() {
+	let emailData = {
+		queueId: QUEUE_ID,
+		provider: PROVIDER_NAME,
+		toAddress: 'Developer Tutorial',
+		toName: 'Developer Tutorial',
+		fromAddress: 'no-reply@mypurecloud.com',
+		fromName: 'John Doe',
+		subject: 'External system email'
+	};
+
+	conversationsApi.postConversationsEmails(emailData)
+		.then((conversation) => {
+			const conversationId = conversation.id;
+			console.log(`Created email, conversation id:${conversationId}`);
+		})
+		.catch((err) => console.log(err));
 }
-
-session.login().then(function() {
-    var notificationsapi = new purecloud.NotificationsApi(session);
-    notificationsapi.postChannels().then(function(data){
-       // Start a new web socket using the connect Uri of the channel
-       webSocket = new WebSocket(data.connectUri);
-       webSocket.onopen = function(){
-           // Now that the connection is open, we can start our subscriptions.
-           conversationsTopic = 'v2.routing.queues.' + QUEUE_ID + '.conversations';
-           notificationsapi.postChannelsChannelIdSubscriptions(data.id, [
-               {
-                   "id": conversationsTopic
-               }]);
-
-           createEmail();
-       };
-
-       // Message received callback function
-       webSocket.onmessage = function(message) {
-           // Parse string message into JSON object
-           var data = JSON.parse(message.data);
-
-           if (data.topicName === conversationsTopic) {
-                conversationApi.getEmailsEmailId(data.eventBody.id).then(function(emailData){
-                    if(emailData.participants[0].provider === PROVIDER_NAME){
-                        console.log("Email matches provider");
-                        //do something with the email
-                    }
-                });
-           }
-
-       };
-   }).catch((err) => console.error(err));
-
-}).catch((err)=>{
-    console.error("ERROR Logging in");
-    console.error(err);
-});
-
-(function wait () {
-   setTimeout(wait, 1000);
-})();

@@ -13,7 +13,7 @@ This project is based off of [Viewsaurus](https://www.npmjs.com/package/viewsaur
 	    2. `gem install haml`
 	    3. `gem install mustache`
 	    4. `gem install redcarpet`
-7. Open your browser and browser to http://localhost:4567/\<tutorialdir>/index
+7. Open your browser and browser to `http://localhost:4567/<tutorialdir>/index`
 
 # Tutorial guidelines
 

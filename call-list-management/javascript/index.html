@@ -1,0 +1,71 @@
+<html>
+<head>
+	<title>Call List Management Tutorial</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js"></script>
+
+	<script type="text/javascript">
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const redirectUri = window.location.href;
+
+		// Use your own IDs here
+		const contactListId = 'f19465cf-5bc6-4871-b59f-5307575ddddf';
+		const campaignId = '7fc6b00a-f2f5-44d2-9fc5-169f339f6c4b';
+
+		// Set purecloud objects
+		const platformClient = require('platformClient');
+		const client = platformClient.ApiClient.instance;
+		const outboundApi = new platformClient.OutboundApi();
+
+		// Set PureCloud settings
+		client.setEnvironment('mypurecloud.com');
+		client.setPersistSettings(true, 'test_app');
+
+		$(document).ready(function() {
+			// Authenticate with PureCloud
+			client.loginImplicitGrant(clientId, redirectUri)
+				.then(() => {
+					const contactData = [
+						{
+							'contactListId': contactListId,
+							'callable': true,
+							// These properties must match the columns in your contact list
+							'data': {
+								'name': 'John Doe',
+								'phone': '3172222222'
+							}
+						}
+					];
+
+					// Add the contact to the contact list
+					return outboundApi.postOutboundContactlistContacts(contactListId, contactData, true);
+				})
+				.then(() => {
+					console.log('Contact added to list');
+
+					// Get the campaign's configuration
+					return outboundApi.getOutboundCampaign(campaignId);
+				})
+				.then((campaignInfo) => {
+					console.log('campaignInfo: ', campaignInfo);
+
+					// if campaign is not on, update it so it is on
+					if(campaignInfo.campaignStatus !== 'on') {
+						campaignInfo.campaignStatus = 'on';
+
+						console.log('Activating campaign');
+						outboundApi.putOutboundCampaign(campaignId, campaignInfo)
+							.then(() => console.log('Campaign activated'))
+							.catch((err) => console.error(err));			
+					}
+				})
+				.catch((err) => console.error(err));
+		});
+	</script>
+</head>
+
+<body>
+
+</body>

@@ -1,150 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
-    <script src='purecloud-api.min.js'></script>
-    <title>Presence Subscription</title>
-    <style type="text/css">
-        body {
-            padding: 5px;
-        }
+	<title>Presence Subscription</title>
+	
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
-        button {
-            margin: 2px 5px;
-        }
+	<style type="text/css">
+		.row {
+			margin-top: 8px;
+		}
+	</style>
 
-        #currentPresence:before {
-            content: "Current presence: ";
-        }
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js"></script>
 
-        #logoutButton {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
-    <script type="text/javascript">
-        var webSocket = null;
+	<script type="text/javascript">
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const redirectUri = window.location.href;
 
-        var pureCloudSession = purecloud.platform.PureCloudSession({
-              strategy: 'implicit',
-              clientId: 'babbc081-0761-4f16-8f56-071aa402ebcb',
-              redirectUrl: window.location.href
-            });
+		// Set purecloud objects
+		const platformClient = require('platformClient');
+		const client = platformClient.ApiClient.instance;
+		const notificationsApi = new platformClient.NotificationsApi();
+		const presenceApi = new platformClient.PresenceApi();
+		const usersApi = new platformClient.UsersApi();
 
+		// Set PureCloud settings
+		client.setEnvironment('mypurecloud.com');
+		client.setPersistSettings(true, 'test_app');
 
-        var usersapi = new purecloud.platform.UsersApi(pureCloudSession);
-        var notificationsapi = new purecloud.platform.NotificationsApi(pureCloudSession);
-        var presenceApi = new purecloud.platform.PresenceApi(pureCloudSession);
-        var userPresenceTopic = '';
-        var conversationsTopic = '';
+		// Local vars
+		let presences = {};
+		let userPresenceTopic = '';
+		let webSocket = null;
+		let me, notificationChannel;
 
-        $(document).ready(function() {
-            $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
+		$(document).ready(() => {
+			// Authenticate with PureCloud
+			client.loginImplicitGrant(clientId, redirectUri)
+				.then(() => {
+					console.log('Logged in');
 
-            pureCloudSession.login()
-                .then(function() {
-                    // Get list of presences available
-                    presenceApi.getPresencedefinitions().then(function(presenceData){
-                        for (var x=0; x< Object.keys(presenceData.entities).length; x++){
-                            var presence = presenceData.entities[x];
-                            $('div#presenceButtons').append('<button onclick="setPresence(\'' + presence.id +'\')">' +
-                                presence.languageLabels.en_US +'</button>');
-                        }
-                    });
+					// Get presences
+					return presenceApi.getPresencedefinitions({ pageSize: 100 });
+				})
+				.then((presenceListing) => {
+					console.log(`Found ${presenceListing.entities.length} presences`);
 
-                    // Get logged in user's presence
-                    usersapi.getMe('presence')
-                        .then(function(data){
-                            // Store user ID
-                            myUserId = data.id;
+					// Create button for each presence
+					presenceListing.entities.forEach((presence) => {
+						presences[presence.id] = presence;
+						$('div#presenceButtons').append($('<button>')
+							.addClass('btn btn-primary')
+							.click(() => setPresence(presence.id))
+							.text(presence.languageLabels.en_US)
+						);
+					});
 
-                            // Get presence definition
-                            var presenceDefinitionId = data.presence.presenceDefinition.id;
-                            presenceApi.getPresenceId(presenceDefinitionId).then(function(data) {
-                                $("#currentPresence").text(data.languageLabels.en_US);
-                            });
+					// Get authenticated user's data, including current presence
+					return usersApi.getUsersMe({ expand: ['presence'] });
+				})
+				.then((userMe) => {
+					me = userMe;
 
-                            // Create a notification channel
-                            notificationsapi.postChannels().then(function(data){
-                                // Start a new web socket using the connect Uri of the channel
-                                webSocket = new WebSocket(data.connectUri);
-                                webSocket.onopen = function(){
-                                    // Now that the connection is open, we can start our subscriptions.
-                                    userPresenceTopic = 'v2.users.' + myUserId + '.presence';
-                                    conversationsTopic = 'v2.users.' + myUserId + '.conversations';
-                                    notificationsapi.postChannelsChannelIdSubscriptions(data.id, [
-                                        {
-                                            "id": userPresenceTopic
-                                        },
-                                        {
-                                            "id": conversationsTopic
-                                        }]);
-                                };
+					// Set current presence text in UI
+					$('#currentPresence').text(presences[me.presence.presenceDefinition.id].languageLabels.en_US);
 
-                                // Message received callback function
-                                webSocket.onmessage = function(message) {
-                                    // Parse string message into JSON object
-                                    var data = JSON.parse(message.data);
+					// Create notification channel
+					return notificationsApi.postNotificationsChannels();
+				})
+				.then((channel) => {
+					console.log('channel: ', channel);
+					notificationChannel = channel;
 
-                                    // Presence update
-                                    if (data.topicName == userPresenceTopic){
-                                        // Get presence display text from presence definition ID
-                                        presenceApi.getPresenceId(data.eventBody.presenceDefinition.id).then(function(presence) {
-                                            // Write presence to body
-                                            $('div#currentPresence').text(presence.languageLabels.en_US);
-                                        });
-                                    }
-                                    // Heartbeat
-                                    else if (data.topicName == 'channel.metadata') {
-                                        console.log('thump... THUMP...');
-                                    }
-                                    // Conversation event
-                                    else if (data.topicName == conversationsTopic) {
-                                        console.debug(data);
-                                    }
-                                    // Unknown
-                                    else {
-                                        console.warn('Unexpected topic: ' + data.topicName)
-                                        console.debug(data);
-                                    }
+					// Set up web socket
+					webSocket = new WebSocket(notificationChannel.connectUri);
+					webSocket.onmessage = handleNotification;
 
-                                    // Log message
-                                    $('div#messages').append('<pre>' + new Date().toLocaleTimeString() + ' - ' +
-                                        JSON.stringify(JSON.parse(message.data),null,2) + '</pre>');
-                                };
-                            });
+					// Subscribe to authenticated user's presence
+					userPresenceTopic = `v2.users.${me.id}.presence`;
+					const body = [ { id: userPresenceTopic } ];
+					return notificationsApi.putNotificationsChannelSubscriptions(notificationChannel.id, body);
+				})
+				.then((channel) => {
+					console.log('Channel subscriptions set successfully');
+				})
+				.catch((err) => console.error(err));
+		});
 
-                        }).catch(function(){
-                            alert("error");
-                        });
-                });
-            });
+		function setPresence(presenceId) {
+			console.log(`Setting presence to ${presences[presenceId].languageLabels.en_US} (${presenceId})`);
 
-        function setPresence(presenceId){
-            // Create request body
-            var setPresence = {
-                "presenceDefinition" : {
-                    "id": presenceId
-                }
-            };
+			// Set presence
+			presenceApi.patchUserPresence(me.id, 'PURECLOUD', { presenceDefinition:{ id: presenceId } })
+				.then(() => {
+					console.log('Presence set successfully');
+				})
+				.catch((err) => console.error(err));
+		}
 
-            // Patch presence
-            presenceApi.patchUserIdPresencesSourceId(myUserId, 'PURECLOUD', setPresence);
-        }
-    </script>
+		// Handle incoming PureCloud notification from WebSocket
+		function handleNotification(message) {
+			// Parse notification string to a JSON object
+			const notification = JSON.parse(message.data);
+
+			// Discard unwanted notifications
+			if (notification.topicName.toLowerCase() === 'channel.metadata') {
+				// Heartbeat
+				console.info('Ignoring metadata: ', notification);
+				return;
+			} else if (notification.topicName.toLowerCase() !== userPresenceTopic.toLowerCase()) {
+				// Unexpected topic
+				console.warn('Unknown notification: ', notification);
+				return;
+			} else {
+				console.debug('Presence notification: ', notification);
+			}
+
+			// Set current presence text in UI
+			$('#currentPresence').text(presences[notification.eventBody.presenceDefinition.id].languageLabels.en_US);
+
+			// Log messages
+			$('div#messages').append($('<pre>').text(`${new Date().toLocaleTimeString()} - ${JSON.stringify(notification,null,2)}`));
+		}
+	</script>
 </head>
 <body>
-    <button id="logoutButton">Log Out</button>
-    <div id="currentPresence"></div>
-    <div id="presenceButtons">Set presence: </div>
-    <br/>
-
-    <b>See information on using the notification service at <a href='http://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html'>http://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html</a></b>
-    <br/><br/>
-
-    <h4>Messages</h4>
-    <div id="messages"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				Current presence: <span id="currentPresence"></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<label for="presenceButtons">Set Presence</label><br />
+				<div id="presenceButtons" class="btn-group"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<p>
+					See information on using the notification service at <a href='http://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html' target="_blank">http://developer.mypurecloud.com/api/rest/v2/notifications/notification_service.html</a>
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<h1>Messages</h1>
+				<div id="messages"></div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

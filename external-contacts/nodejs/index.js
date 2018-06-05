@@ -1,79 +1,84 @@
-var purecloud = require('purecloud_api_sdk_javascript');
-var CSV = require('csv-string');
-var fs = require('fs');
+const platformClient = require('purecloud-platform-client-v2');
+const CSV = require('csv-string');
+const fs = require('fs');
 
-var pureCloudSession = purecloud.PureCloudSession({
-    strategy: 'client-credentials',
-    clientId: process.env.PURECLOUD_CLIENT_ID,
-    clientSecret: process.env.PURECLOUD_CLIENT_SECRET,
-    timeout: 10000,
-    environment: process.env.PURECLOUD_ENVIRONMENT
-});
+// Get client credentials from environment variables
+const PURECLOUD_CLIENT_ID = process.env.PURECLOUD_CLIENT_ID;
+const PURECLOUD_CLIENT_SECRET = process.env.PURECLOUD_CLIENT_SECRET;
 
-pureCloudSession.login().then(function() {
-    var externalContactsApi = new purecloud.ExternalContactsApi(pureCloudSession);
+// Set purecloud objects
+const client = platformClient.ApiClient.instance;
+const externalContactsApi = new platformClient.ExternalContactsApi();
 
-    var body = {
-        "name": "Developer Tutorial Company",
-        "industry": "Software",
-        "address": {
-            "address1": "7601 Interactive Way",
-            "city": "Indianapolis",
-            "state": "Indiana",
-            "postalCode": "46278",
-            "countryCode": "USA"
-        },
-        "employeeCount": 2000,
-        "websites": [
-            "https://developer.mypurecloud.com"
-        ],
-        "twitterId": {
-            "screenName": "PureCloud_dev"
-        }
-    };
+// Set PureCloud settings
+client.setEnvironment('mypurecloud.com');
+// client.setDebugLog(console.log, 100);
 
-    externalContactsApi.postOrganizations(body).then(function(organization){
-        console.log("Created organization "+ organization.id);
+// Authenticate with PureCloud
+client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
+	.then(() => {
+		console.log('Authenticated with PureCloud');
 
-        fs.readFile('contacts.csv', 'utf8', function (err,data) {
-            if (err) {
-                return console.log(err);
-            }
-            var arr = CSV.parse(data);
+		const organization = {
+			name: 'Developer Tutorial Company',
+			industry: 'Software',
+			address: {
+				address1: '7601 Interactive Way',
+				city: 'Indianapolis',
+				state: 'Indiana',
+				postalCode: '46278',
+				countryCode: 'USA'
+			},
+			employeeCount: 2000,
+			websites: [
+				'https://developer.mypurecloud.com'
+			],
+			twitterId: {
+				screenName: 'PureCloud_dev'
+			}
+		};
 
-            for(let x=1; x<arr.length; x++){
-                let userData = arr[x];
-                let user = {
-                    "firstName": userData[0],
-                    "lastName": userData[1],
-                    "title": userData[5],
-                    "workPhone": {
-                        "display": userData[6]
-                    },
-                    "address": {
-                        "address1": userData[2],
-                        "city": userData[3],
-                        "postalCode": userData[4]
-                    },
-                    "workEmail": userData[8],
-                    "externalOrganization": {
-                        "id": organization.id
-                    }
-                };
+		// Create new external organization
+		return externalContactsApi.postExternalcontactsOrganizations({ body: organization });
+	})
+	.then((organization) => {
+		console.log('Created organization '+ organization.id);
 
-                externalContactsApi.postContacts(user).then(function(data){
-                    console.log(`User ${userData[0]} ${userData[1]}`);
-                }).catch(function(error){
-                    console.error(error);
-                });
-            }
+		const promises = [];
+		const data = fs.readFileSync('contacts.csv', 'utf8');
+		const contacts = CSV.parse(data);
 
-        });
+		// Create each contact
+		console.log('Adding contacts...');
+		for (let c = 1; c < contacts.length; c++){
+			const contactData = contacts[c];
+			const contact = {
+				'firstName': contactData[0],
+				'lastName': contactData[1],
+				'title': contactData[5],
+				'workPhone': {
+					'display': contactData[6]
+				},
+				'address': {
+					'address1': contactData[2],
+					'city': contactData[3],
+					'postalCode': contactData[4]
+				},
+				'workEmail': contactData[8],
+				'externalOrganization': {
+					'id': organization.id
+				}
+			};
 
-    }).catch(function(error){
-        //error while making call
-        console.error(error);
-    });
-}).catch((err)=>{
-    console.error(err);
-});
+			// Create contact and collect promise
+			let contactPromise = externalContactsApi.postExternalcontactsContacts({ body: contact })
+				.then((data) => console.log(`  ${data.firstName} ${data.lastName} (${data.id})`));
+			promises.push(contactPromise);
+		}
+
+		return Promise.all(promises);
+	})
+	.then(() => {
+		console.log('All contacts added');
+	})
+	.catch((err) => console.log(err));

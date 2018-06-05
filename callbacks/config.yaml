@@ -14,10 +14,10 @@ nodejs:
     displayName: NodeJS
     steps:
         - file: "nodejs/index.js"
-          highlight: "0-100"
+          highlight: "0-41"
         - file: "nodejs/index.js"
-          highlight: "3-11"
+          highlight: "4-16"
         - file: "nodejs/index.js"
-          highlight: "12-24"
+          highlight: "20-33"
         - file: "nodejs/index.js"
-          highlight: "26-33"
+          highlight: "35-40"

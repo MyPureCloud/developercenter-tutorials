@@ -3,15 +3,15 @@ javascript:
     displayName: Javascript
     steps:
         - file: "javascript/index.html"
-          highlight: "0-151"
+          highlight: "0-160"
         - file: "javascript/index.html"
-          highlight: "48-67"
+          highlight: "45-65"
         - file: "javascript/index.html"
-          highlight: "69-84"
+          highlight: "70-87"
         - file: "javascript/index.html"
-          highlight: "86-116"
+          highlight: "103-126"
         - file: "javascript/index.html"
-          highlight: "125-135"
+          highlight: "92-101"
 java:
     displayName: Java
     steps:

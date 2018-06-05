@@ -1,78 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
-    <script src='purecloud-api-min.js'></script>
-    <title>Aggregation Query</title>
-    <style type="text/css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js"></script>
+	<title>Aggregation Query</title>
+	<style type="text/css">
 
-    </style>
-    <script type="text/javascript">
-        var webSocket = null;
-        var redirectUrl = window.location.href;
+	</style>
+	<script type="text/javascript">
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const redirectUri = window.location.href;
 
-        var pureCloudSession = purecloud.platform.PureCloudSession({
-              strategy: 'implicit',
-              clientId: '6b003ac7-eead-4f26-bf0a-a90b54908e41',
-              redirectUrl: window.location.href
-            });
+		// Set purecloud objects
+		const platformClient = require('platformClient');
+		const client = platformClient.ApiClient.instance;
+		const analyticsapi = new platformClient.AnalyticsApi();
+		const routingapi = new platformClient.RoutingApi();
 
-        var routingapi = new purecloud.platform.RoutingApi(pureCloudSession);
+		// Set PureCloud settings
+		client.setEnvironment('mypurecloud.com');
+		client.setPersistSettings(true, 'test_app');
 
-        $(document).ready(function() {
-            $('button#logoutButton').click(function() { window.location = 'https://login.mypurecloud.com/logout'; });
+		$(document).ready(function() {
+			// Authenticate with PureCloud
+			client.loginImplicitGrant(clientId, redirectUri)
+				.then(() => {
+					console.log('Logged in');
 
-            function getIntervalString(){
-                var end = new Date();
-                var start = new Date();
-                start.setDate(end.getDate() - 7);
+					// Get "Support" queue by name
+					return routingapi.getRoutingQueues({ name: 'Support' });
+				})
+				.then((queueData) => {
+					// Store queue ID
+					console.log('queueData: ', queueData);
+					const queueId = queueData.entities[0].id;
 
-                return start.toISOString() + "/" + end.toISOString();
-            }
+					// Build analytics query
+					let query = {
+						interval : getIntervalString(),
+						groupBy: ['queueId'],
+						metrics : ['nOffered','tAnswered','tTalk'],
+						filter :{
+							type: 'and',
+							clauses: [
+								{
+									type: 'or',
+									predicates:[
+										{
+											dimension : 'queueId',
+											value: queueId
+										}
+									]
+								}
+							]
+						}
+					};
+					console.log('query: ', query);
+					
+					// Execute analytics query
+					return analyticsapi.postAnalyticsConversationsAggregatesQuery(query);
+				})
+				.then((queryResult) => {
+					// Display analytics results
+					console.log('queryResult: ', queryResult);
+					$('#results').text(JSON.stringify(queryResult, null, 2));
+				})
+				.catch((err) => console.error(err));
+		});
 
-            pureCloudSession.login()
-                .then(function() {
-                    // support queue
-                    routingapi.getQueues(null, null, null, "Support").then(function(queueData){
-                        var queueId = queueData.entities[0].id;
+		// Gets an ISO-8601 interval from now for the last 7 days
+		function getIntervalString() {
+			let end = new Date();
+			let start = new Date();
+			start.setDate(end.getDate() - 7);
 
-                        var query = {
-                            interval : getIntervalString(),
-                            groupBy: ["queueId"],
-                            metrics : ["nOffered","tAnswered","tTalk"],
-                            filter :{
-                                type: "and",
-                                clauses: [
-                                    {
-                                        type: "or",
-                                        predicates:[
-                                            {
-                                                dimension : "queueId",
-                                                value: queueId
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        };
-
-                        var analyticsapi = new purecloud.platform.AnalyticsApi(pureCloudSession);
-                        analyticsapi.postConversationsAggregatesQuery(query).then(function(queryResult){
-                            console.log(queryResult);
-                            document.getElementById('results').innerText = JSON.stringify(queryResult, null, "  ")
-                        });
-
-                    });
-
-                });
-        });
-
-    </script>
+			return start.toISOString() + '/' + end.toISOString();
+		}
+	</script>
 </head>
 <body>
-
-    <div id='results'>
-    </div>
+	<pre id="results"></pre>
 </body>
 </html>

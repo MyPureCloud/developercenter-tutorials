@@ -1,15 +1,13 @@
 {
   "name": "nodejs",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "purecloud_api_sdk_javascript": "^0.83.8",
-    "websocket": "^1.0.24"
+    "purecloud-platform-client-v2": "^27.0.0",
+    "websocket": "^1.0.26"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }

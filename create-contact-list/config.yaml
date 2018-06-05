@@ -2,11 +2,11 @@
 javascript:
     displayName: Javascript
     steps:
-        - file: "javascript/createContactList.html"
-          highlight: "0-44"
-        - file: "javascript/createContactList.html"
-          highlight: "13-15"
-        - file: "javascript/createContactList.html"
-          highlight: "16-29"
-        - file: "javascript/createContactList.html"
-          highlight: "31-40"
+        - file: "javascript/index.html"
+          highlight: "0-55"
+        - file: "javascript/index.html"
+          highlight: "23-26"
+        - file: "javascript/index.html"
+          highlight: "28-42"
+        - file: "javascript/index.html"
+          highlight: "45-49"
