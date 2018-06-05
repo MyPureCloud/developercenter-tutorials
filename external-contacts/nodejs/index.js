@@ -12,6 +12,7 @@ const externalContactsApi = new platformClient.ExternalContactsApi();
 
 // Set PureCloud settings
 client.setEnvironment('mypurecloud.com');
+// client.setDebugLog(console.log, 100);
 
 // Authenticate with PureCloud
 client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
@@ -38,7 +39,7 @@ client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
 		};
 
 		// Create new external organization
-		return externalContactsApi.postExternalcontactsOrganizations(organization);
+		return externalContactsApi.postExternalcontactsOrganizations({ body: organization });
 	})
 	.then((organization) => {
 		console.log('Created organization '+ organization.id);
@@ -48,29 +49,30 @@ client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
 		const contacts = CSV.parse(data);
 
 		// Create each contact
+		console.log('Adding contacts...');
 		for (let c = 1; c < contacts.length; c++){
-			const userData = contacts[c];
-			const user = {
-				'firstName': userData[0],
-				'lastName': userData[1],
-				'title': userData[5],
+			const contactData = contacts[c];
+			const contact = {
+				'firstName': contactData[0],
+				'lastName': contactData[1],
+				'title': contactData[5],
 				'workPhone': {
-					'display': userData[6]
+					'display': contactData[6]
 				},
 				'address': {
-					'address1': userData[2],
-					'city': userData[3],
-					'postalCode': userData[4]
+					'address1': contactData[2],
+					'city': contactData[3],
+					'postalCode': contactData[4]
 				},
-				'workEmail': userData[8],
+				'workEmail': contactData[8],
 				'externalOrganization': {
 					'id': organization.id
 				}
 			};
 
 			// Create contact and collect promise
-			let contactPromise = externalContactsApi.postContacts(user)
-				.then((data) => {console.log(data);console.log(`Added ${userData[0]} ${userData[1]}`);});
+			let contactPromise = externalContactsApi.postExternalcontactsContacts({ body: contact })
+				.then((data) => console.log(`  ${data.firstName} ${data.lastName} (${data.id})`));
 			promises.push(contactPromise);
 		}
 
