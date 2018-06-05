@@ -1,0 +1,121 @@
+<html>
+<head>
+	<link href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB' crossorigin='anonymous'>
+
+	<style type='text/css'>
+		.row {
+			margin-top: 8px;
+		}
+	</style>
+
+	<script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+	<script src='https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js'></script>
+
+	<script type='text/javascript'>
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const redirectUri = window.location.href;
+
+		// Set purecloud objects
+		const platformClient = require('platformClient');
+		const client = platformClient.ApiClient.instance;
+		const outboundApi = new platformClient.OutboundApi();
+
+		// Set PureCloud settings
+		client.setEnvironment('mypurecloud.com');
+		client.setPersistSettings(true, 'test_app');
+
+		$(document).ready(() => {
+			// Handle file selection
+			$('#file-input').change((event) => {
+				uploadContacts(event.target.files[0]);
+			});
+
+			// Authenticate with PureCloud
+			client.loginImplicitGrant(clientId, redirectUri)
+				.then(() => {
+					console.log('Logged in');
+
+					// Get a list of contact lists
+					return outboundApi.getOutboundContactlists({ pageSize: 100 });
+				})
+				.then((contactLists) => {
+					// Add contact lists to the UI
+					contactLists.entities.forEach((contactList) => {
+						$('#contactLists').append($('<option></option>')
+							.attr('value', contactList.id)
+							.text(contactList.name));
+					});
+				})
+				.catch((err) => console.error(err));
+		});
+
+		function uploadContacts(file) {
+			const contactListId = $('#contactLists').find(':selected').val();
+			console.log('contactListId: ' + contactListId);
+
+			// Build form data object (POST request body)
+			const data = new FormData();
+			data.append('id', contactListId);
+			data.append('file', file);
+			data.append('fileType', 'contactlist');
+			data.append('contact-id-name', 'Contact ID');
+
+			// Build request
+			const request = {
+				url: 'https://apps.mypurecloud.com/uploads/v2/contactlist',
+				headers: {
+					Authorization: 'bearer ' + client.authData.accessToken
+				},
+				data: data,
+				processData: false,
+				contentType: false
+			};
+
+			// Upload contact list
+			$.post(request)
+				.then((data) => {
+					console.log('UPLOAD SUCCESS');
+					console.log(data);
+
+					// Show success
+					$('#upload-result').html($('<div>').addClass('alert alert-success').text('File uploaded successfully'));
+				})
+				.catch((err) => {
+					let message = $('<span>').text('File uploaded failed!');
+					if (err.status) {
+						message.append($('<p>').text(`${err.status} ${err.statusText}`));
+						message.append($('<p>').text(`Response body: ${err.responseText}`));
+					}
+					console.error(err);
+
+					// Show failure
+					$('#upload-result').html($('<div>').addClass('alert alert-danger').html(message));
+				});
+		}
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<label for="contactLists">Contact Lists</label>
+				<select id="contactLists"></select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<label for="file-input">Choose file to upload</label>
+				<input type='file' id='file-input' />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12" id="upload-result">
+			</div>
+		</div>
+	</div>
+		
+		
+</body>
+</html>
