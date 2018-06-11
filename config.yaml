@@ -45,7 +45,7 @@ upload-contacts:
     categories:
         - Dialer
 upload-prompts:
-    title: Uploading Architect user prompts
+    title: Uploading Architect Prompts
     description: Creating a prompt and uploading media
     categories:
         - Architect
