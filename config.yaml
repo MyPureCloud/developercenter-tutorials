@@ -44,6 +44,11 @@ upload-contacts:
     description: Uploading contacts to an existing outbound dialing contact list.
     categories:
         - Dialer
+upload-prompts:
+    title: Uploading Architect user prompts
+    description: Creating a prompt and uploading media
+    categories:
+        - Architect
 presence:
     title: User Presence with Notifications
     description: Getting and setting the current user's presence and listening for changes.
