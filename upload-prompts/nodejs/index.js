@@ -22,7 +22,7 @@ client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
 		console.log('Creating new prompt...');
 		return architectApi.postArchitectPrompts({ 
 			body: {
-				name: 'uploaded_prompt-',
+				name: 'uploaded_prompt',
 				description: 'Prompt uploaded by upload-prompts example app'
 			}
 		});
