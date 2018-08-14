@@ -1,0 +1,111 @@
+.tutorial{:data =>{:title=>'Creating a Premium App Installer'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+			This tutorial walks through the steps of implementing an installation flow that will configure the PureCloud environment for use by the Premium App.
+			
+			Common configurations that need to be done includes creating additional roles, creating groups, and creating additional instances of the app.
+            
+            For this project, we are going to use the Javascript PureCloud SDK and using Javascript ES6 coding standards.
+            
+            Other requirements:
+            * A role that includes the premium app permission.
+            * A premium app integration to access the installation web app.
+
+    .step{:data=>{:title=>'Creation of Javascript Object for Installation'}}
+        :markdown
+            There are three common PureCloud objects that need to be configured:
+            * Roles
+            * Groups
+            * App Instances
+
+            We're going to store all that we need in a simple Javascript Object to centralize and make it easier to modify in the future. This information could also be loaded from an external resource instead of being harcoded into the web app. 
+
+            Objects created by the Installer are determined by the prefix on their name 
+            'PREMIUM_APP_'. A safer option could be to store the ids of the generated PureCloud objects into an external database or storage.
+
+    .step{:data=>{:title=>'Set up Client App and determine Language and Environment'}}
+        :markdown
+            It is recommended for PureCloud apps to use the Client App SDK. This allows certain integrations to be implemented for example: Displaying an alert to the PureCloud UI, implementing lifecycle events, popping user profiles, and popping PureCloud help pages.
+    
+            We'll also determine the the environment (.com, .ie, .jp) and the language of the PureCloud user so the Premium App could use the correct authentication keys and language for the content.
+
+    .step{:data=>{:title=>'Authenticate through PureCloud'}}
+        :markdown
+            Before we can start making PureCloud API calls, we need to first authenticate to PureCloud. Different regions have different OAuth secrets so it must be determined before ateempting to authenticate.
+
+    .step{:data=>{:title=>'Getting User Information'}}
+        :markdown
+            It is a good practice to always start off geting the curent user's detail. This will make personalizing the page with the user's information better and will also allow double checking of any user setting or configuration.
+
+    .step{:data=>{:title=>'Validate Product Availability'}}
+        :markdown
+            As a precaution, make sure to check that the PureCloud org has the premium app feature enabled.
+
+    .step{:data=>{:title=>'Check if Existing'}}
+        :markdown
+            Before installation, it's recommended to first check if existing objects are still present. In this example, the web app will redirect the user to a different page instead of continuing with the installation. 
+
+    .step{:data=>{:title=>'Get existing Roles'}}
+        :markdown
+            In order to query Roles by prefix, we set the 'name' parameter to Prefix + '*' - whch serves as a wildcard for the search.
+
+    .step{:data=>{:title=>'Get Existing Groups'}}
+        :markdown
+            In querying groups, the API provides more parameters and we can use "START_WITH" to search for groups starting with a specific prefix.
+
+    .step{:data=>{:title=>'Get Existing Integration Instances'}}
+        :markdown
+            The API for listing integrations does not include any search/query parameters. We'll be getting a list of all integrations and manually filter the list to get the desired integrations. 
+
+    .step{:data=>{:title=>'Install Configurations'}}
+        :markdown
+            Installing all the configurations include 3 major steps:
+            * Create Roles 
+            * Create Groups
+            * Create Integrations
+
+            Each major step may contain more than one API call for setting up.
+
+            First, we'll need to create instances of the APIs that we're going to need:
+            * AuthorizationApi (for Roles)
+            * GroupsApi (for Groups)
+            * IntegrationsAPI (for Integrations)
+
+            The installation will be performed in sequential order so we'll need to track the parallel calls using Promise arrays before moving to the next step.
+
+            In this example, we're also resolving each API call to be displayed on the screen. We'll need arrays to contain the actual information that are needed for succeeding steps. 
+
+    .step{:data=>{:title=>'Create Roles'}}
+        :markdown
+            Creating roles require the role name and permissions assosciated with the role.
+
+            After creating the role, it will be automatically assigned to the current user.
+
+    .step{:data=>{:title=>'Create Groups'}}
+        :markdown
+            To maintain the sequence of installation in this example, groups will only be created after the roles. This could be run in parallel since there are no data dependencies between the two.
+
+            The current user will automatically be assign as the owner of the group.
+
+    .step{:data=>{:title=>'Create Integrations'}}
+        :markdown
+            In this example, integrations need to be created after groups because they can contain group filtering in their configuration.
+
+            There are 3 steps in setting up the integration:
+            1. Create an Integration (This API does not allow configuring the integration on creation)
+            2. Configure the Integration (Name, URL, Group Filtering, etc.)
+            3. Activate the Integration (By default Integrations are inactive)
+
+    .step{:data=>{:title=>'Redirect to App'}}
+        :markdown
+            After installation, the example should redirect to the Premium App Sample. 
+            
+            The Client App have no native way of knowing its own Inegration ID. It is recommended to not modify the URI but to have the default page redirect to either installation or the Premium App proper based on the status/existence of PureCloud objects.
+
+    .step{:data=>{:title=>'Clear Configuration'}}
+        :markdown
+            It is recommended to have a way to take down any existing configurations. This allows a new and clean installation of the Premium App.
+
+            Things to note in this example:
+            * Since we're tracking generated objects through the prefix, the original role and original integration instance created will not be deleted.
+            * Groups that contain members, and roles that's assigned to users will not carry over to the new installation after deleting them.
