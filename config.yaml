@@ -84,3 +84,9 @@ client-app-sdk:
     categories:
         - Architect
         - Notifications
+queue-conversation-notification:
+    title: Subscribe to Queue
+    description: See how to subscribe to conversation notifications in a queue.
+    categories:
+        - Conversations
+        - Notifications

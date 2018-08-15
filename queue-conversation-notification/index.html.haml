@@ -1,0 +1,34 @@
+.tutorial{:data =>{:title=>'Queue Conversation Notification'}}
+    .step{:data=>{:title=>'Introduction'}}
+        :markdown
+			This tutorial walks through the steps how to integrate with PureCloud Client App SDK to get notifications on all conversations within a queue. The goal is to step through the cases when handling conversation notification on the API and will skip over authentication.
+
+			This tutorial will deal with basic interactions with a phone call conversation. The goal is to step through the basic use cases when handling phone calls on the API and will skip over the details of using jQuery and handlebars for the UI as well as skipping over authentication which has a series of tutorials itself.
+
+			The main topics that will be covered in the tutorial are the following:
+			* Create a notification channel
+			* Subscribe to Queue
+			* Handling websocket messages
+
+	.step{:data=>{:title=>'Create a Notification Channel'}}
+        :markdown
+			API call to /api/v2/notifications/channels
+		
+            In order to subscribe to a queue, we need to create a notification channel by calling the postNotificationsChannels() method of the Notifications API.
+			
+	.step{:data=>{:title=>'Store Channel ID for Future Use'}}
+        :markdown
+			After calling the postNotificationsChannels method, we will then store the Channel ID returned by the method to be able to use it in the postNotificationsChannelSubscriptions method call.
+			
+	.step{:data=>{:title=>'Subscribe to Queue'}}
+        :markdown
+			API call to /api/v2/notifications/channels/{channelId}/subscriptions
+		
+            In order to subscribe to a queue, we need to call the postNotificationsChannelSubscriptions(channelId, body) method of the Notifications API of the JavaScript PureCloud SDK passing the Channel ID variable from the postNotificationsChannels method call.
+			
+			The Topic ID used in this project is "v2.routing.queues.{queueId}.conversations" where the queue variable stores the queueId.
+			
+	.step{:data=>{:title=>'Handling Websocket Messages'}}
+        :markdown
+			To make sure that we are getting the correct notifications, we need to check if the websocket message contains the same Topic ID we used when subscribing to the queue. Once the Topic ID has been validated, we can now proceed in consuming the conversation details however the app needs us to do.
+			

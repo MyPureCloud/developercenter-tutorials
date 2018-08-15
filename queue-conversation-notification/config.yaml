@@ -1,0 +1,14 @@
+---
+javascript:
+    displayName: Javascript
+    steps:
+        - file: "client_app.js"
+          highlight: "0-536"               
+        - file: "client_app.js"
+          highlight: "37"
+        - file: "client_app.js"
+          highlight: "40"
+        - file: "client_app.js"
+          highlight: "137-142"
+        - file: "client_app.js"
+          highlight: "251-265"
