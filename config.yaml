@@ -78,3 +78,9 @@ external-contacts:
     description: Overview of creating External Contacts from a CSV file
     categories:
         - Contacts
+client-app-sdk:
+    title: Using Client App SDK
+    description: See how to use URL Interpolation and send Toast using the Client App SDK.
+    categories:
+        - Architect
+        - Notifications

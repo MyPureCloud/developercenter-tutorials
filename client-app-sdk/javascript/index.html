@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Incoming Conversation</title>
+
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' async type='text/css'>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/chronomouse@2.4.0/chronomouse.2.4.0.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/client-apps/1.0.0/purecloud-client-app-sdk.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/29.1.0/purecloud-platform-client-v2.min.js"></script>
+</head>
+<body>
+    <h1 id="txtIncomingCall"></h1>
+    <div>
+        <div id="txtName" class="floating field-title"></div>
+        <div id="callerName" class="floating field-value"></div>   
+    </div>
+    <div>
+        <div id="txtNumber" class="floating field-title"></div>
+        <div id="callerNumber" class="floating field-value"></div>   
+    </div>
+    <div>
+        <div id="txtStateInfo" class="floating field-title"></div>
+        <div id="callerArea" class="floating field-value"></div>   
+    </div>
+
+    <script type="module">
+        import clientApp from './client_app.js';
+
+        var queryString = window.location.search.substring(1);
+        var pairs = queryString.split('&');
+        var langTag = null;
+        var pcEnv = null;
+        for (var i = 0; i < pairs.length; i++)
+        {
+            var currParam = pairs[i].split('=');
+            if(currParam[0] === 'langTag') {
+                langTag = currParam[1];
+            } else if(currParam[0] === 'pcEnvironment') {
+                pcEnv = currParam[1];
+            } else if(currParam[0] === 'environment' && pcEnv === null) {
+                pcEnv = currParam[1];
+            }
+
+            if (langTag !== null) {
+                $.getJSON('./language.json', function(data) {
+                    $("#txtIncomingCall").text("\u260E " + data[langTag].IncomingCall);
+                    $("#txtName").text(data[langTag].Name + ": ");
+                    $("#txtNumber").text(data[langTag].Number + ": ");
+                    $("#txtStateInfo").text(data[langTag].StateInfo + ": ");
+                });
+            }
+        }
+
+        if(langTag === null){
+            $.getJSON('./language.json', function(data) {
+                $("#txtIncomingCall").text("\u260E " + data["en-us"].IncomingCall);
+                $("#txtName").text(data["en-us"].Name + ": ");
+                $("#txtNumber").text(data["en-us"].Number + ": ");
+                $("#txtStateInfo").text(data["en-us"].StateInfo + ": ");
+            });
+        }
+        
+        clientApp.setup(pcEnv, langTag, "index.html");
+        clientApp.purecloudClientApi = new window.purecloud.apps.ClientApp();
+    </script>
+</body> 
+</html>
