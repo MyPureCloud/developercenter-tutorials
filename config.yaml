@@ -78,3 +78,8 @@ external-contacts:
     description: Overview of creating External Contacts from a CSV file
     categories:
         - Contacts
+premium-app-example-wizard:
+    title: Premium App Wizard
+    description: A template for premium app installer.
+    categories:
+        - Integrations

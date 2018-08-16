@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Premium App Wizard</title>
+
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' async type='text/css'>
+    <link rel="stylesheet" href="./style.css">
+
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/29.1.0/purecloud-platform-client-v2.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/client-apps/1.0.0/purecloud-client-app-sdk-ed1f20f5244ee2bb9cc242f669369639.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <script src="./scripts/util.js"></script>
+</head>
+<body>
+    <div id="background"></div>
+    <!-- <canvas id="bubbly-layer" style="position: fixed; top:0; left:0; z-index: -5; "></canvas> -->
+
+    <noscript>
+        For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank">instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+
+    <header>
+        <p>Premium App /&nbsp; Home</p>
+    </header>
+
+    <div id="loading" style="margin-top: 30px; text-align: center;">
+        <i class="fa fa-spinner fa-spin" style="font-size:70px"></i>
+    </div>
+
+    <div class="hidden title">
+        <span class="txt-greeting">
+        Hi 
+        </span>
+        <span id="username"></span>!
+        <div class="txt-greeting-2">
+            welcome to the Premium App Example
+        </div>
+    </div>
+
+    <ul class="hidden progress-bar">
+        <li class="active current">
+            <span class="txt-start">Start</span>
+        </li>
+        <li class="">
+            <span class="txt-install">Install</span>
+        </li>
+        <li class="">
+            <span class="txt-summary">Summary</span>
+        </li>
+    </ul>
+
+    <main class="hidden">
+        <div id="available" class="hidden">
+            <p class="success">
+                <span class="txt-product-available">Product Available </span> <i class="fas fa-check-circle enlarge"></i>
+            </p>
+            <p>
+                <span class="txt-available-message">We're ready to set you up. Please click the Start button.</span>
+            </p>
+            <button id="next" onclick="goToPage('./install')" class="btn-info right">
+                <span class="txt-start">Start</span> <i class="button-icon fas fa-chevron-right"></i></button>
+        </div>
+
+        <div id="unavailable" class="hidden">
+            <p class="fail">
+                <span class="txt-product-not-available">Product not avaiable.</span>  <i class="fas fa-times-circle enlarge"></i>
+            </p>
+            <p>
+                <span class="txt-not-available-message">
+                We're sorry but your PureCloud org does not have the Premium App Sample Product enabled.
+                Please contact the authorities.
+                </span>
+            </p>
+        </div>
+    </main>
+
+    <footer>
+            <img src="logo.png" alt="Logo">
+    </footer>
+
+    <!-- Client Instances and PureCloud API will be encapsulated in the wizardApp module -->
+    <script type="module">
+        import WizardApp from './scripts/wizard-app.js';
+
+        // Initiate the App
+        let myApp = new WizardApp();
+        myApp.start()
+
+
+        // Check Product Availability and display appropriate message
+        .then(() => {
+            return myApp.validateProductAvailability();
+        })
+        .then((isAvailable) => {
+            if (isAvailable){
+                $("#available").removeClass("hidden");
+            }else{
+                $("#unavailable").removeClass("hidden");
+            }
+
+        // Check if there is an existing installation and redirect to manage.html if so
+        return myApp.isExisting(); 
+        }).then((exists) => {
+            if(exists){
+                goToPage('../supervisor');
+            }else{
+                // Get the user information to display on the screen
+                return myApp.getUserDetails(); 
+            }
+        }).then((user) => {
+            if(user){
+                // Display welcome message after everything has been loaded
+                $("main").removeClass("hidden");
+                $(".progress-bar").removeClass("hidden");
+                $("#loading").addClass("hidden");
+                $(".title").removeClass("hidden");
+                $("#username").text(user.name);
+            }  
+        })
+
+        .catch((e) => console.log(e));
+    </script>
+
+<!-- <script src="./scripts/bubbles.js"></script> -->
+</body>
+</html>
