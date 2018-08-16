@@ -1,19 +1,21 @@
 .tutorial{:data =>{:title=>'Creating a Premium App Installer'}}
     .step{:data=>{:title=>'Introduction'}}
         :markdown
-			This tutorial walks through the steps of implementing an installation flow that will configure the PureCloud environment for use by the Premium App.
-			
-			Common configurations that need to be done includes creating additional roles, creating groups, and creating additional instances of the app.
+            This tutorial walks through the steps of implementing an installation flow that will configure the PureCloud environment for use by the Premium App.
+            
+            Common configurations that need to be done includes creating additional roles, creating groups, and creating additional instances of the app.
             
             For this project, we are going to use the Javascript PureCloud SDK and using Javascript ES6 coding standards.
             
             Other requirements:
+
             * A role that includes the premium app permission.
             * A premium app integration to access the installation web app.
 
     .step{:data=>{:title=>'Creation of Javascript Object for Installation'}}
         :markdown
             There are three common PureCloud objects that need to be configured:
+
             * Roles
             * Groups
             * App Instances
@@ -60,6 +62,7 @@
     .step{:data=>{:title=>'Install Configurations'}}
         :markdown
             Installing all the configurations include 3 major steps:
+
             * Create Roles 
             * Create Groups
             * Create Integrations
@@ -67,6 +70,7 @@
             Each major step may contain more than one API call for setting up.
 
             First, we'll need to create instances of the APIs that we're going to need:
+
             * AuthorizationApi (for Roles)
             * GroupsApi (for Groups)
             * IntegrationsAPI (for Integrations)
@@ -92,6 +96,7 @@
             In this example, integrations need to be created after groups because they can contain group filtering in their configuration.
 
             There are 3 steps in setting up the integration:
+
             1. Create an Integration (This API does not allow configuring the integration on creation)
             2. Configure the Integration (Name, URL, Group Filtering, etc.)
             3. Activate the Integration (By default Integrations are inactive)
@@ -107,5 +112,6 @@
             It is recommended to have a way to take down any existing configurations. This allows a new and clean installation of the Premium App.
 
             Things to note in this example:
+
             * Since we're tracking generated objects through the prefix, the original role and original integration instance created will not be deleted.
             * Groups that contain members, and roles that's assigned to users will not carry over to the new installation after deleting them.
