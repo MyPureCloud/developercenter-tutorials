@@ -78,6 +78,18 @@ external-contacts:
     description: Overview of creating External Contacts from a CSV file
     categories:
         - Contacts
+client-app-sdk:
+    title: Using Client App SDK
+    description: See how to use URL Interpolation and send Toast using the Client App SDK.
+    categories:
+        - Architect
+        - Notifications
+queue-conversation-notification:
+    title: Subscribe to Queue
+    description: See how to subscribe to conversation notifications in a queue.
+    categories:
+        - Conversations
+        - Notifications
 premium-app-example-wizard:
     title: Premium App Wizard
     description: A template for premium app installer.
