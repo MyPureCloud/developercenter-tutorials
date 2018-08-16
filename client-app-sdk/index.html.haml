@@ -1,70 +1,82 @@
 .tutorial{:data =>{:title=>'Using Client App SDK'}}
     .step{:data=>{:title=>'Introduction'}}
         :markdown
-			This tutorial walks through the steps how to integrate with [PureCloud Client App SDK](https://developer.mypurecloud.com/api/client-apps/). The Client App SDK framework lets developers embed custom web based applicaitons in the PureCloud web. 
+            This tutorial walks through the steps how to integrate with [PureCloud Client App SDK](https://developer.mypurecloud.com/api/client-apps/). The Client App SDK framework lets developers embed custom web based applicaitons in the PureCloud web. 
 
-			The main topics that will be covered in the tutorial are the following:
-			* Referencing the CDN library
-			* URL Interpolation to deterimine pcLangTag and pcEnvironment
-			* Sending toast message notifications
-	
-	.step{:data=>{:title=>'Referencing the Library'}}
+            The main topics that will be covered in the tutorial are the following:
+
+            * Referencing the CDN library
+            * URL Interpolation to deterimine pcLangTag and pcEnvironment
+            * Sending toast message notifications
+
+    .step{:data=>{:title=>'Referencing the Library'}}
         :markdown
-			The Client App SDK can be referenced by CDN at https://sdk-cdn.mypurecloud.com/client-apps/<taggedversion>/purecloud-client-app-sdk.js.
+            The Client App SDK can be referenced by CDN at:
+            
+            ```
+            https://sdk-cdn.mypurecloud.com/client-apps/<taggedversion>/purecloud-client-app-sdk.js
+            ```
 
     .step{:data=>{:title=>'URL Interpolation to determine pcLangTag and pcEnvironment'}}
         :markdown
-			Pre-Requisites:
-			* The confiured app should have a URL defining the pcLangTag and pcEnvironment tags ex. https://myapp.com?langTag={{pcLangTag}}&environment={{pcEnvironment}}. This will contain information on the user's locale and which environment they are running and will look similarly to https://myapp.com?langTag=en-us&environment=mypurecloud.com.
-		
-			In this tutorial, the pcLangTag will be used to determine which language the app will use for displays. And the pcEnvironment will be used to determine which Client ID will be used for authentication.
+            Pre-Requisites:
+
+            - The confiured app should have a URL defining the pcLangTag and pcEnvironment tags
+
+                ```
+                ex. https://myapp.com?langTag={{pcLangTag}}&environment={{pcEnvironment}}
+                ```
+
+            This will contain information on the user's locale and which environment they are running and will look similarly to:
+
+            ```
+            https://myapp.com?langTag=en-us&environment=mypurecloud.com
+            ```
+
+            In this tutorial, the pcLangTag will be used to determine which language the app will use for displays. And the pcEnvironment will be used to determine which Client ID will be used for authentication.
 
     .step{:data=>{:title=>'Deep Dive on pcLangTag'}}
         :markdown
             Before the app loads, it needs to determine which language to be used for the HTML fields.
-			
-			This logic gets the locale of the current user. This value follows the bcp 74 pattern. Once the locale is determined, HTML fields will be populated accordingly.
-			
-	.step{:data=>{:title=>'Deep Dive on pcLangTag'}}
+
+            This logic gets the locale of the current user. This value follows the bcp 74 pattern. Once the locale is determined, HTML fields will be populated accordingly.
+
+    .step{:data=>{:title=>'Deep Dive on pcLangTag'}}
         :markdown		
             A separate JSON file is configured to store language translations per HTML field. If the locale does not have the language specified in the JSON file, it will default to en-us.
 
     .step{:data=>{:title=>'Deep Dive on pcEnvironment for Authentication'}}
         :markdown
-			index.html call to clientApp.setup()
-		
-            Before we can start making PureCloud API calls, we need to determine the PureCloud environment that the app is running in ex. mypurecloud.com, mypurecloud.ie, etc. Different regions have different OAuth Client IDs so it must be determined before attempting to authenticate.
-			
-			Once the pcEnvironment is determined, we can pass the value to the JavaScript method for authentication.
+            Before we can start making PureCloud API calls, we need to determine the PureCloud environment that the app is running in.
+            
+            ```
+            ex. mypurecloud.com, mypurecloud.ie, mypurecloud.com.au, mypurecloud.jp, etc.
+            ```
+
+            Different regions have different OAuth Client IDs so it must be determined before attempting to authenticate.
+
+            Once the pcEnvironment is determined, we can pass the value to the JavaScript method for authentication.
 
     .step{:data=>{:title=>'Deep Dive on pcEnvironment for Authentication'}}
         :markdown
-			client_app.js loginImplicitGrant()
-		
-            A separate JavaScript file contains the object that holds the different Client IDs per region. We need to filter the object to get which Client ID to be used and call the loginImplicitGrant method of the Javascript PureCloud SDK. If the pcEnvironment is not set, it will default to mypurecloud.com region.
+            A separate JavaScript file contains the object that holds the different Client IDs per region. We need to filter the object to get which Client ID to be used and call the loginImplicitGrant() method of the Javascript PureCloud SDK. If the pcEnvironment is not set, it will default to mypurecloud.com region.
 
     .step{:data=>{:title=>'Creating Toast Notifications for Incoming Calls'}}
         :markdown
-			client_app.js create notification channel for toast messages
-		
             Aside form URL Interpolation, the Client App SDK also has the capability to send toast messages.
 
     .step{:data=>{:title=>'Creating a Notification Channel and  Subscribing to Conversations'}}
         :markdown
-			client_app.js API call to /api/v2/notifications/channels/{channelId}/subscriptions
-		
             In order to send toast notifications for incoming calls, we need to create a channel and subscribe to call conversations of the current user.
-			
-			We need to use the JavaScript PureCloud SDK and call the postNotificationsChannels and the postNotificationsChannelSubscriptions of the Notifications API.
+
+            We need to use the JavaScript PureCloud SDK and call the postNotificationsChannels() and the postNotificationsChannelSubscriptions() of the Notifications API.
 
     .step{:data=>{:title=>'Handling Websocket Messages'}}
         :markdown
-			client_app.js onSocketMessage()
-		
             For every websocket message the app receives, we need to determine if the Topic ID in the socket message matches the Topic ID we used in subscribing to the channel. Once the Topic ID has been validated, we can proceed in calling the method to send the toast message.
 
     .step{:data=>{:title=>'Calling Toast Popup in the Client App SDK'}}
         :markdown
-			[alerting.showToastPopup(title, message, options)](https://developer.mypurecloud.com/api/client-apps/client-app-sdk.html#module_alerting)
-		
-            To show a toast popup in PureCloud, we need to call the showToastPopup method of the Alerting API on the Client App SDK passing the title, message and options (optional) as parameters.
+            To show a toast popup in PureCloud, we need to call the showToastPopup() method of the Alerting API on the Client App SDK passing the title, message and options (optional) as parameters.
+
+            For more details on how to configure options in the Toast Popup, you may read more about [alerting.showToastPopup(title, message, options)](https://developer.mypurecloud.com/api/client-apps/client-app-sdk.html#module_alerting).
