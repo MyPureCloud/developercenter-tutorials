@@ -90,3 +90,8 @@ queue-conversation-notification:
     categories:
         - Conversations
         - Notifications
+premium-app-example-wizard:
+    title: Premium App Wizard
+    description: A template for premium app installer.
+    categories:
+        - Integrations
