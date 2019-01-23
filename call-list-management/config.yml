@@ -1,0 +1,31 @@
+---
+title: Dialer Call List Management
+description: Inserting records into a dialer call list and starting the dialer campaign.
+categories:
+- Dialer
+steps:
+- title: Introduction
+  content: >
+    There might be scenarios where contact records need to be individually added to a campaign.
+
+    For more information on the Dialer APIs see the [REST Documentation](http://developer.mypurecloud.com/api/rest/v2/outbound/index.html)
+- title: Adding Record to Contact List
+  content: >
+    The data field of the contact is a hash of contact list column and the value where the key is the call list column name.
+- title: Restart the campaign
+  content: >
+    Campaigns will most likely need to be restarted after contacts are added.  We first get the current campaign configuration, then we will set campaignStatus to "on" and update the campaign.
+
+    It is important to get the campaign details first because there is a version on the campaign and the data that you post to the server needs to have the same version as the current version in the system.
+
+    If the campaign is already running, you won't have to start it for the contacts to be dialed.
+languages: 
+  javascript:
+    displayName: Javascript
+    steps:
+    - file: "javascript/index.html"
+      highlight: "0-100"
+    - file: "javascript/index.html"
+      highlight: "30-40"
+    - file: "javascript/index.html"
+      highlight: "48-63"
