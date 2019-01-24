@@ -24,11 +24,11 @@ languages:
   javascript:
     displayName: Javascript
     steps:
-      - file: "javascript/index.html"
-        highlight: "0-55"
-      - file: "javascript/index.html"
-        highlight: "23-26"
-      - file: "javascript/index.html"
-        highlight: "28-42"
-      - file: "javascript/index.html"
-        highlight: "45-49"
+    - file: "javascript/index.html"
+      highlight: "0-55"
+    - file: "javascript/index.html"
+      highlight: "23-26"
+    - file: "javascript/index.html"
+      highlight: "28-42"
+    - file: "javascript/index.html"
+      highlight: "45-49"

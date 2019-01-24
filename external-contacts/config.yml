@@ -36,11 +36,11 @@ languages:
   nodejs:
     displayName: NodeJS
     steps:
-      - file: "nodejs/index.js"
-        highlight: "0-100"
-      - file: "nodejs/index.js"
-        highlight: "5-20"
-      - file: "nodejs/index.js"
-        highlight: "22-45"
-      - file: "nodejs/index.js"
-        highlight: "47-82"
+    - file: "nodejs/index.js"
+      highlight: "0-100"
+    - file: "nodejs/index.js"
+      highlight: "5-20"
+    - file: "nodejs/index.js"
+      highlight: "22-45"
+    - file: "nodejs/index.js"
+      highlight: "47-82"

@@ -1,0 +1,59 @@
+---
+title: Get Number of On-Queue Agents using PureCloud SDK
+description: This tutorial walks through the steps of implementing a function to get the number of On-Queue Agents on a specific queue.
+categories:
+- Routing
+steps:
+- title: Introduction
+  content: >
+    This tutorial walks through the steps of implementing a function to get the number of On-Queue Agents on a specific queue.
+
+    There are 5 tpes of Routing Status: IDLE, INTERACTING, COMMUNINCATING, OFF_QUEUE, and NOT_RESPONDING. To determine if an agent is On-Queue, he/she should have a routing status of either IDLE or INTERACTING.
+
+    Go here for more information about [Presences and Routing Status](https://developer.mypurecloud.com/api/rest/v2/presence/understanding_presence.html):
+
+    For this tutorial, we are going to use the Python PureCloud SDK.
+
+- title: Obtain an Access Token
+  content: >
+    Start by making a POST call to https://login.mypurecloud.com/oauth/token with the following settings:
+
+
+    * Authentication- Basic
+
+    * User - Client ID
+
+    * Password-  Client secret
+
+
+    To use basic authentication, set the authentication header to ```Basic <base64EncodedUserPass>```, where base64EncodedUserPass is a base64-encoded string containing the username and password separated by a colon:
+    base64.b64encode(bytes(client_id + ':' + client_secret, 'ISO-8859-1')).decode('ascii')
+
+    Note: Base64 encoding differs between Python 2 and Python 3. This implementation is for Python 3.
+
+- title: Create instance of Routing API
+  content: >
+    Configure the token to be used by the PureCloud SDK. This token will be sent along every API call automatically.
+
+    Create an instance of the Routing API which will be used to make the API calls.
+
+- title: Create the function
+  content: >
+    First, search for the queue using its name. It should return exactly one result, otherwise it should return an exception.
+
+    The next API call should get the users of the queue with the desired routing status. ("IDLE", "INTERACTING").
+
+    The number of users will simple be returned from the function.
+
+languages: 
+  python:
+    displayName: Python
+    steps:
+    - file: "python/script.py"
+      highlight: "0-76"
+    - file: "python/script.py"
+      highlight: "8-32"
+    - file: "python/script.py"
+      highlight: "32-38"
+    - file: "python/script.py"
+      highlight: "38-76"
