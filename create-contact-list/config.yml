@@ -1,13 +1,34 @@
-.tutorial{:data=>{:title=>'Creating a Contact List'}}
-    .step{:data=>{:title=>'Introduction'}}
-        :markdown
+---
+title: Creating an Outbound Dialing Contact List
+description: Creating a contact list for use with outbound dialing campaigns.
+categories:
+- Dialer
+steps:
+- title: Introduction
+  content: >
             Contact lists are one of the building blocks for outbound dialing campaigns. They let you specify who you want the campaign to call.
-    .step{:data=>{:title=>'Session Initialization'}}
-        :markdown
+
+- title: Session Initialization
+  content: >
             First, the user must authorize the application. 
-    .step{:data=>{:title=>'Contact List Configuration'}}
-        :markdown
+
+- title: Contact List Configuration
+  content: >
             The contact list configuration must specify a name, columnNames, and phoneColumns, at a minimum. The columnNames should be the columns from your CSV file of contacts, and the phoneColumns should specify which columns are of which type of phone number. More information about contact list configuration options can be found on the [Outbound Dialing API Resource documentation](https://developer.mypurecloud.com/api/rest/v2/outbound/index.html) under POST /api/v2/outbound/contactlists.
-    .step{:data=>{:title=>'Create the Contact List'}}
-        :markdown
+
+- title: Create the Contact List
+  content: >
             To create the contact list, post the configuration object to the API. The response will contain the newly created list's configuration. The ID can then be used for things like [creating a campaign](https://developer.mypurecloud.com/api/tutorials/create-campaign/#javascript) and [uploading contacts to it](https://developer.mypurecloud.com/api/tutorials/upload-contacts/#javascript).
+
+languages: 
+  javascript:
+    displayName: Javascript
+    steps:
+      - file: "javascript/index.html"
+        highlight: "0-55"
+      - file: "javascript/index.html"
+        highlight: "23-26"
+      - file: "javascript/index.html"
+        highlight: "28-42"
+      - file: "javascript/index.html"
+        highlight: "45-49"
