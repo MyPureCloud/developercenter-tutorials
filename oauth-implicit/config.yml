@@ -5,25 +5,23 @@ categories:
 - OAuth
 steps:
 - title: Introduction
-  content: >
+  content: |
     This tutorial walks through how to use the OAuth implicit code grant.  For more information on the implicit grant, see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html)
 
 - title: Redirect to PureCloud to Handle Authentication
-  content: >
+  content: |
     When the page loads, we redirect the page to the authorization url and specify:
 
     **response_type**: Use _token_ since this is an implicit (token) grant.
-
     **client_id**: The client ID for this application.
-
     **redirect_uri**: The URI to which the user is redirected after login.
 
 - title: Get the Access Token Out of the Url
-  content: >
+  content: |
     After the user follows the redirect, the URI contains a hash (#) with the access token as a parameter.  We strip the parameter and save it in the token variable.
 
 - title: Make API Calls
-  content: >
+  content: |
     Now that we have the bearer token, we can make an Ajax call to PureCloud, setting the value of the **Authorization** parameter to **bearer** _token_, where _token_ is the value from the hash.
 
 languages: 

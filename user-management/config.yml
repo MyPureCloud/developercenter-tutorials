@@ -1,0 +1,41 @@
+---
+title: Creating and Updating a User
+description: Procedure for creating and then updating a user.
+categories:
+- Users
+steps:
+- title: Introduction
+  content: |
+    This tutorial will walk through creating and then updating a PureCloud user
+
+- title: Create new user
+  content: |
+    The first step is to create the new user object.  Email and Password are required, and you will probably also want to name your user.  
+
+    Once the user object is created, we can post it to the Users Api
+
+- title: Updating a User
+  content: |
+    When updating a user, you only need to specify the properties that you want to change.  In this case we are going to update the name and set the user's addresses.
+
+    It is important to note that we are setting the version on the updateuser object. The version on this user is the current version value of the user, you may need to call Get User first to find out what that value is. In this tutorial we got the version from the user that was returned when we created it.  
+
+languages: 
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-100"
+    - file: "nodejs/index.js"
+      highlight: "7-13"
+    - file: "nodejs/index.js"
+      highlight: "16-28"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/user.py"
+      highlight: "0-100"
+    - file: "python/user.py"
+      highlight: "9-15"
+    - file: "python/user.py"
+      highlight: "19-30"

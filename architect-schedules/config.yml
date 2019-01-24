@@ -5,20 +5,20 @@ categories:
 - Architect
 steps:
 - title: Introduction
-  content: >
+  content: |
     Architect APIs are available for you to interact with your IVR. This tutorial will walk you through the APIs needed to verify if an IVR is currently open. This logic can be used as a factor to show the chat widget or to provide a callback form on a web page .
 - title: Retrieving IVR and Schedule Group
-  content: >
+  content: |
     To start, we need to get our IVR configuration and from the configuration we can get the schedule group.  We know the name of our IVR so can use the name to filter the result. Once we have the IVR configuration we will call /api/v2/architect/schedulegroups/{scheduleGroupId} and get the schedule group.  The schedule group contains list of schedules which identify when the IVR is open or closed.
 - title: Process Open and Closed Schedules
-  content: >
+  content: |
     The schedule group has a property *openSchedules* which contains a list of schedules that determine when the IVR is open and a list called *closedSchedules* which can override the open schedules. In this configuration you could have a M-F 9-5 open schedule but maybe the IVR closes early at 4 on Wednesdays so a closed schedule on Wednesday from 4-5 would override the open schedule.
 
     The schedules are defined in a Schedule object so we will iterate over the open and closed schedules and retrieve them by calling /api/v2/architect/schedules/{scheduleId}.
 
     Once we've retrieved all the schedules, we'll iterate over all the open ones and process each individually.  If we find an open schedule then we can process the closed schedules and see if there is one that is currently overriding.  If there aren't any open schedules then the IVR defaults to closed.
 - title: Evaluate Schedule
-  content: >
+  content: |
     A schedules recurrence is defined in the *rrule* property on the schedule and is in the [iCal Recurrence](https://tools.ietf.org/html/rfc2445) format.
 
     The first thing we will do is starting at the beginning of the current day, we will us the rrule to find the next occurance and see if the next occurance is the same day as today. If it isn't the same then we know the schedule doesn't currently match, if it does then we need to evaluate the time in the *start* and *end* properties. The time is used to evaluate the time of day within the recurrance, if the current time is in between the start and end times then we are currently within the schedule.

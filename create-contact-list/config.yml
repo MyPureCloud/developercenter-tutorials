@@ -5,20 +5,20 @@ categories:
 - Dialer
 steps:
 - title: Introduction
-  content: >
-            Contact lists are one of the building blocks for outbound dialing campaigns. They let you specify who you want the campaign to call.
+  content: |
+    Contact lists are one of the building blocks for outbound dialing campaigns. They let you specify who you want the campaign to call.
 
 - title: Session Initialization
-  content: >
-            First, the user must authorize the application. 
+  content: |
+    First, the user must authorize the application. 
 
 - title: Contact List Configuration
-  content: >
-            The contact list configuration must specify a name, columnNames, and phoneColumns, at a minimum. The columnNames should be the columns from your CSV file of contacts, and the phoneColumns should specify which columns are of which type of phone number. More information about contact list configuration options can be found on the [Outbound Dialing API Resource documentation](https://developer.mypurecloud.com/api/rest/v2/outbound/index.html) under POST /api/v2/outbound/contactlists.
+  content: |
+    The contact list configuration must specify a name, columnNames, and phoneColumns, at a minimum. The columnNames should be the columns from your CSV file of contacts, and the phoneColumns should specify which columns are of which type of phone number. More information about contact list configuration options can be found on the [Outbound Dialing API Resource documentation](https://developer.mypurecloud.com/api/rest/v2/outbound/index.html) under POST /api/v2/outbound/contactlists.
 
 - title: Create the Contact List
-  content: >
-            To create the contact list, post the configuration object to the API. The response will contain the newly created list's configuration. The ID can then be used for things like [creating a campaign](https://developer.mypurecloud.com/api/tutorials/create-campaign/#javascript) and [uploading contacts to it](https://developer.mypurecloud.com/api/tutorials/upload-contacts/#javascript).
+  content: |
+    To create the contact list, post the configuration object to the API. The response will contain the newly created list's configuration. The ID can then be used for things like [creating a campaign](https://developer.mypurecloud.com/api/tutorials/create-campaign/#javascript) and [uploading contacts to it](https://developer.mypurecloud.com/api/tutorials/upload-contacts/#javascript).
 
 languages: 
   javascript:
