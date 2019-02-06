@@ -1,0 +1,40 @@
+---
+title: Working with the Architect APIs
+description: See how to query architect flows for their schedule and determine if an IVR is currently open or closed.
+categories:
+- Architect
+steps:
+- title: Introduction
+  content: |
+    Architect APIs are available for you to interact with your IVR. This tutorial will walk you through the APIs needed to verify if an IVR is currently open. This logic can be used as a factor to show the chat widget or to provide a callback form on a web page .
+- title: Retrieving IVR and Schedule Group
+  content: |
+    To start, we need to get our IVR configuration and from the configuration we can get the schedule group.  We know the name of our IVR so can use the name to filter the result. Once we have the IVR configuration we will call /api/v2/architect/schedulegroups/{scheduleGroupId} and get the schedule group.  The schedule group contains list of schedules which identify when the IVR is open or closed.
+- title: Process Open and Closed Schedules
+  content: |
+    The schedule group has a property *openSchedules* which contains a list of schedules that determine when the IVR is open and a list called *closedSchedules* which can override the open schedules. In this configuration you could have a M-F 9-5 open schedule but maybe the IVR closes early at 4 on Wednesdays so a closed schedule on Wednesday from 4-5 would override the open schedule.
+
+    The schedules are defined in a Schedule object so we will iterate over the open and closed schedules and retrieve them by calling /api/v2/architect/schedules/{scheduleId}.
+
+    Once we've retrieved all the schedules, we'll iterate over all the open ones and process each individually.  If we find an open schedule then we can process the closed schedules and see if there is one that is currently overriding.  If there aren't any open schedules then the IVR defaults to closed.
+- title: Evaluate Schedule
+  content: |
+    A schedules recurrence is defined in the *rrule* property on the schedule and is in the [iCal Recurrence](https://tools.ietf.org/html/rfc2445) format.
+
+    The first thing we will do is starting at the beginning of the current day, we will us the rrule to find the next occurance and see if the next occurance is the same day as today. If it isn't the same then we know the schedule doesn't currently match, if it does then we need to evaluate the time in the *start* and *end* properties. The time is used to evaluate the time of day within the recurrance, if the current time is in between the start and end times then we are currently within the schedule.
+
+    This process works well for weekly schedules.  Yearly schedules will use the month/day in the *start* and *end* properties to determine if they are in schedule. It is recommended to test your logic against know schedules that your IVR will use.
+
+languages: 
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: nodejs/isOpen.js
+      highlight: 0-100
+    - file: nodejs/isOpen.js
+      highlight: 72-82
+    - file: nodejs/isOpen.js
+      highlight: 27-61
+    - file: nodejs/isOpen.js
+      highlight: 5-24
+      note: To evaluate the times and rrule, we are relying on the <a href="https://www.npmjs.com/package/rrule">rrule</a> and <a href="https://www.npmjs.com/package/moment">moment</a> node packages to do the heavy lifting for us.

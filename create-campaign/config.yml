@@ -1,0 +1,33 @@
+---
+title: Creating an Outbound Dialing Campaign
+description: Creating a campaign that can be run to place outbound calls.
+categories:
+- Dialer
+steps:
+- title: Introduction
+  content: |
+    Campaigns are the workhorses for outbound dialing. Before you can create a campaign, you'll need to have [created a contact list](https://developer.mypurecloud.com/api/tutorials/create-contact-list/#javascript) and, for most dialing modes, a queue. Most dialing modes also require a script, but you can use the default outbound script that's provided.
+
+- title: Log In to PureCloud
+  content: |
+    First, the user must authorize the application. 
+
+- title: Getting Your IDs
+  content: |
+    Next, the IDs of the desired contact list, queue, and agent script are retrieved. This is accomplished by collecting the promises from the API requests and waiting until all have resolved before moving on to the next step.
+
+- title: Campaign Configuration
+  content: |
+    The IDs collected in the previous step are then used to populate the campaign configuration object. This object is then used to create the campaign. This is a bare-bones configuration for a preview dialing campaign. More information about dialing modes and their options can be found on the [Outbound Dialing API Resource documentation](https://developer.mypurecloud.com/api/rest/v2/outbound/index.html) under POST /api/v2/outbound/campaigns.
+languages: 
+  javascript:
+    displayName: Javascript
+    steps:
+    - file: "javascript/index.html"
+      highlight: "0-127"
+    - file: "javascript/index.html"
+      highlight: "33-35"
+    - file: "javascript/index.html"
+      highlight: "37-89"
+    - file: "javascript/index.html"
+      highlight: "91-121"

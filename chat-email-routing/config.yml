@@ -1,0 +1,52 @@
+---
+title: 3rd Party Chat and Email Routing
+description: Introduction on how to route external objects through PureCloud ACD
+categories:
+- Chat
+- Email
+steps:
+- title: Introduction
+  content: |
+    Use cases can arise where there are entities external to PureCloud which need to be routed through PureCloud's ACD engine. The most common use case is with a CRM that supports email to case functionality and then the callcenter wants to ACD route that case to an available agent. Using [POST /api/v2/conversations/emails](/api/rest/v2/conversations/#postConversationsEmails) and [POST /api/v2/conversations/chats](/api/rest/v2/conversations/#postConversationsChats) it is now possible to create a representation of those external objects in PureCloud as email or chat objects.  This tutorial demonstrates routing an email, but the concepts also apply for a chat.
+    
+- title: Authenticate with PureCloud
+  content: |
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud. After authenticating, a new notification channel is created for the app.
+    
+- title: Initialize Queue or User Watcher
+  content: |
+    After the notification channel has been created, a subscription is made to a queue's conversations (additional media-specific topics exist). Next, a web socket is opened on the channel's connectUri. Callbacks are registered for the websocket's onopen and onmessage events. When the socket opens, a new 3rd party email is created. When a message is received, some basic information is logged about the email.
+
+    Proceed for more information about each of those events.
+    
+- title: Create an Email
+  content: |
+    When creating the data for an email, the only required fields are queueId, which is the queue used to route the email and provider. The provider field is an arbitrary string value which identifies your routing integration. Native PureCloud emails and chats will have a provider of "PureCloud Email" and "PureCloud Webchat".
+
+    The other fields on the email are optional but the from/to name can be used to display helpful information to the agent and the from/to address may be useful for the integration.
+    
+- title: Handling a Conversation Notification
+  content: |
+    This is the callback function that handles incoming notifications from PureCloud. It performs the following steps:
+
+    1. Parses the notification payload to JSON. Web socket message payloads are always received as a string.
+    2. Unwanted notification topics are filtered out.
+    3. The email provider is checked against this app's name and colored red for the log message if it matches.
+    4. Some basic information about the email conversation in the notification is logged.
+
+    An integration might choose to apply some logic to the conversation object and perform a screen pop or send data to an external system at this point.
+    
+languages: 
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-100"
+    - file: "nodejs/index.js"
+      highlight: "25-32"
+    - file: "nodejs/index.js"
+      highlight: "33-69"
+    - file: "nodejs/index.js"
+      highlight: "72-91"
+    - file: "nodejs/index.js"
+      highlight: "46-68"
