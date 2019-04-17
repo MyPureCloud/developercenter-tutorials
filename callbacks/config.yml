@@ -16,7 +16,7 @@ steps:
     [POST /api/v2/conversations/callbacks](https://developer.mypurecloud.com/api/rest/v2/conversations/index.html#postConversationsCallbacks) has a full set of documentation for the callback.  The only required attributes are the callbackNumbers and either queueId or routingData.  queueId can be used for basic ACD routing to a queue or routingData can be used for more advanced routing settings. In this example, we will specify scriptId to load a custom script for the agent and also set the data attribute. The value of data can not be used in our script, but can be used by other applications watching the callbacks, this attribute will show up in the attributes property of the callback participant.
 - title: Create the callback
   content: |
-    Lastly, make the call to the [ConversationsApi](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/latest/ConversationsApi.html#postCallbacks) to create the callback. The callbackResponseData that is returned on success will contain the conversation id for the callback.
+    Lastly, make the call to the [ConversationsApi.postConversationsCallbacks()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/ConversationsApi.html#postConversationsCallbacks) function to create the callback. The `CreateCallbackResponse` that is returned on success will contain the conversation id for the callback.
 languages: 
   ruby:
     displayName: Ruby
