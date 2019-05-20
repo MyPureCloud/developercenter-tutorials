@@ -28,57 +28,58 @@
         <p>Premium App /&nbsp; Home</p>
     </header>
 
-    <div id="loading" style="margin-top: 30px; text-align: center;">
-        <i class="fa fa-spinner fa-spin" style="font-size:70px"></i>
+    <div class="content">
+        <div id="loading" style="margin-top: 30px; text-align: center;">
+            <i class="fa fa-spinner fa-spin" style="font-size:70px"></i>
+        </div>
+
+        <div class="hidden title">
+            <span class="txt-greeting">
+            Hi 
+            </span>
+            <span id="username"></span>!
+            <div class="txt-greeting-2">
+                welcome to the Premium App Example
+            </div>
+        </div>
+
+        <ul class="hidden progress-bar">
+            <li class="active current">
+                <span class="txt-start">Start</span>
+            </li>
+            <li class="">
+                <span class="txt-install">Install</span>
+            </li>
+            <li class="">
+                <span class="txt-summary">Summary</span>
+            </li>
+        </ul>
+
+        <main class="hidden">
+            <div id="available" class="hidden">
+                <p class="success">
+                    <span class="txt-product-available">Product Available </span> <i class="fas fa-check-circle enlarge"></i>
+                </p>
+                <p>
+                    <span class="txt-available-message">We're ready to set you up. Please click the Start button.</span>
+                </p>
+                <button id="next" onclick="goToPage('./install')" class="btn-info right">
+                    <span class="txt-start">Start</span> <i class="button-icon fas fa-chevron-right"></i></button>
+            </div>
+
+            <div id="unavailable" class="hidden">
+                <p class="fail">
+                    <span class="txt-product-not-available">Product not avaiable.</span>  <i class="fas fa-times-circle enlarge"></i>
+                </p>
+                <p>
+                    <span class="txt-not-available-message">
+                    We're sorry but your PureCloud org does not have the Premium App Sample Product enabled.
+                    Please contact the authorities.
+                    </span>
+                </p>
+            </div>
+        </main>
     </div>
-
-    <div class="hidden title">
-        <span class="txt-greeting">
-        Hi 
-        </span>
-        <span id="username"></span>!
-        <div class="txt-greeting-2">
-            welcome to the Premium App Example
-        </div>
-    </div>
-
-    <ul class="hidden progress-bar">
-        <li class="active current">
-            <span class="txt-start">Start</span>
-        </li>
-        <li class="">
-            <span class="txt-install">Install</span>
-        </li>
-        <li class="">
-            <span class="txt-summary">Summary</span>
-        </li>
-    </ul>
-
-    <main class="hidden">
-        <div id="available" class="hidden">
-            <p class="success">
-                <span class="txt-product-available">Product Available </span> <i class="fas fa-check-circle enlarge"></i>
-            </p>
-            <p>
-                <span class="txt-available-message">We're ready to set you up. Please click the Start button.</span>
-            </p>
-            <button id="next" onclick="goToPage('./install')" class="btn-info right">
-                <span class="txt-start">Start</span> <i class="button-icon fas fa-chevron-right"></i></button>
-        </div>
-
-        <div id="unavailable" class="hidden">
-            <p class="fail">
-                <span class="txt-product-not-available">Product not avaiable.</span>  <i class="fas fa-times-circle enlarge"></i>
-            </p>
-            <p>
-                <span class="txt-not-available-message">
-                We're sorry but your PureCloud org does not have the Premium App Sample Product enabled.
-                Please contact the authorities.
-                </span>
-            </p>
-        </div>
-    </main>
-
     <footer>
             <img src="logo.png" alt="Logo">
     </footer>
