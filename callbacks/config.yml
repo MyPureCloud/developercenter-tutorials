@@ -1,0 +1,42 @@
+---
+title: Create Callback
+description: Using the Platform API to create callbacks.
+categories:
+- Callback
+- Conversations
+steps:
+- title: Introduction
+  content: |
+    Scheduled callbacks do not have a wrapper library like [Web Chat](/api/webchat/) does, but instead you will need to use the Platform API to create the callback. In this tutorial, we will use a simple command line app to create the callback.
+- title: Session Initialization
+  content: |
+    Most scenarios where you need to create a callback will involve using the client credentials grant type so we will create a new session using that grant. When creating an oauth client, the client must have the conversation:callback:create permission.
+- title: Creating the Callback Data
+  content: |
+    [POST /api/v2/conversations/callbacks](https://developer.mypurecloud.com/api/rest/v2/conversations/index.html#postConversationsCallbacks) has a full set of documentation for the callback.  The only required attributes are the callbackNumbers and either queueId or routingData.  queueId can be used for basic ACD routing to a queue or routingData can be used for more advanced routing settings. In this example, we will specify scriptId to load a custom script for the agent and also set the data attribute. The value of data can not be used in our script, but can be used by other applications watching the callbacks, this attribute will show up in the attributes property of the callback participant.
+- title: Create the callback
+  content: |
+    Lastly, make the call to the [ConversationsApi.postConversationsCallbacks()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/ConversationsApi.html#postConversationsCallbacks) function to create the callback. The `CreateCallbackResponse` that is returned on success will contain the conversation id for the callback.
+languages: 
+  ruby:
+    displayName: Ruby
+    steps:
+    - file: "ruby/script.rb"
+      highlight: "0-100"
+    - file: "ruby/script.rb"
+      highlight: "3-6"
+    - file: "ruby/script.rb"
+      highlight: "9-19"
+    - file: "ruby/script.rb"
+      highlight: "22-23"          
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-41"
+    - file: "nodejs/index.js"
+      highlight: "4-16"
+    - file: "nodejs/index.js"
+      highlight: "20-33"
+    - file: "nodejs/index.js"
+      highlight: "35-40"

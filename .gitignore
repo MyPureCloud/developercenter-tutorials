@@ -241,3 +241,6 @@ _Pvt_Extensions
 
 # ASP.NET libs
 oauth-auth-code/csharp/authorization_code_aspdotnet/wwwroot/lib/**
+
+/env
+/.vscode

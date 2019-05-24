@@ -1,0 +1,81 @@
+---
+title: Querying Queue Historical Statistics
+description: See how to query historical statistics for a queue using the Analytics API.
+categories:
+- Analytics
+steps:
+- title: Introduction
+  content: |
+    The Analytics API provides a flexible way to query historical information from PureCloud.  For full details see [Analytics Overview](/api/rest/v2/analytics/overview.html). 
+    
+    When querying historical statistics for a queue, we'll need to build up an aggregation query to send to the [PureCloud API](/api/rest/v2/analytics/index.html).
+- title: Build Query
+  content: |
+    The aggregation query contains a number of different parameters.
+- title: Get Query Interval
+  content: |
+    First, we need to specify the timespan for the query. The format of this parameter will look like
+
+    ```
+    2015-11-10T00:00:00.000Z/2015-11-11T00:00:00.000Z
+    ```
+
+    Where it is starttime/endtime with the times being in [ISO-8601 format](https://en.wikipedia.org/wiki/ISO_8601).  This example will use an interval for the past seven days.
+- title: Statistics Grouping
+  content: |
+    We are looking to get statistics based on queue so we will group by queueId. See [Group using multidemsional fields](/api/rest/v2/analytics/groupby.html) for advanced grouping options.
+- title: Query Metrics
+  content: |
+    The metrics parameter is where we can specify which metrics we want returned from this query.  Here we just want:
+
+    * nOffered - The number of interactions offered to a queue.
+    * tAnswered - The number of assigned interactions answered by an agent in the time interval.
+    * tTalk - The total talk time.
+
+    A full list of available metrics can be found on the [Metrics](/api/rest/v2/analytics/metrics.html) page.
+- title: Query Filter
+  content: |
+    Finally we need to build the query filter. A list of dimensions used to build the query [is available](/api/rest/v2/analytics/dimensions.html) but we are simply going to query by queueId.  This example is getting the queue named Support.
+- title: Send Query
+  content: |
+    Now that the query is built, we can send the query to PureCloud and handle the result set as needed.
+- title: Results
+  content: |
+    Here is an example response containing the results of the query. For this query, we can see that the only media type presented in the queue were chats, there were 5 calls offered as well as details on the talk time and answer time.
+languages: 
+  ruby:
+    displayName: Ruby
+    steps:
+    - file: ruby/query.rb
+    - file: ruby/query.rb
+      highlight: 24-44
+    - file: ruby/query.rb
+      highlight: 16-22
+    - file: ruby/query.rb
+      highlight: 27
+    - file: ruby/query.rb
+      highlight: 28
+    - file: ruby/query.rb
+      highlight: 29-42
+    - file: ruby/query.rb
+      highlight: 46-49
+    - file: results.json
+  javascript:
+    displayName: JavaScript
+    steps:
+    - file: javascript/index.html
+      highlight: 0-87
+    - file: javascript/index.html
+      highlight: 41-59
+    - file: javascript/index.html
+      highlight: 73-80
+    - file: javascript/index.html
+      highlight: 43-43
+    - file: javascript/index.html
+      highlight: 44-44
+    - file: javascript/index.html
+      highlight: 45-58
+    - file: javascript/index.html
+      highlight: 62-69
+    - file: results.json
+      highlight: 1-100

@@ -1,0 +1,36 @@
+---
+title: Uploading Contacts to a Contact List
+description: Uploading contacts to an existing outbound dialing contact list.
+categories:
+- Dialer
+steps:
+- title: Introduction
+  content: |
+    Once you've [created a contact list](https://developer.mypurecloud.com/api/tutorials/create-contact-list/#javascript), you'll want to upload contacts to it from a CSV file (an example CSV file of contacts is included in the [source code](https://github.com/MyPureCloud/developercenter-tutorials/tree/master/upload-contacts) for this tutorial).
+
+- title: Session Initialization
+  content: |
+    First, authorize with PureCloud and get the list of contact lists. This example adds each list to a dropdown in the UI to allow the user to choose the list without knowing the ID.
+
+- title: File Selection UI
+  content: |
+    Next, create a way to select the file you want to upload. This example uses jQuery's changed handler to initiate the upload when a user selects a file.
+
+- title: The Upload Request
+  content: |
+    To upload contacts to PureCloud, the POST request is constructed by building the form data body and configuring the request. This primarially consists of the form data body and the auth token in the header. For full documentation on the upload request, see the Dev Center article [Upload Contact Lists](https://developer.mypurecloud.com/api/rest/v2/outbound/uploadcontactlists.html).
+
+    After constructing the request, the user-selected file is posted to the PureCloud upload service. This request may take some time to complete when uploading large contact lists.
+
+languages:
+  javascript:
+    displayName: Javascript
+    steps:
+    - file: "javascript/index.html"
+      highlight: "0-200"
+    - file: "javascript/index.html"
+      highlight: "34-50"
+    - file: "javascript/index.html"
+      highlight: "29-32"
+    - file: "javascript/index.html"
+      highlight: "53-95"
