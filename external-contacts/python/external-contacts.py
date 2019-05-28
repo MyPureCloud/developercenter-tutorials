@@ -88,3 +88,4 @@ with open("contacts.csv", mode="r", encoding='utf-8-sig') as csv_file:
             print(f"Error occurred when adding {new_contact.first_name}")
 
     print("All contacts added.")
+    
