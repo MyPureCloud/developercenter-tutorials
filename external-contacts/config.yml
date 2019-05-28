@@ -44,3 +44,14 @@ languages:
       highlight: "22-45"
     - file: "nodejs/index.js"
       highlight: "47-82"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/external-contacts.py"
+      highlight: "0-100"
+    - file: "python/external-contacts.py"
+      highlight: "10-35"
+    - file: "python/external-contacts.py"
+      highlight: "40-62"
+    - file: "python/external-contacts.py"
+      highlight: "64-90"
