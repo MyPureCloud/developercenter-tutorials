@@ -40,3 +40,14 @@ languages:
       highlight: "20-33"
     - file: "nodejs/index.js"
       highlight: "35-40"
+  python:
+    displayName: Pythin
+    steps:
+    - file: "python/callbacks.py"
+      highlight: "0-56"
+    - file: "python/callbacks.py"
+      highlight: "13-38"
+    - file: "python/callbacks.py"
+      highlight: "40-48"
+    - file: "python/callbacks.py"
+      highlight: "50-56"
