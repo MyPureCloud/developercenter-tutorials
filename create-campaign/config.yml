@@ -31,3 +31,14 @@ languages:
       highlight: "37-89"
     - file: "javascript/index.html"
       highlight: "91-121"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/create-campaign.py"
+      highlight: "0-105"
+    - file: "python/create-campaign.py"
+      highlight: "15-41"
+    - file: "python/create-campaign.py"
+      highlight: "42-79"
+    - file: "python/create-campaign.py"
+      highlight: "81-105"

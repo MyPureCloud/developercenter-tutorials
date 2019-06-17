@@ -12,15 +12,15 @@ steps:
   content: |
     The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
 
-- title: Create an Organization
+- title: Create a Prompt Object
   content: |
     First, the prompt object is created. This API only requires the name of the prompt, though a description will be useful when viewing prompts in Architect.
 
-- title: Create Users
+- title: Create a Prompt Resource
   content: |
     Next, the prompt resource is created. This requires the ID from the prompt created in the previous step as well as the language of the prompt. The value for `language` must be a known Architect language code. 
 
-- title: Create Users
+- title: Upload the Audio File
   content: |
     Using the upload URI returned from creating the prompt resource, upload the media file for the prompt. This POST request requires the Authorization header to be specified. The prompt media should be provided in the form-data property `file`.
 
@@ -38,3 +38,16 @@ languages:
       highlight: "33-42"
     - file: "nodejs/index.js"
       highlight: "44-60"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/upload-prompts.py"
+      highlight: "0-80"
+    - file: "python/upload-prompts.py"
+      highlight: "13-41"
+    - file: "python/upload-prompts.py"
+      highlight: "42-53"
+    - file: "python/upload-prompts.py"
+      highlight: "55-65"
+    - file: "python/upload-prompts.py"
+      highlight: "67-80"
