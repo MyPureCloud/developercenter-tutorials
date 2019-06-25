@@ -12,7 +12,7 @@ steps:
     Campaign Sequences are chained campaigns. It provides the user an option to automate the start and stop of campaigns instead of manually starting and stopping campaigns at a time. 
 - title: Authenticating Credentials
   content: |
-     PureCloud will verify the validity of Client Credentials. In this case, we have implicit grant client credentials for user authentication. 
+     PureCloud will verify the credentials using Implicit grant.
      Once the validation is successful, it will return objects that will be used later for populating select/ drop down lists.
 - title: Adding Data
   content: |
