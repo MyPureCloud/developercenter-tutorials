@@ -1,0 +1,151 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'
+        integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+    <script src='https://sdk-cdn.mypurecloud.com/javascript/27.0.0/purecloud-platform-client-v2.min.js'></script>
+</head>
+
+<body>
+    <div class="row row-no-gutters" style="margin: 25px">
+        <div class="col-sm-7">
+            <label for="sequenceName">Sequence Name</label>
+            <input type="text" class="form-control" id="sequenceName">
+        </div>
+        <div class="col-sm-7">
+            <label name="campaign">Campaign Lists</label>
+            <div id="divCampaign" class="campaign"></div>
+        </div>
+
+        <div class="col-sm-7">
+            <button id="btnSubmit" class="btn btn-success" onclick="submit()" style="float: left;">Submit</button>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+// Variable that will be used for storing objects (campaign list) from PureCloud
+let campaignLists = null;
+// This client ID expects the redirect URL to be http://localhost:8080/
+const clientId = '83d37bf5-e050-47bf-9937-0314b259c9c4';
+const redirectUri = window.location.href;
+
+// Set purecloud objects
+const platformClient = require('platformClient');
+const client = platformClient.ApiClient.instance;
+const outboundApi = new platformClient.OutboundApi();
+
+// Set PureCloud settings
+client.setEnvironment('mypurecloud.com');
+client.setPersistSettings(true, 'test_app');
+
+// Accessing purecloud objects
+$(document).ready(() => {
+    client.loginImplicitGrant(clientId, redirectUri)
+        .then(() => {
+            console.log('Logged in');
+
+            // Get lists of outbound campaigns
+            return outboundApi.getOutboundCampaigns({
+                pageSize: 100
+            });
+        })
+        .then((_campaignLists) => {
+            // Initialize _campaignList object from API to campaignLists variable
+            campaignLists = _campaignLists;
+
+            // Call function addList that populates dropdown menu
+            addList();
+        })
+        .catch((err) => console.error(err));
+});
+
+// Create div to serve as parent element.
+let parentDiv = document.createElement('div');
+
+// Add dropdown list to campain list initially and everytime add button is clicked.
+function addList () {
+    parentDiv.setAttribute('class', 'col-sm-10');
+    divCampaign.appendChild(parentDiv);
+
+    // Create childDiv to serve as container for all the dynamic elements that will be generated.
+    let childDiv = document.createElement('div');
+    parentDiv.appendChild(childDiv);
+
+    // Generate select lists 
+    let selectList = document.createElement('Select');
+    selectList.setAttribute('class', 'campaignLists col-sm-11');
+    childDiv.appendChild(selectList);
+
+    // Create add button
+    let addButton = document.createElement('Button');
+    addButton.setAttribute('onclick', 'addList()');
+    addButton.innerHTML = '+';
+    addButton.setAttribute('class', 'btn btn-primary btn-xs');
+    childDiv.appendChild(addButton);
+
+    // Create delete button
+    let delButton = document.createElement('Button');
+    delButton.setAttribute('class', 'btn btn-danger btn-xs');
+    delButton.innerHTML = '-';
+    delButton.setAttribute('onclick', 'deleteList()');
+    childDiv.appendChild(delButton);
+
+    // Call function to add data to select/ drop down list
+    populateDropdown(campaignLists);
+}
+
+// Add dynamic selection to select/dropdown list in the UI
+function populateDropdown (campaignLists) {
+    campaignLists.entities.forEach((campaignLists) => {
+        $('.campaignLists').last()
+            .append($('<option></option>')
+                .attr('value', campaignLists.id)
+                .text(campaignLists.name));
+    });
+}
+
+// Remove the last select/drop down list every time the delete button is clicked
+function deleteList () {
+    if (parentDiv.childNodes.length > 1) {
+        parentDiv.removeChild(parentDiv.lastChild);
+    }
+}
+
+// Consolidate value of each selected campaign list into an object
+function submit () {
+    let campaignIds = $.map($('.campaignLists'), (campaignList) => {
+        console.log(campaignList);
+        return campaignList.options[campaignList.selectedIndex].value;
+    });
+
+    // Create an object in acceptable format for PureCloud API to store all the user input
+    let body = {
+        name: (document.getElementById('sequenceName').value),
+        version: 0,
+        status: 'on',
+        campaigns: campaignIds.map(id => ({
+            id: id
+        }))
+    };
+
+    // Submit data 
+    outboundApi.postOutboundSequences(body)
+        .then((data) => {
+            confirm('Success!') && refresh(event);
+        })
+        .catch((err) => {
+            console.log(err);
+            confirm('There was a failure calling postOutboundSequences');
+        });
+}
+
+// Refresh the page to remove all the user inputs and proceed with another campaign
+function refresh (event) {
+    location.reload();
+}
+</script>
