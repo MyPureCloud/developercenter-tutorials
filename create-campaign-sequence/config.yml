@@ -1,0 +1,37 @@
+---
+title: Creating a Campaign Sequence
+description: Creating campaign sequence to setup the arrangement of campaigns.
+categories:
+- Dialer
+steps:
+- title: Introduction
+  content: |
+    Once done creating an [Outbound Dialing Contact List](https://developer.mypurecloud.com/api/tutorials/create-contact-list/?language=javascript&step=1) and (Outbound Dialing Campaign](https://developer.mypurecloud.com/api/tutorials/create-campaign/?language=javascript&step=1)
+    Campaign Sequence can be created to automate the campaigns. 
+    
+    Campaign Sequences are chained campaigns. It provides the user an option to automate the start and stop of campaigns instead of manually starting and stopping campaigns at a time. 
+- title: Authenticating Credentials
+  content: |
+     PureCloud will verify the credentials using Implicit grant.
+     Once the validation is successful, it will return objects that will be used later for populating select/ drop down lists.
+- title: Adding Data
+  content: |
+     Text field and dynamic select/drop down will be displayed. Users can input their desired campaign list name and add or delete campaigns. 
+     These campaign lists are dynamically generated so that user can freely select
+     their chosen campaign list even without knowing the campaign ID.
+- title: Creating Campaign Sequence
+  content: |
+     All the user input will be formatted and sent to PureCloud through OutboundApi.
+
+languages: 
+  javascript:
+    displayName: Javascript
+    steps:
+    - file: "javascript/index.html"
+      highlight: "0-152"
+    - file: "javascript/index.html"
+      highlight: "31-65"
+    - file: "javascript/index.html"
+      highlight: "67-117"
+    - file: "javascript/index.html"
+      highlight: "119-145"
