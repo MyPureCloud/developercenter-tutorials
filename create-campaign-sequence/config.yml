@@ -6,7 +6,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    Once done creating an [Outbound Dialing Contact List](https://developer.mypurecloud.com/api/tutorials/create-contact-list/?language=javascript&step=1) and (Outbound Dialing Campaign](https://developer.mypurecloud.com/api/tutorials/create-campaign/?language=javascript&step=1)
+    Once done creating an [Outbound Dialing Contact List](https://developer.mypurecloud.com/api/tutorials/create-contact-list/?language=javascript&step=1) and [Outbound Dialing Campaign](https://developer.mypurecloud.com/api/tutorials/create-campaign/?language=javascript&step=1)
     Campaign Sequence can be created to automate the campaigns. 
     
     Campaign Sequences are chained campaigns. It provides the user an option to automate the start and stop of campaigns instead of manually starting and stopping campaigns at a time. 
