@@ -6,22 +6,24 @@ categories:
 steps:
 - title: Introduction
   content: |
-    The main objective of this tutorial is to showcase how to create an interaction, and send SMS using Platform API. This tutorial will also cover the use notification API.
+    The main objective of this tutorial is to showcase how to create an interaction, and send SMS using Platform API. The given sample code will send a message after an agent drops off a call made through a queue. This tutorial will also cover how to listen to a topic from a pre-created channel.
 - title: Authenticate with PureCloud
   content: |
     First, authenticate the application with pureCloud.
 - title: Websocket Object
   content: |
-    Create an instance of the websocket object that will listen to a topic. For convinience, a notification channel subscribed to a queues call, is already available in this scenario. For more information about Notification API you may visit the following resources below.
+    Create an instance of the websocket object that will listen to the topic {"id": "v2.routing.queues.{queueID}.conversations.calls"}. For convenience, a notification channel subscribed to a queues call flow, is already created. For more information about Notification API refer the following resources below:
+    * [Notifications](https://developer.mypurecloud.com/api/rest/v2/notifications/)
+    * [User Presence with Notifications](https://developer.mypurecloud.com/api/tutorials/presence/?language=javascript&step=1)
 - title: IVR Participant Attribute
   content: |
-    To simplify this usecase, an IVR will prompt the caller to verify if he/she is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute.
+    To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.
 - title: Create Conversation
   content: |
-    In order to send SMS, a conversation ID and communication ID are required.
+    Once the call become disconnected, create an interaction and get the conversation ID and communication ID.
 - title: Send SMS
   content: |
-    Once a Conversation is created
+    Send the drop off message.
 
 languages: 
   nodejs:
