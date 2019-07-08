@@ -1,30 +1,30 @@
 ---
-title: Auto Send SMS After Inbound Call
-description: Using Platform API to send SMS after an inbound call.
+title: Auto Send SMS After A Call To A Queue
+description: Using Platform API to send SMS after dropping off a call.
 categories:
 - Architect
 steps:
 - title: Introduction
   content: |
-    The main objective of this tutorial is to showcase how to create an interaction, and send SMS using Platform API. The given sample code will send a message after an agent drops off a call made through a queue. This tutorial will also cover how to listen to a topic from a pre-created channel.
+    The main objective of this tutorial is to showcase how to create an interaction, and send SMS using through a queue with Platform API. The given sample code will send a message after an agent drops off a call. This tutorial will also cover how to listen to a topic from a pre-created channel.
 - title: Authenticate with PureCloud
   content: |
     First, authenticate the application with pureCloud.
 - title: WebSocket Object
   content: |
-    Create an instance of the websocket object that will listen to the topic {"id": "v2.routing.queues.{queueID}.conversations.calls"}. For convenience, a notification channel subscribed to a queues call flow, is already created. For more information about Notification API refer the following resources below:
+    Create an instance of the web socket object that will listen to the topic {"id": "v2.routing.queues.{queueID}.conversations.calls"}. For convenience, a notification channel subscribed to a queues call flow, is already created. For more information about Notification API refer the following resources below:
     * [Notifications](https://developer.mypurecloud.com/api/rest/v2/notifications/)
     * [User Presence with Notifications](https://developer.mypurecloud.com/api/tutorials/presence/?language=javascript&step=1)
 - title: WebSocket Message
   content: |
-    To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.  
-    Every message from the webSocket, identify the state of the call, the customer address i.e., conatact number, and lastly the customer attribute.
+    To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the web socket object will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.  
+    After every message from the web socket, get the value of the state of the call, the customer address i.e., conatact number, and lastly the customer attribute.
 - title: Create Conversation
   content: |
     Once the call become disconnected, create an interaction and get the conversation ID and communication ID.
 - title: Send SMS
   content: |
-    Send the drop off message.
+    lastly, send the SMS message.
 
 languages: 
   nodejs:
