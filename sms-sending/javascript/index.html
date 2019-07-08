@@ -1,0 +1,101 @@
+<html>
+<head>
+  
+  <title>DropOff SMS</title>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>  
+  <script src="https://sdk-cdn.mypurecloud.com/javascript/49.0.0/purecloud-platform-client-v2.min.js"></script>
+ 
+</head>
+
+<body>
+  
+  <div>
+      
+    <label id="state">Status: </label>   
+    <label id="stateVal"></label>         
+  
+  </div>
+
+<script type="text/javascript">
+
+  // Set purecloud objects
+  const platformClient = require('platformClient');
+  const client = platformClient.ApiClient.instance;
+  const conversationsApi = new platformClient.ConversationsApi();
+  
+  // Set variables
+  let webSocket = new WebSocket('wss://carrier-pigeon.us-east-1.mypurecloud.com/v1/channels/btmfetbcc9r489fbrsj918876m');
+  let redirectUri = 'http://localhost:8080/';
+  let clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+  let queueId = '4d3af653-b60c-42f1-b373-7cf2c99610fc';
+  let receivedMsg, customerAddress, conversationId, communicationId, interactionState, usingMobilePhone;
+  let dropOffMessage = 'Message sent upon dropping off the call.';
+
+  // jQuery call this function when DOM's ready
+  $(document).ready(function() {
+    client.loginImplicitGrant(clientId, redirectUri)
+      .then(() => {
+        console.log('Loged in');
+        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.'
+        webSocket.onmessage = dropOffsms;
+    }).catch((err) => console.log(err));
+  })
+
+  function dropOffsms(message){ 		
+    receivedMsg = JSON.parse(message.data);		
+    console.log(receivedMsg);
+
+    try {
+      interactionState = receivedMsg.eventBody.participants[0].state;		
+      customerAddress = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').address;
+      usingMobilePhone = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').attributes.usingMobilePhone;
+      customerAddress = customerAddress.slice(4, customerAddress.length);	
+      
+      document.getElementById('stateVal').innerHTML = interactionState + ' to ' + customerAddress;	
+      
+      if (interactionState === 'disconnected' && usingMobilePhone === 'true')
+      {
+        let body = {
+          'queueId': queueId,
+          'toAddress': customerAddress,
+          'toAddressMessengerType': 'sms',
+          'useExistingConversation': true
+        };
+
+        // Create interaction
+        conversationsApi.postConversationsMessages(body)
+          .then((data) => {						
+            conversationId = data.id;
+
+            // Get conversation id
+            return conversationsApi.getConversation(conversationId); 
+          })
+          .then((data) => {
+              communicationId = data.participants.find(participant => participant.purpose === 'agent').messages[0].id;
+
+              let body = {
+                'textBody': dropOffMessage
+              };
+
+              // Send message
+            return conversationsApi.postConversationsMessageCommunicationMessages(conversationId, communicationId, body);
+          })
+          .then((data) => {
+            document.getElementById('stateVal').innerHTML = 'SMS successfully sent to: '+ data.toAddress;
+          })
+          .catch((err) => console.log(err));
+      }
+      else if(interactionState === 'disconnected' && usingMobilePhone === 'false') 
+      {
+        document.getElementById('stateVal').innerHTML = 'SMS not sent.';
+      }			
+    } catch (e) {
+      interactionState = '';
+      console.log(e);
+    };			
+  }
+  
+</script>
+</body>
+</html>

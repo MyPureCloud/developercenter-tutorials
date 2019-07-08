@@ -1,0 +1,44 @@
+---
+title: Autosending SMS After Inbound Call
+description: Using Platform API to send SMS after an inbound call.
+categories:
+- Architect
+steps:
+- title: Introduction
+  content: |
+    The main objective of this tutorial is to showcase how to create an interaction, and send SMS using Platform API. This tutorial will also cover the use notification API.
+- title: Authenticate with PureCloud
+  content: |
+    First, authenticate the application with pureCloud.
+- title: Websocket Object
+  content: |
+    Create an instance of the websocket object that will listen to a topic. For convinience, a notification channel subscribed to a queues call, is already available in this scenario. For more information about Notification API you may visit the following resources below.
+- title: IVR Participant Attribute
+  content: |
+    To simplify this usecase, an IVR will prompt the caller to verify if he/she is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute.
+- title: Create Conversation
+  content: |
+    In order to send SMS, a conversation ID and communication ID are required.
+- title: Send SMS
+  content: |
+    Once a Conversation is created
+
+languages: 
+  nodejs:
+    displayName: Javascript
+    steps:
+    - file: "javascript/index.html"
+      highlight: "0-101"
+    - file: "javascript/index.html"
+      highlight: "37-40"
+    - file: "javascript/index.html"
+      highlight: "28-28"
+    - file: "javascript/index.html"
+      highlight: "57-57"
+    - file: "javascript/index.html"
+      highlight: "59-75"
+    - file: "javascript/index.html"
+      highlight: "82-87"
+    
+
+   
