@@ -1,6 +1,6 @@
 ---
 title: Auto Send SMS
-description: Using Platform API to send SMS after dropping off a call.
+description: Auto send SMS after a call gets disconnected using Platform API.
 categories:
 - Architect
 steps:
