@@ -29,7 +29,7 @@
   let redirectUri = 'http://localhost:8080/';
   let clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
   let queueId = '4d3af653-b60c-42f1-b373-7cf2c99610fc';
-  let receivedMsg, customerAddress, conversationId, communicationId, interactionState, usingMobilePhone;
+  let receivedMsg, customerAddress, conversationId, communicationId, callState, usingMobilePhone;
   let dropOffMessage = 'Message sent upon dropping off the call.';
 
   // jQuery call this function when DOM's ready
@@ -47,14 +47,14 @@
     console.log(receivedMsg);
 
     try {
-      interactionState = receivedMsg.eventBody.participants[0].state;		
+      callState = receivedMsg.eventBody.participants[0].state;		
       customerAddress = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').address;
       usingMobilePhone = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').attributes.usingMobilePhone;
       customerAddress = customerAddress.slice(4, customerAddress.length);	
       
-      document.getElementById('stateVal').innerHTML = interactionState + ' to ' + customerAddress;	
+      document.getElementById('stateVal').innerHTML = callState + ' to ' + customerAddress;	
       
-      if (interactionState === 'disconnected' && usingMobilePhone === 'true')
+      if (callState === 'disconnected' && usingMobilePhone === 'true')
       {
         let body = {
           'queueId': queueId,
@@ -86,12 +86,12 @@
           })
           .catch((err) => console.log(err));
       }
-      else if(interactionState === 'disconnected' && usingMobilePhone === 'false') 
+      else if(callState === 'disconnected' && usingMobilePhone === 'false') 
       {
         document.getElementById('stateVal').innerHTML = 'SMS not sent.';
       }			
     } catch (e) {
-      interactionState = '';
+      callState = '';
       console.log(e);
     };			
   }
