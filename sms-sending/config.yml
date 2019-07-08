@@ -19,7 +19,7 @@ steps:
   content: |
     To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.  
     Every message from the webSocket, identify the state of the call, the customer address i.e., conatact number, and lastly the customer attribute.
-    - title: Create Conversation
+- title: Create Conversation
   content: |
     Once the call become disconnected, create an interaction and get the conversation ID and communication ID.
 - title: Send SMS
