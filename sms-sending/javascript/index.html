@@ -46,7 +46,7 @@
     receivedMsg = JSON.parse(message.data);		
     console.log(receivedMsg);
 
-    try {
+    try { 
       callState = receivedMsg.eventBody.participants[0].state;		
       customerAddress = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').address;
       usingMobilePhone = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').attributes.usingMobilePhone;
