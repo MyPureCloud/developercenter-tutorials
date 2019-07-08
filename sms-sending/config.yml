@@ -1,5 +1,5 @@
 ---
-title: Autosending SMS After Inbound Call
+title: Auto Send SMS After Inbound Call
 description: Using Platform API to send SMS after an inbound call.
 categories:
 - Architect
@@ -10,15 +10,16 @@ steps:
 - title: Authenticate with PureCloud
   content: |
     First, authenticate the application with pureCloud.
-- title: Websocket Object
+- title: WebSocket Object
   content: |
     Create an instance of the websocket object that will listen to the topic {"id": "v2.routing.queues.{queueID}.conversations.calls"}. For convenience, a notification channel subscribed to a queues call flow, is already created. For more information about Notification API refer the following resources below:
     * [Notifications](https://developer.mypurecloud.com/api/rest/v2/notifications/)
     * [User Presence with Notifications](https://developer.mypurecloud.com/api/tutorials/presence/?language=javascript&step=1)
-- title: IVR Participant Attribute
+- title: WebSocket Message
   content: |
-    To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.
-- title: Create Conversation
+    To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the websocket will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.  
+    Every message from the webSocket, identify the state of the call, the customer address i.e., conatact number, and lastly the customer attribute.
+    - title: Create Conversation
   content: |
     Once the call become disconnected, create an interaction and get the conversation ID and communication ID.
 - title: Send SMS
@@ -36,7 +37,7 @@ languages:
     - file: "javascript/index.html"
       highlight: "28-28"
     - file: "javascript/index.html"
-      highlight: "57-57"
+      highlight: "45-57"
     - file: "javascript/index.html"
       highlight: "59-75"
     - file: "javascript/index.html"
