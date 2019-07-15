@@ -12,14 +12,14 @@ steps:
     First, authenticate the application with pureCloud.
 - title: Create a Notification Channel 
   content: |
-    Create a notification channel and subscribe to the topic _{"id": "v2.routing.queues.{queueID}.conversations.calls"}_. This topic will listen to a queues incoming and outgoing calls. After setting up the notification channel, create a web socket object with the notification channel URI.
+    Create a notification channel and subscribe to the topic _{"id": "v2.routing.queues.{queueID}.conversations.calls"}_. This topic will listen to a queues incoming and outgoing calls. After setting up the notification channel, create a web socket object using the notification channel URI.
 - title: Recieving Notification
   content: |
-    Every time a call connects to the queue a notification will be sent to the web socket. In this sample code, _if statements_ to filter through the messages the websocket is recieving. In this tutorial, to identify if the caller is using a mobile number, an IVR is created to prommpt the user if he is using a mobile number. The customers input the participant attribute. This is one of many ways to check if a caller is using a mobile number. 
-    An attribute is also added to the customers information after a message is sent, this done to avoid sending multiple SMS to the customer.
+    Every time a call connects to the queue a notification will be sent to the web socket. In this sample code, _if statements_ is used to filter through the messages the websocket is recieving. To identify if the caller is using a mobile number, an IVR is created that prompt the user to identify if he is using a mobile number. The customers input will be in the participant attribute. This is one of many ways to check if a caller is using a mobile number. 
+    An attribute is also added to the customers information after a message is sent, this is done later on the codes. This will be filtered too, to avoid sending multiple SMS to the customer.
 - title: Create Conversation
   content: |
-    Create a new conversation and get the conversation ID and communication ID. These information will be used to send the SMS.
+    Create a new conversation and get the conversation ID and communication ID.
 - title: Send SMS
   content: |
     Send the SMS message and update the customer's attribute on the call conversation.
