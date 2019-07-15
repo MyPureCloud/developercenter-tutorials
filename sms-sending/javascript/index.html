@@ -56,7 +56,9 @@
         
         // Create a new webSocket object
         webSocket = new WebSocket(connectionUri);
-        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.';        
+        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.';  
+
+        // If a message is recieve notificationMesssage function will be called      
         webSocket.onmessage = notificationMessage;
     })
     .catch((err) => console.log(err));
