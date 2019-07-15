@@ -6,42 +6,40 @@ categories:
 steps:
 - title: Introduction
   content: |
-    The main objective of this tutorial is to showcase how to create an interaction, and send SMS using through a queue with Platform API. The given sample code will send a message after an agent drops off a call. This tutorial will also cover how to listen to a topic from a pre-created channel.
+    The main objective of this tutorial is to showcase how to create an interaction, and send SMS through a queue with Platform API. The given sample code will send a message after an agent drops off a call. This tutorial will also cover how to create a notification channel, subscribe to a topic and listen to a web socket.
 - title: Authenticate with PureCloud
   content: |
     First, authenticate the application with pureCloud.
-- title: WebSocket Object
+- title: Create a Notification Channel 
   content: |
-    Create an instance of the web socket object that will listen to the topic {"id": "v2.routing.queues.{queueID}.conversations.calls"}. For convenience, a notification channel subscribed to a queues call flow, is already created. For more information about Notification API refer the following resources below:
-    * [Notifications](https://developer.mypurecloud.com/api/rest/v2/notifications/)
-    * [User Presence with Notifications](https://developer.mypurecloud.com/api/tutorials/presence/?language=javascript&step=1)
-- title: WebSocket Message
+    Create a notification channel and subscribe to the topic _{"id": "v2.routing.queues.{queueID}.conversations.calls"}_. This topic will listen to a queues incoming and outgoing calls. After setting up the notification channel, create a web socket object with the notification channel URI.
+- title: Recieving Notification
   content: |
-    To identify if the caller is using a mobile number, an IVR is created to prommpt the user with a question if he is using a mobile number. The customers input will be in the message that the web socket object will recieve as participant attribute. This is one of many ways to check if a caller is using a mobile number.  
-    After every message from the web socket, get the value of the state of the call, the customer address i.e., conatact number, and lastly the customer attribute.
+    Every time a call connects to the queue a notification will be sent to the web socket. In this sample code, _if statements_ to filter through the messages the websocket is recieving. In this tutorial, to identify if the caller is using a mobile number, an IVR is created to prommpt the user if he is using a mobile number. The customers input the participant attribute. This is one of many ways to check if a caller is using a mobile number. 
+    An attribute is also added to the customers information after a message is sent, this done to avoid sending multiple SMS to the customer.
 - title: Create Conversation
   content: |
-    Once the call disconnects, create an interaction and get the conversation ID and communication ID.
+    Create a new conversation and get the conversation ID and communication ID. These information will be used to send the SMS.
 - title: Send SMS
   content: |
-    Lastly, send the SMS message.
+    Send the SMS message and update the customer's attribute on the call conversation.
 
 languages: 
   nodejs:
     displayName: Javascript
     steps:
     - file: "javascript/index.html"
-      highlight: "0-101"
+      highlight: "0-142"
     - file: "javascript/index.html"
-      highlight: "37-40"
+      highlight: "40-42"
     - file: "javascript/index.html"
-      highlight: "28-28"
+      highlight: "44-62"
     - file: "javascript/index.html"
-      highlight: "45-57"
+      highlight: "67-98"
     - file: "javascript/index.html"
-      highlight: "59-75"
+      highlight: "102-118"
     - file: "javascript/index.html"
-      highlight: "82-87"
+      highlight: "120-135"
     
 
    

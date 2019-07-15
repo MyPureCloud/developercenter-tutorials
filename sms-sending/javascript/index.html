@@ -23,77 +23,116 @@
   const platformClient = require('platformClient');
   const client = platformClient.ApiClient.instance;
   const conversationsApi = new platformClient.ConversationsApi();
+  const notificationsApi = new platformClient.NotificationsApi();
   
-  // Set variables
-  let webSocket = new WebSocket('wss://carrier-pigeon.us-east-1.mypurecloud.com/v1/channels/btmfetbcc9r489fbrsj918876m');
+  // Initialize variables
   let redirectUri = 'http://localhost:8080/';
   let clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
   let queueId = '4d3af653-b60c-42f1-b373-7cf2c99610fc';
-  let receivedMsg, customerAddress, conversationId, communicationId, callState, usingMobilePhone;
   let dropOffMessage = 'Message sent upon dropping off the call.';
+  let userPresenceTopic = 'v2.routing.queues.'+ queueId +'.conversations.calls';
+  let message, CustomerInfo, webSocket, customerAddress, conversationId,
+  communicationId, callState, customerSmsAttr, usingMobilePhone, 
+  callConversationId, channelId, connectionUri;
 
   // jQuery call this function when DOM's ready
   $(document).ready(function() {
     client.loginImplicitGrant(clientId, redirectUri)
       .then(() => {
         console.log('Loged in');
-        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.'
-        webSocket.onmessage = dropOffsms;
-    }).catch((err) => console.log(err));
+
+      // Create notification channel
+      return notificationsApi.postNotificationsChannels();
+      })
+      .then((data) => {
+        channelId = data.id;
+        connectionUri = data.connectUri;        
+        
+        // Subscribe to a topic
+        let body = [{
+          'id': userPresenceTopic
+        }]; 
+        notificationsApi.putNotificationsChannelSubscriptions(channelId, body);
+        
+        // Create a new webSocket object
+        webSocket = new WebSocket(connectionUri);
+        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.';        
+        webSocket.onmessage = notificationMessage;
+    })
+    .catch((err) => console.log(err));
   })
 
-  function dropOffsms(message){ 		
-    receivedMsg = JSON.parse(message.data);		
-    console.log(receivedMsg);
-
-    try { 
-      callState = receivedMsg.eventBody.participants[0].state;		
-      customerAddress = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').address;
-      usingMobilePhone = receivedMsg.eventBody.participants.find(participant => participant.purpose === 'customer').attributes.usingMobilePhone;
-      customerAddress = customerAddress.slice(4, customerAddress.length);	
+  // Call this function when the webSocket recieves a message
+  function notificationMessage(message) { 
+    notification = JSON.parse(message.data);		
+    console.log(notification);
+    
+    // Check notification topicname
+    if (notification.topicName.toLowerCase() === userPresenceTopic.toLowerCase()) {  
+      CustomerInfo = notification.eventBody.participants.find(participant => participant.purpose === 'customer');       
+      callConversationId = notification.eventBody.id;     
+      callState = notification.eventBody.participants[0].state;    
+      usingMobilePhone = CustomerInfo.attributes.usingMobilePhone;
+      participantId = CustomerInfo.id;
+      customerAddress = CustomerInfo.address;
+      customerAddress = customerAddress.slice(4, customerAddress.length);
       
       document.getElementById('stateVal').innerHTML = callState + ' to ' + customerAddress;	
-      
-      if (callState === 'disconnected' && usingMobilePhone === 'true')
-      {
-        let body = {
-          'queueId': queueId,
-          'toAddress': customerAddress,
-          'toAddressMessengerType': 'sms',
-          'useExistingConversation': true
-        };
 
-        // Create interaction
-        conversationsApi.postConversationsMessages(body)
-          .then((data) => {						
-            conversationId = data.id;
-
-            // Get conversation id
-            return conversationsApi.getConversation(conversationId); 
-          })
-          .then((data) => {
-              communicationId = data.participants.find(participant => participant.purpose === 'agent').messages[0].id;
-
-              let body = {
-                'textBody': dropOffMessage
-              };
-
-              // Send message
-            return conversationsApi.postConversationsMessageCommunicationMessages(conversationId, communicationId, body);
-          })
-          .then((data) => {
-            document.getElementById('stateVal').innerHTML = 'SMS successfully sent to: '+ data.toAddress;
-          })
-          .catch((err) => console.log(err));
+      // Check if messageSent attribute has been added
+      if(('messageSent' in CustomerInfo.attributes) === true) {
+        customerSmsAttr = true;
       }
-      else if(callState === 'disconnected' && usingMobilePhone === 'false') 
-      {
-        document.getElementById('stateVal').innerHTML = 'SMS not sent.';
-      }			
-    } catch (e) {
-      callState = '';
-      console.log(e);
-    };			
+      else {
+        customerSmsAttr = false;
+      }
+      
+      // Check if all attributes are align
+      if (callState === 'disconnected' && usingMobilePhone === 'true' && customerSmsAttr === false){
+        // Call sms sending function
+        sendSms();
+      }
+    }
+  }
+
+  // Call this function to send SMS
+  function sendSms(){
+    let body = {
+      'queueId': queueId,
+      'toAddress': '+13175763352',
+      'toAddressMessengerType': 'sms',
+      'useExistingConversation': true
+    };
+    // Create interaction
+    conversationsApi.postConversationsMessages(body)
+      .then((data) => {						
+        conversationId = data.id;
+        console.log(conversationId);
+
+        // Get conversation id
+        return conversationsApi.getConversation(conversationId); 
+      })
+      .then((data) => {
+        communicationId = CustomerInfo.messages[0].id;
+
+        let body = {
+          'textBody': dropOffMessage
+        };
+        // Send message
+        return conversationsApi.postConversationsMessageCommunicationMessages(conversationId, communicationId, body);
+      })
+      .then((data) => {
+        document.getElementById('stateVal').innerHTML = 'SMS successfully sent to: '+ data.toAddress;
+        
+        // Create participant attribute
+        let body = {
+          "attributes": {'messageSent': true}
+        };
+        
+        console.log(callConversationId+ '  ' + participantId);
+        conversationsApi.patchConversationParticipantAttributes(callConversationId, participantId, body);
+      })
+      .catch((err) => console.log(err));		
   }
   
 </script>
