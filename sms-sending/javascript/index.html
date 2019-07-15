@@ -39,7 +39,7 @@
   $(document).ready(function() {
     client.loginImplicitGrant(clientId, redirectUri)
       .then(() => {
-        console.log('Loged in');
+        console.log('Logged in');
 
       // Create notification channel
       return notificationsApi.postNotificationsChannels();
@@ -101,7 +101,7 @@
   function sendSms(){
     let body = {
       'queueId': queueId,
-      'toAddress': '+13175763352',
+      'toAddress': customerAddress,
       'toAddressMessengerType': 'sms',
       'useExistingConversation': true
     };
