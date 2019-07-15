@@ -12,7 +12,7 @@ steps:
     First, authenticate the application with pureCloud.
 - title: Create a Notification Channel 
   content: |
-    Create a notification channel and subscribe to the topic _{"id": "v2.routing.queues.{queueID}.conversations.calls"}_. This topic will listen to a queues incoming and outgoing calls. After setting up the notification channel, create a web socket object using the notification channel URI.
+    Create a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{queueID}.conversations.calls"}`. This topic will listen to a queues incoming and outgoing calls. After setting up the notification channel, create a web socket object using the notification channel URI.
 - title: Recieving Notification
   content: |
     Every time a call connects to the queue a notification will be sent to the web socket. In this sample code, _if statements_ is used to filter through the messages the websocket is recieving. To identify if the caller is using a mobile number, an IVR is created that prompt the user to identify if he is using a mobile number. The customers input will be in the participant attribute. This is one of many ways to check if a caller is using a mobile number. 
