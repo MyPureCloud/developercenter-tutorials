@@ -2,7 +2,7 @@ var http = require("http");
 
 var express = require('express');
 var app = express();
-var uuid = require('node-uuid');
+var uuidv4 = require('uuid/v4');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var request = require('request');
@@ -72,7 +72,7 @@ app.get("/oauth2/callback", function(req,res){
 
         var tokenResponse = JSON.parse(body);
 
-        var sessionId = uuid.v4();
+        var sessionId = uuidv4();
 
         //store the session id as a key in the session map, the value is the bearer token for purecloud.
         //we want to keep that secure so won't send that back to the client
