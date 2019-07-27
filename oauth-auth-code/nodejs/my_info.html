@@ -2,17 +2,26 @@
   <head>
     <title>NodeJS Authorization Code</title>
 
-  <script src='//code.jquery.com/jquery-1.11.2.min.js'></script>
-  <script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <script src='http://code.jquery.com/jquery-1.11.2.min.js'></script>
+  <script src="http://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
   <script>
   $.ajax({
    url: "/me",
    type: "GET",
+
    success: function(data) {
        $('#data').text(JSON.stringify(data));
+       $.ajax({
+        url: "/me",
+        type: "GET",
 
+        success: function(data) {
+            console.log('2nd call succeeded')
+
+        }});
    }});
+
   </script>
 </head>
 <body>

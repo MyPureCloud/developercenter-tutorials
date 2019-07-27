@@ -15,6 +15,7 @@ var authvalidation = function(req, res, next) {
     //if we don't have a session then redirect them to the login page
     if((req.cookies && !(req.cookies.session && sessionMap[req.cookies.session])) &&
             req.url.indexOf("oauth") == -1){
+                console.log('req', req)
         //redirect the user to authorize with purecloud
         var redirectUri = "https://login.mypurecloud.com/oauth/authorize?" +
                     "response_type=code" +
@@ -101,7 +102,9 @@ app.get("/me", function(req, res){
         console.log("Got response for /users/me");
         console.log(user);
         console.log(e);
-         res.send(user);
+        res.send(user);
+        // clear cache for forcing the 2nd ajax to call;
+        sessionMap = {};
     })
 });
 
