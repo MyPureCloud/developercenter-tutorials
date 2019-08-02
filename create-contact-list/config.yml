@@ -32,3 +32,14 @@ languages:
       highlight: "28-42"
     - file: "javascript/index.html"
       highlight: "45-49"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/create-contact-list.py"
+      highlight: "0-64"
+    - file: "python/create-contact-list.py"
+      highlight: "13-38"
+    - file: "python/create-contact-list.py"
+      highlight: "40-55"
+    - file: "python/create-contact-list.py"
+      highlight: "57-64"

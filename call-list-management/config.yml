@@ -29,3 +29,12 @@ languages:
       highlight: "30-40"
     - file: "javascript/index.html"
       highlight: "48-63"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/call-list-management.py"
+      highlight: "0-89"
+    - file: "python/call-list-management.py"
+      highlight: "46-60"
+    - file: "python/call-list-management.py"
+      highlight: "62-88"

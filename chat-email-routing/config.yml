@@ -50,3 +50,16 @@ languages:
       highlight: "72-91"
     - file: "nodejs/index.js"
       highlight: "46-68"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/chat-email-routing.py"
+      highlight: "0-122"
+    - file: "python/chat-email-routing.py"
+      highlight: "22-56"
+    - file: "python/chat-email-routing.py"
+      highlight: "57-94"
+    - file: "python/chat-email-routing.py"
+      highlight: "96-118"
+    - file: "python/chat-email-routing.py"
+      highlight: "71-94"
