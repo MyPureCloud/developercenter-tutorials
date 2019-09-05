@@ -26,7 +26,13 @@ prompt.get(['clientId', 'clientSecret', 'dates'], function (_err, result) {
             conversationsApi.postAnalyticsConversationsDetailsQuery(body)
                 .then((conversationDetails) => {
                     // Pass conversation details to function
-                    extractConversationDetails(conversationDetails);
+                    extractConversationDetails(conversationDetails)    
+                    // Create folder that will store all the downloaded recordings
+                    fs.mkdirSync('./' + ('Recordings'), function (err) {
+                        if (err) {
+                            return console.error(err);
+                        }
+                    });
                 })
                 .catch((err) => {
                     console.log('There was a failure calling postAnalyticsConversationsDetailsQuery');
@@ -47,17 +53,13 @@ function extractConversationDetails (conversationDetails) {
     // Push all conversationId from conversationDetails to conversationIds
     for (conversationDetail of conversationDetails.conversations) {
         conversationIds.push(conversationDetail.conversationId);
-    }
-
-    // Iterate through conversationIds
-    for (conversationId of conversationIds) {
-        // Pass every conversationId to getRecordingMetaData function
+        let conversationId = conversationIds[conversationIds.length - 1];
         getRecordingMetaData(conversationId);
     }
 }
 
 // Generate recordingId for every conversationId
-function getRecordingMetaData(conversationId) {
+function getRecordingMetaData (conversationId) {
     recordingApi.getConversationRecordingmetadata(conversationId)
         .then((recordingsData) => {
             // Pass recordingsMetadata to a function
@@ -76,7 +78,7 @@ function iterateRecordingsData (recordingsData) {
     }
 }
 // Plot conversationId and recordingId to request for batchdownload Recordings
-function getSpecificRecordings(iterateRecordings) {
+function getSpecificRecordings (iterateRecordings) {
     let getSpecificRecordingsbody = {
         batchDownloadRequestList: [{
             conversationId: iterateRecordings.conversationId,
@@ -94,7 +96,7 @@ function getSpecificRecordings(iterateRecordings) {
         });
 }
 
-// Check status of generating url for downloading, if the result is still unavailble. The function will be called again until the result will be available.
+// Check status of generating url for downloading, if the result is still unavailble. The function will be called again until the result is available.
 function recordingStatus (recordingBatchrequestid) {
     recordingApi.getRecordingBatchrequest(recordingBatchrequestid.id)
         .then((getRecordingBatchrequestdata) => {
@@ -118,7 +120,7 @@ function getExtension (getRecordingBatchrequestdata) {
     // Slice the text and gets the extension that will be used for the recording
     let ext = contentType.split('/').splice(-1);
 
-    createDirectory (ext, getRecordingBatchrequestdata)
+    createDirectory(ext, getRecordingBatchrequestdata);
 }
 
 // Generate directory for recordings that will be downloaded
@@ -129,7 +131,7 @@ function createDirectory (ext, getRecordingBatchrequestdata) {
     let recordingId = getRecordingBatchrequestdata.results[0].recordingId;
     let url = getRecordingBatchrequestdata.results[0].resultUrl;
 
-    fs.mkdirSync('./' + (conversationId + '_' + recordingId), function (err) {
+    fs.mkdirSync('./Recordings/' + (conversationId + '_' + recordingId), function (err) {
         if (err) {
             return console.error(err);
         }
@@ -140,7 +142,7 @@ function createDirectory (ext, getRecordingBatchrequestdata) {
 // Download recordings
 function downloadRecording (conversationId, recordingId, url, ext) {
     const downloadFile = conversationId + '_' + recordingId + '.' + ext;
-    const file = fs.createWriteStream(('./' + conversationId + '_' + recordingId + '/' + downloadFile));
+    const file = fs.createWriteStream(('./Recordings/' + conversationId + '_' + recordingId + '/' + downloadFile));
     http.get(url, function (response) {
         response.pipe(file);
     });
