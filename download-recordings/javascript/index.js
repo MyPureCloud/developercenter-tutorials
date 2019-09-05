@@ -18,16 +18,15 @@ prompt.get(['clientId', 'clientSecret', 'dates'], function (_err, result) {
     client.loginClientCredentialsGrant(result.clientId, result.clientSecret)
         .then(() => {
             console.log('Working...');
-            const body = {
-
+            let body = {
                 interval: result.dates
             }; // Object | query
 
-            // Call conversation API, pass data from
+            // Call conversation API, pass date inputted to extract conversationIds needed
             conversationsApi.postAnalyticsConversationsDetailsQuery(body)
-                .then((conversationData) => {
-                    // Pass conversation data from API to getMediaType function
-                    getMediaType(conversationData);
+                .then((conversationDetails) => {
+                    // Pass conversation details to function
+                    extractConversationDetails(conversationDetails);
                 })
                 .catch((err) => {
                     console.log('There was a failure calling postAnalyticsConversationsDetailsQuery');
@@ -39,119 +38,110 @@ prompt.get(['clientId', 'clientSecret', 'dates'], function (_err, result) {
             // Handle failure response
             console.log(err);
         });
-
-    // Format coversationId and mediaType to an acceptable JSON format that will be used later in downloading the recordings
-    function getMediaType (conversationData) {
-        // Create an array to handle conversation id and media type
-        const modifiedMediaType = [];
-
-        for (const conversationMediaType of conversationData.conversations) {
-            modifiedMediaType.push({
-
-                conversationId: conversationMediaType.conversationId,
-                mediaType: conversationMediaType.participants[0].sessions[0].mediaType
-
-            });
-        }
-
-        // Pass conversationData and modifiedMediaType to formatConversationId function and initiate the function.
-        formatConversationId(conversationData, modifiedMediaType);
-    }
-
-    // Format conversationId to acceptable json format that will be used later to download request.
-    function formatConversationId (conversationData, modifiedMediaType) {
-    // Create an array that will store each and every conversation ids and add keys.
-        const conversationIds = [];
-
-        for (const id of conversationData.conversations) {
-            conversationIds.push({
-                conversationId: id.conversationId
-            });
-        }
-
-        // Pass conversationIds and modifiedMediaType objects to downloadRequest function and initiate the function.
-        downloadRequest(conversationIds, modifiedMediaType);
-    }
-
-    // Function that will format objects to be acceptable to postRecordingBatchRequest API. Also accepts modifiedMediaType array that will be used later.
-    function downloadRequest (conversationIds, modifiedMediaType) {
-        const download = {
-            batchDownloadRequestList: conversationIds
-        };
-
-        recordingApi.postRecordingBatchrequests(download)
-            .then((job) => {
-                // Once the requests are completed. Generated result such as job will be sent to getRecordingBatchRequest together with modifiedMediaType. Also, initate the function.
-                getRecordingBatchRequest(job, modifiedMediaType);
-            })
-            .catch((err) => {
-                console.log('There was a failure calling postRecordingBatchrequests');
-                console.error(err);
-            });
-    }
-
-    // Function that will generate jobId that will be used to request for request of batch recordings.
-    function getRecordingBatchRequest (job, modifiedMediaType) {
-        recordingApi.getRecordingBatchrequest(job.id)
-            .then((batchDownloadData) => {
-                // Call the function again after 5 seconds up until the result count is equals to expected result
-                if (batchDownloadData.expectedResultCount === batchDownloadData.resultCount) {
-                    filterBatchDownloadData(batchDownloadData, modifiedMediaType);
-                } else {
-                    console.log('Processed: ' + batchDownloadData.resultCount + '/' + batchDownloadData.expectedResultCount);
-                    setTimeout(() => getRecordingBatchRequest(job, modifiedMediaType), 5000);
-                }
-            })
-            .catch((err) => {
-                console.log('There was a failure calling getRecordingBatchrequest');
-                console.error(err);
-            });
-    }
-
-    // Filter batchdownload data using array mapping.
-    function filterBatchDownloadData (batchDownloadData, modifiedMediaType) {
-        for (result of batchDownloadData.results) {
-            console.log(JSON.stringify(result) + 'result');
-
-            const mapping = modifiedMediaType.find((val) => result.conversationId === val.conversationId);
-
-            console.log('mapping ' + JSON.stringify(mapping));
-
-            getExtensionFromMediaType(result, mapping);
-        }
-    }
-    // Assign extension for every filtered batchdownload data.
-    function getExtensionFromMediaType (result, mapping) {
-        let ext = '';
-        if (mapping.mediaType === 'voice') {
-            ext = '.wav';
-        } else if (mapping.mediaType === 'chat' || mapping.mediaType === 'email') {
-            ext = '.txt';
-        } else {
-            ext = '';
-        }
-
-        createDirectory(result, ext);
-    }
-    // Generate directory for recordings that will be downloaded
-    function createDirectory (result, ext) {
-        fs.mkdir('./' + (result.conversationId), function (err) {
-            if (err) {
-                return console.error(err);
-            }
-        });
-        downloadRecording(result, ext);
-    }
-    // Download recordings
-    function downloadRecording (result, ext) {
-        console.log('Currently Downloading...');
-        console.log('extension: ' + ext);
-
-        const downloadFile = result.conversationId + '_' + ext;
-        const file = fs.createWriteStream(('./' + (result.conversationId)) + '/' + downloadFile);
-        http.get(result.resultUrl, function (response) {
-            response.pipe(file);
-        });
-        console.log('DONE');
-    }
 });
+// Format conversation details to object inside and array. Get every mediatype per conversation
+function extractConversationDetails (conversationDetails) {
+    // Create conversationIds array to store all conversationId
+    let conversationIds = [];
+
+    // Push all conversationId from conversationDetails to conversationIds
+    for (conversationDetail of conversationDetails.conversations) {
+        conversationIds.push(conversationDetail.conversationId);
+    }
+
+    // Iterate through conversationIds
+    for (conversationId of conversationIds) {
+        // Pass every conversationId to getRecordingMetaData function
+        getRecordingMetaData(conversationId);
+    }
+}
+
+// Generate recordingId for every conversationId
+function getRecordingMetaData(conversationId) {
+    recordingApi.getConversationRecordingmetadata(conversationId)
+        .then((recordingsData) => {
+            // Pass recordingsMetadata to a function
+            iterateRecordingsData(recordingsData);
+        })
+        .catch((err) => {
+            console.log('There was a failure calling getConversationRecordingmetadata');
+            console.error(err);
+        });
+}
+
+// Iterate through every result, check if there are one or more recordingIds in every conversation
+function iterateRecordingsData (recordingsData) {
+    for (iterateRecordings of recordingsData) {
+        getSpecificRecordings(iterateRecordings)
+    }
+}
+// Plot conversationId and recordingId to request for batchdownload Recordings
+function getSpecificRecordings(iterateRecordings) {
+    let getSpecificRecordingsbody = {
+        batchDownloadRequestList: [{
+            conversationId: iterateRecordings.conversationId,
+            recordingId: iterateRecordings.id
+        }]
+    }; // Object | Job submission criteria
+
+    recordingApi.postRecordingBatchrequests(getSpecificRecordingsbody)
+        .then((recordingBatchrequestid) => {
+            recordingStatus(recordingBatchrequestid);
+        })
+        .catch((err) => {
+            console.log('There was a failure calling postRecordingBatchrequests');
+            console.error(err);
+        });
+}
+
+// Check status of generating url for downloading, if the result is still unavailble. The function will be called again until the result will be available.
+function recordingStatus (recordingBatchrequestid) {
+    recordingApi.getRecordingBatchrequest(recordingBatchrequestid.id)
+        .then((getRecordingBatchrequestdata) => {
+            if (getRecordingBatchrequestdata.expectedResultCount === getRecordingBatchrequestdata.resultCount) {
+                // Pass the getRecordingBatchrequestdata to getExtension function
+                getExtension(getRecordingBatchrequestdata);
+            } else {
+                setTimeout(() => recordingStatus(recordingBatchrequestid), 5000);
+            }
+        })
+        .catch((err) => {
+            console.log('There was a failure calling getRecordingBatchrequest');
+            console.error(err);
+        });
+}
+
+// Get extension of every recordings
+function getExtension (getRecordingBatchrequestdata) {
+    // Store the contenttype to a variable that will be used later to determine the extension of recordings.
+    let contentType = getRecordingBatchrequestdata.results[0].contentType;
+    // Slice the text and gets the extension that will be used for the recording
+    let ext = contentType.split('/').splice(-1);
+
+    createDirectory (ext, getRecordingBatchrequestdata)
+}
+
+// Generate directory for recordings that will be downloaded
+function createDirectory (ext, getRecordingBatchrequestdata) {
+    console.log('Processing please wait...');
+
+    let conversationId = getRecordingBatchrequestdata.results[0].conversationId;
+    let recordingId = getRecordingBatchrequestdata.results[0].recordingId;
+    let url = getRecordingBatchrequestdata.results[0].resultUrl;
+
+    fs.mkdirSync('./' + (conversationId + '_' + recordingId), function (err) {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    downloadRecording(conversationId, recordingId, url, ext);
+}
+// Download recordings
+function downloadRecording (conversationId, recordingId, url, ext) {
+    const downloadFile = conversationId + '_' + recordingId + '.' + ext;
+    const file = fs.createWriteStream(('./' + conversationId + '_' + recordingId + '/' + downloadFile));
+    http.get(url, function (response) {
+        response.pipe(file);
+    });
+}
