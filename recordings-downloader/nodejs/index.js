@@ -47,14 +47,10 @@ prompt.get(['clientId', 'clientSecret', 'dates'], function (_err, result) {
 });
 // Format conversation details to object inside and array. Get every mediatype per conversation
 function extractConversationDetails (conversationDetails) {
-    // Create conversationIds array to store all conversationId
-    let conversationIds = [];
 
-    // Push all conversationId from conversationDetails to conversationIds
+    // Iterate every conversations in conversationDetails and pass the conversationId to getRecordingMetaData function
     for (conversationDetail of conversationDetails.conversations) {
-        conversationIds.push(conversationDetail.conversationId);
-        let conversationId = conversationIds[conversationIds.length - 1];
-        getRecordingMetaData(conversationId);
+        getRecordingMetaData(conversationDetail.conversationId);
     }
 }
 

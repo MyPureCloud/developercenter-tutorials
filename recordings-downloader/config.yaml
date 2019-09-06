@@ -69,7 +69,7 @@ nodejs:
     displayName: NodeJS
     steps:
         - file: "nodejs/index.js"
-          highlight: "0-149"
+          highlight: "0-146"
         - file: "nodejs/index.js"
           highlight: "17"
         - file: "nodejs/index.js"
@@ -81,8 +81,8 @@ nodejs:
         - file: "nodejs/index.js"
           highlight: "25-36"
         - file: "nodejs/index.js"
-          highlight: "80-97"
+          highlight: "76-94"
         - file: "nodejs/index.js"
-          highlight: "117-124"
+          highlight: "112-120"
         - file: "nodejs/index.js"
-          highlight: "126-149"
+          highlight: "122-145"
