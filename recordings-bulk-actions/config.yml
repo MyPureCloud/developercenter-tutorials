@@ -22,7 +22,7 @@ steps:
     The user will specify the job_id and use the PUT for excuting the bulk job
 
 languages: 
-  javascript:
+  python:
     displayName: Python
     steps:
     - file: "python/recordings-bulk-action.py"
