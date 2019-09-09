@@ -2,7 +2,7 @@
 title: Bulk delete\export of recordings
 description: Bulk delete\export of recordings based on analytics query parameters
 categories:
-- Dialer
+- Recordings
 steps:
 - title: Introduction
   content: |
