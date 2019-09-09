@@ -1,0 +1,37 @@
+---
+title: Bulk delete\export of recordings
+description: Bulk delete\export of recordings based on analytics query parameters
+categories:
+- Dialer
+steps:
+- title: Introduction
+  content: |
+    User will specify an analytics query and a time range over which we should match conversation recordings.
+    Additonaly, the user need to specify the action type (export\delete) and the action date. This will result in deletion\export of the matched recordings
+- title: Authenticate with PureCloud
+  content: |
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+- title: Create a recording Job
+  content: |
+    The user will use the POST API for creating a bulk Job. The response will include the generated job_id
+- title: Get Job status
+  content: |
+    The user will use the get recording job API in order to check what is the status of the bulk job. Once the status is Ready, the execute action PUT API can be used
+- title: Execute Job
+  content: |
+    The user will specify the job_id and use the PUT for excuting the bulk job
+
+languages: 
+  javascript:
+    displayName: Python
+    steps:
+    - file: "python/recordings-bulk-action.py"
+      highlight: "0-85"
+    - file: "python/recordings-bulk-action.py"
+      highlight: "13-40"
+    - file: "python/recordings-bulk-action.py"
+      highlight: "42-61"
+    - file: "python/recordings-bulk-action.py"
+      highlight: "63-75"
+    - file: "python/recordings-bulk-action.py"
+      highlight: "77-85"
