@@ -39,9 +39,9 @@ access_token = response.json()["access_token"]
 # Assign the token
 PureCloudPlatformClientV2.configuration.access_token = access_token
 
-# Build the create job query, for delete action, set query.action = "DELETE"
+# Build the create job query, for export action, set query.action = "EXPORT"
 query = PureCloudPlatformClientV2.RecordingJobsQuery()
-query.action = "EXPORT"
+query.action = "DELETE"
 query.action_date = "2029-01-01T00:00:00.000Z"
 query.integration_id = "integration-id"
 query.conversation_query = {
