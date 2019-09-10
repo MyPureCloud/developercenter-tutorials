@@ -1,0 +1,6 @@
+framework module PureCloudPlatformClientV2 {
+  umbrella header "PureCloudPlatformClientV2-umbrella.h"
+
+  export *
+  module * { export * }
+}
