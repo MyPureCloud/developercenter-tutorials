@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "moment": "^2.18.1",
-    "rrule": "^2.2.0"
+    "moment": "^2.24.0",
+    "purecloud-platform-client-v2": "^55.0.0",
+    "rrule": "^2.6.2"
   }
 }
