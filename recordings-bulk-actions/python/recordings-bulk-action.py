@@ -1,4 +1,4 @@
-import base64, sys, requests
+import base64, sys, requests, time
 import PureCloudPlatformClientV2
 from pprint import pprint
 from PureCloudPlatformClientV2.rest import ApiException
@@ -7,34 +7,17 @@ print('-------------------------------------------------------------')
 print('- Execute Bulk Action on recordings-')
 print('-------------------------------------------------------------')
 
-# Recording API
-recording_api = PureCloudPlatformClientV2.RecordingApi()
-
 # OAuth when using Client Credentials
 client_id = 'CLIENT_ID'
 client_secret = 'CLIENT_ID'
-authorization = base64.b64encode(bytes(client_id + ':' + client_secret, 'ISO-8859-1')).decode('ascii')
 
-# Prepare for POST /oauth/token request
-request_headers = {
-    "Authorization": f"Basic {authorization}",
-    "Content-Type": "application/x-www-form-urlencoded"
-}
-request_body = {
-    "grant_type": "client_credentials"
-}
+# Authenticate client
+api_client = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(client_id, client_secret)
 
-# Get token
-response = requests.post("https://login.mypurecloud.com/oauth/token", data=request_body, headers=request_headers)
+# Get the api
+recording_api = PureCloudPlatformClientV2.RecordingApi(api_client)
 
-# Check response
-if response.status_code == 200:
-    print("Got token")
-else:
-    print(f"Failure: { str(response.status_code) } - { response.reason }")
-    sys.exit(response.status_code)
-
-access_token = response.json()["access_token"]
+access_token = recording_api.api_client.access_token
 
 # Assign the token
 PureCloudPlatformClientV2.configuration.access_token = access_token
