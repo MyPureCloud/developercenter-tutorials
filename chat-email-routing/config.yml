@@ -55,6 +55,7 @@ languages:
     steps:
     - file: "python/chat-email-routing.py"
       highlight: "0-99"
+      note: This example is written for Python 3
     - file: "python/chat-email-routing.py"
       highlight: "19-32"
     - file: "python/chat-email-routing.py"
