@@ -48,10 +48,10 @@ languages:
     displayName: Python
     steps:
     - file: "python/external-contacts.py"
-      highlight: "0-100"
+      highlight: "0-67"
     - file: "python/external-contacts.py"
-      highlight: "10-35"
+      highlight: "10-11"
     - file: "python/external-contacts.py"
-      highlight: "40-62"
+      highlight: "16-38"
     - file: "python/external-contacts.py"
-      highlight: "64-90"
+      highlight: "40-66"
