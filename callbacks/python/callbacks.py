@@ -1,4 +1,4 @@
-import base64, csv, sys, requests
+import base64, csv, sys, requests, os
 import PureCloudPlatformClientV2
 from pprint import pprint
 from PureCloudPlatformClientV2.rest import ApiException
