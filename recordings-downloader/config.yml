@@ -1,0 +1,126 @@
+---
+title: Download Recordings
+description: Step by step procedure on how to download recordings.
+categories:
+- Conversations
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps to download recordings in bulk within a given date interval.
+    For this tutorial, PureCloud SDK will be used.
+- title: Input
+  content: |
+    For this tutorial, the user will be asked to input the credentials through a simple console input.
+
+    The user will be also asked for the date interval of the recordings. Please take note of the format for the date input (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss)
+- title: Configure SDK Settings
+  content: |
+    Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
+
+    To obtain a token, separate function is created to request token from PureCloud.
+- title: Obtain an Access Token
+  content: |
+    Start by making a POST call to https://login.mypurecloud.com/oauth/token to request a token.
+    Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
+
+    For this tutorial, Client Credentials Grant Type will be used as user context is not needed in acquiring the desired information
+    More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
+
+- title: Instantiate APIs
+  content: |
+    Instance of Conversation API and Recording API will be created and will be passed to methods that will request for the batch download.
+
+    To get the recordings, separated functions were created
+    * Get Conversation IDs within a date interval.
+    * Use the Conversation IDs and and Recording IDs and request a batch download for the conversations.
+    * Get all conversations with recordings.
+    * Determine the file extension to be used depending on the contenttype.
+    * Download recordings in a directory.
+
+- title: Get Conversation IDs
+  content: |
+    Before getting the recordings within the date interval, conversations that happened during the dates should be get first.
+
+    Here, a function is created to get all conversations with the date interval as the search criteria.
+
+    The function should return the Conversation ID of the conversation which will be used in requesting the batch download of the recordings
+- title: Request Batch Recordings Download
+  content: |
+    Create a function that will get all recordings of the conversations.
+
+    The function should return the Job ID which will be used to download the recordings.
+
+- title: Get Recording Extension Based on Conversation Media
+  content: |
+    Create a function that will set the file extension based on the conversation media.
+
+    The function should return file extension depending on the contenttype.
+
+- title: Download Recordings into a Directory
+  content: |
+    Create a function that will download each conversation recordings and save it in a directory.
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-146"
+    - file: "nodejs/index.js"
+      highlight: "17"
+    - file: "nodejs/index.js"
+      highlight: "18-19"
+    - file: "nodejs/index.js"
+      highlight: "18-19"
+    - file: "nodejs/index.js"
+      highlight: "11-12"
+    - file: "nodejs/index.js"
+      highlight: "25-36"
+    - file: "nodejs/index.js"
+      highlight: "76-94"
+    - file: "nodejs/index.js"
+      highlight: "112-120"
+    - file: "nodejs/index.js"
+      highlight: "122-145"
+  csharp:
+    displayName: C#
+    steps:
+    - file: "csharp/Program.cs"
+      highlight: "0-214"
+    - file: "csharp/Program.cs"
+      highlight: "24-32"
+    - file: "csharp/Program.cs"
+      highlight: "36-38"
+    - file: "csharp/Program.cs"
+      highlight: "200-212"
+    - file: "csharp/Program.cs"
+      highlight: "40-41"
+    - file: "csharp/Program.cs"
+      highlight: "48-51"
+    - file: "csharp/Program.cs"
+      highlight: "103-122"
+    - file: "csharp/Program.cs"
+      highlight: "147-160"
+    - file: "csharp/Program.cs"
+      highlight: "162-197"
+  java:
+    displayName: Java
+    steps:
+    - file: "java/src/main/java/Main.java"
+      highlight: "0-179"
+    - file: "java/src/main/java/Main.java"
+      highlight: "32-39"
+    - file: "java/src/main/java/Main.java"
+      highlight: "41-53"
+    - file: "java/src/main/java/Main.java"
+      highlight: "41-53"
+    - file: "java/src/main/java/Main.java"
+      highlight: "55-58"
+    - file: "java/src/main/java/Main.java"
+      highlight: "60-72"
+    - file: "java/src/main/java/Main.java"
+      highlight: "103-122"
+    - file: "java/src/main/java/Main.java"
+      highlight: "142-155"
+    - file: "java/src/main/java/Main.java"
+      highlight: "156-173"
