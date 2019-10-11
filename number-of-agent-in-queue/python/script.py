@@ -1,40 +1,16 @@
-import base64, json, requests
+import base64, json, requests, os
 import PureCloudPlatformClientV2
 from PureCloudPlatformClientV2.rest import ApiException
 
 print('-------------------------------------------------------------')
 print('- Python3 Get Number of On-Queue Agents using PureCloud SDK -')
 print('-------------------------------------------------------------')
-
-# Oauth Client Credentials
-client_id = 'd3b70533-d806-4ff8-9f35-sample'
-client_secret = 'o3q5E87GyLlB-D_hQ09Odaur2F_sample'
-authorization = base64.b64encode(bytes(client_id + ':' + client_secret, 'ISO-8859-1')).decode('ascii')
-
-# Prepare for POST /oauth/token request
-request_headers = {
-	'Authorization': 'Basic ' + authorization,
-	'Content-Type': 'application/x-www-form-urlencoded'
-}
-request_body = {
-	'grant_type': 'client_credentials'
-}	
-
-# Get token
-response = requests.post('https://login.mypurecloud.com/oauth/token', data=request_body, headers=request_headers)
-
-# Check response
-if response.status_code == 200:
-	print('Got token')
-else:
-	print('Failure: ' + str(response.status_code) + ' - ' + response.reason)
-	sys.exit(response.status_code)
 	
 # Configure the token for use by the SDK
-PureCloudPlatformClientV2.configuration.access_token = response.json()['access_token']
+apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
 
 # Create an instance of the Routing API
-routing_api = PureCloudPlatformClientV2.RoutingApi()
+routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)
 
 def get_on_queue_agents(queue_name):
 	""" Get number of agents active on a queue given the name of the queue.
@@ -70,5 +46,5 @@ def get_on_queue_agents(queue_name):
 		on_queue_agents = api_response.total
 	except ApiException as e:
 		print("Error on RoutingAPI -> " + e)
-	
+
 	return on_queue_agents
