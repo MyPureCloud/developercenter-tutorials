@@ -1,4 +1,4 @@
-import base64, sys, requests
+import base64, sys, requests, os
 import PureCloudPlatformClientV2
 from pprint import pprint
 from PureCloudPlatformClientV2.rest import ApiException
@@ -11,8 +11,8 @@ print('-------------------------------------------------------------')
 architect_api = PureCloudPlatformClientV2.ArchitectApi()
 
 # OAuth when using Client Credentials
-client_id = 'CLIENT_ID'
-client_secret = 'CLIENT_ID'
+client_id = os.environ['PURECLOUD_CLIENT_ID']
+client_secret = os.environ['PURECLOUD_CLIENT_SECRET']
 authorization = base64.b64encode(bytes(client_id + ':' + client_secret, 'ISO-8859-1')).decode('ascii')
 
 # Prepare for POST /oauth/token request
