@@ -1,4 +1,4 @@
-import base64, sys, requests
+import base64, sys, requests, os
 from datetime import datetime, timedelta
 import PureCloudPlatformClientV2
 from pprint import pprint
@@ -16,38 +16,12 @@ print("-------------------------------------------------------------")
 print("- Querying Queue Historical Statistics -")
 print("-------------------------------------------------------------")
 
-# PureCloud Objects
-routing_api = PureCloudPlatformClientV2.RoutingApi()
-analytics_api = PureCloudPlatformClientV2.AnalyticsApi()
-
 # OAuth when using Client Credentials
-client_id = "CLIENT_ID"
-client_secret = "CLIENT_SECRET"
-authorization = base64.b64encode(bytes(client_id + ":" + client_secret, "ISO-8859-1")).decode("ascii")
+apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
 
-# Prepare for POST /oauth/token request
-request_headers = {
-    "Authorization": f"Basic {authorization}",
-    "Content-Type": "application/x-www-form-urlencoded"
-}
-request_body = {
-    "grant_type": "client_credentials"
-}
-
-# Get token
-response = requests.post("https://login.mypurecloud.com/oauth/token", data=request_body, headers=request_headers)
-
-# Check response
-if response.status_code == 200:
-    print("Got token")
-else:
-    print(f"Failure: { str(response.status_code) } - { response.reason }")
-    sys.exit(response.status_code)
-
-access_token = response.json()["access_token"]
-
-# Assign the token
-PureCloudPlatformClientV2.configuration.access_token = access_token
+# PureCloud Objects
+routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)
+analytics_api = PureCloudPlatformClientV2.AnalyticsApi(apiClient)
 
 # Get "Support" queue by name
 try:
@@ -62,15 +36,15 @@ print(f"queueData: {queue_data}")
 queue_id = queue_data.entities[0].id
 
 # Build analytics query
-query = PureCloudPlatformClientV2.AggregationQuery()
+query = PureCloudPlatformClientV2.ConversationAggregationQuery()
 query.interval = get_interval_string()
 query.group_by = ['queueId']
 query.metrics = ['nOffered', 'tAnswered', 'tTalk']
-query.filter = PureCloudPlatformClientV2.AnalyticsQueryFilter()
+query.filter = PureCloudPlatformClientV2.ConversationAggregateQueryFilter()
 query.filter.type = 'and'
-query.filter.clauses = [PureCloudPlatformClientV2.AnalyticsQueryClause()]
+query.filter.clauses = [PureCloudPlatformClientV2.ConversationAggregateQueryClause()]
 query.filter.clauses[0].type = 'or'
-query.filter.clauses[0].predicates = [PureCloudPlatformClientV2.AnalyticsQueryPredicate()]
+query.filter.clauses[0].predicates = [PureCloudPlatformClientV2.ConversationAggregateQueryPredicate()]
 query.filter.clauses[0].predicates[0].dimension = 'queueId'
 query.filter.clauses[0].predicates[0].value = queue_id
 
