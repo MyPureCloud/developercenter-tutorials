@@ -83,18 +83,18 @@ languages:
     displayName: Python
     steps:
     - file: python/analytics-conversation-aggregate-query.py
-      highlight: 0-83
+      highlight: 0-57
     - file: python/analytics-conversation-aggregate-query.py
-      highlight: 61-76
+      highlight: 38-50
     - file: python/analytics-conversation-aggregate-query.py
       highlight: 7-13
     - file: python/analytics-conversation-aggregate-query.py
-      highlight: 67-67
+      highlight: 41-41
     - file: python/analytics-conversation-aggregate-query.py
-      highlight: 68-68
+      highlight: 42-42
     - file: python/analytics-conversation-aggregate-query.py
-      highlight: 69-75
+      highlight: 43-49
     - file: python/analytics-conversation-aggregate-query.py
-      highlight: 79-83
+      highlight: 53-57
     - file: results.json
       highlight: 1-100

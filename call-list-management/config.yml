@@ -33,8 +33,8 @@ languages:
     displayName: Python
     steps:
     - file: "python/call-list-management.py"
-      highlight: "0-89"
+      highlight: "0-63"
     - file: "python/call-list-management.py"
-      highlight: "46-60"
+      highlight: "20-34"
     - file: "python/call-list-management.py"
-      highlight: "62-88"
+      highlight: "36-62"

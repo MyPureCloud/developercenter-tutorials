@@ -42,12 +42,12 @@ languages:
     displayName: Python
     steps:
     - file: "python/upload-prompts.py"
-      highlight: "0-80"
+      highlight: "0-54"
     - file: "python/upload-prompts.py"
-      highlight: "13-41"
+      highlight: "10-11"
     - file: "python/upload-prompts.py"
-      highlight: "42-53"
+      highlight: "16-27"
     - file: "python/upload-prompts.py"
-      highlight: "55-65"
+      highlight: "29-39"
     - file: "python/upload-prompts.py"
-      highlight: "67-80"
+      highlight: "41-54"

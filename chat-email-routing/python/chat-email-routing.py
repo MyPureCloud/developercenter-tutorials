@@ -2,6 +2,7 @@ import base64, sys, requests
 import asyncio
 import websockets
 import json
+import os
 import PureCloudPlatformClientV2
 from pprint import pprint
 from datetime import date
@@ -15,36 +16,12 @@ print("-------------------------------------------------------------")
 QUEUE_ID = "QUEUE_ID"
 PROVIDER_NAME = "Developer Center Tutorial"
 
-# Set PureCloud Objects
-notifications_api = PureCloudPlatformClientV2.NotificationsApi()
-conversations_api = PureCloudPlatformClientV2.ConversationsApi()
-
 # OAuth when using Client Credentials
-client_id = "CLIENT_ID"
-client_secret = "CLIENT_SECRET"
-authorization = base64.b64encode(bytes(client_id + ":" + client_secret, "ISO-8859-1")).decode("ascii")
+apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
 
-# Prepare for POST /oauth/token request
-request_headers = {
-    "Authorization": f"Basic {authorization}",
-    "Content-Type": "application/x-www-form-urlencoded"
-}
-request_body = {
-    "grant_type": "client_credentials"
-}
-
-# Get token
-response = requests.post("https://login.mypurecloud.com/oauth/token", data=request_body, headers=request_headers)
-
-# Check response
-if response.status_code == 200:
-    print("Got token")
-else:
-    print(f"Failure: { str(response.status_code) } - { response.reason }")
-    sys.exit(response.status_code)
-
-# Assign the token
-PureCloudPlatformClientV2.configuration.access_token = response.json()["access_token"]
+# Set PureCloud Objects
+notifications_api = PureCloudPlatformClientV2.NotificationsApi(apiclient)
+conversations_api = PureCloudPlatformClientV2.ConversationsApi(apiclient)
 
 try:
     # Create a new channel
@@ -114,7 +91,7 @@ async def create_email():
         api_response = conversations_api.post_conversations_emails(email_request)
         print(f"Created email, conversation id: { api_response.id }")
     except ApiException as e:
-        print(f"Exception when calling ConversationsApi->post_conversations_emails: { e }")
+        print(f"Exception when calling ConversationsApi->post_conversations_emails: {e}")
 
 
 grouped_async = asyncio.gather(create_email(), email_conversation_wss())
