@@ -34,7 +34,7 @@ query.conversation_query = {
 }
 print(query)
 try:
-# Call create_recording_job api
+    # Call create_recording_job api
     create_job_response = recording_api.post_recording_jobs(query)
     job_id = create_job_response.id
     print(f"Succesfully created recording bulk job { create_job_response}")
@@ -65,3 +65,27 @@ if job_state == 'READY':
         sys.exit()
 else:
     print(f"Expected Job State is: READY, however actual Job State is: { job_state }")
+
+# Call delete_recording_job api
+# Can be canceled also in READY and PENDING states
+if job_state == 'PROCESSING':
+    try:
+        cancel_job_response = recording_api.delete_recording_job(job_id)
+        print(f"Succesfully cancel recording bulk job { execute_job_response}")
+    except ApiException as e:
+        print(f"Exception when calling RecordingApi->delete_recording_job: { e }")
+        sys.exit()
+
+try:
+    get_recording_jobs_response = recording_api.get_recording_jobs({
+        "page_size": 25,
+        "page_number": 1,
+        "sort_by": "userId",  # or "dateCreated"
+        "state": "READY",  # valid values FULFILLED, PENDING, READY, PROCESSING, CANCELLED, FAILED
+        "show_only_my_jobs": True,
+        "job_type": "EXPORT",  # or "DELETE"
+    })
+    print(f"Succesfully get recording bulk jobs { execute_job_response}")
+except ApiException as e:
+    print(f"Exception when calling RecordingApi->get_recording_jobs: { e }")
+    sys.exit()
