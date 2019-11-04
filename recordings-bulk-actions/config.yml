@@ -21,10 +21,10 @@ steps:
     content: |
       The user will specify the job_id and use the PUT for excuting the bulk job
   - title: Cancel Job
-      content: |
+		content: |
         The user will specify the job_id and use the DELETE for canceling the bulk job
   - title: Get Several Jobs
-      content: |
+		content: |
         The user will specify the parameters in a dictionary as in the example and will get all jobs satisfying the filters
         and in the requested order.
 
@@ -46,4 +46,3 @@ languages:
         highlight: "69-77"
       - file: "python/recordings-bulk-action.py"
         highlight: "79-91"
-
