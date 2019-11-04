@@ -33,7 +33,7 @@ languages:
     displayName: Python
     steps:
       - file: "python/recordings-bulk-action.py"
-        highlight: "0-67"
+        highlight: "0-91"
       - file: "python/recordings-bulk-action.py"
         highlight: "10-23"
       - file: "python/recordings-bulk-action.py"
