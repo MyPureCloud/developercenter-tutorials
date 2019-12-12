@@ -17,6 +17,7 @@ steps:
   content: |
     In order to call the endpoint to send agentless outbound sms notifications you will need to use your OAuth client to generate a token. See: https://developer.mypurecloud.com/api/rest/authorization/use-client-credentials.html for more info
 
+
 - title: Use the OAuth client token to call the agentless outbound sms endpoint
   content: |
     Using the public api you will need to call the POST /api/v2/conversations/messages/agentless to send the message. Use the previously generated Oauth client token as "Authoization: Bearer {OAuthClientToken}"" header in the request. The POST body should look like this
@@ -53,5 +54,6 @@ languages:
       highlight: "0-15"
     - file: "java/src/com/genesys/Main.java"
       highlight: "20-27"
+      note: You need to make sure to build the basePath for the correct Purecloud region you are working in. See https://developer.mypurecloud.com/api/rest/
     - file: "java/src/com/genesys/Main.java"
       highlight: "29-43"

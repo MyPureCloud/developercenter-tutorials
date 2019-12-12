@@ -19,6 +19,7 @@ public class Main {
             
             //Generate the OAuth access token
             try {
+                //Make sure to specify the correct base path for your Purecloud region. see https://developer.mypurecloud.com/api/rest/
                 oAuthApiClient = ApiClient.Builder.standard().withBasePath("https://api.mypurecloud.com").build();
                 oAuthApiClient.authorizeClientCredentials(clientId, clientSecret);
                 
@@ -33,7 +34,7 @@ public class Main {
             SendAgentlessOutboundMessageRequest sendAgentlessOutboundMessageRequest = new SendAgentlessOutboundMessageRequest();
             sendAgentlessOutboundMessageRequest.setFromAddress("+13178723000");
             sendAgentlessOutboundMessageRequest.setToAddressMessengerType(SendAgentlessOutboundMessageRequest.ToAddressMessengerTypeEnum.SMS);
-            sendAgentlessOutboundMessageRequest.setToAddress("+13178723001");
+            sendAgentlessOutboundMessageRequest.setToAddress("+15557655942");
             sendAgentlessOutboundMessageRequest.setTextBody("Hello, this is a test notification");
             
             //Send the sms notification
