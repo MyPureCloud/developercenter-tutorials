@@ -13,7 +13,9 @@ steps:
       The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
   - title: Create a recording Job
     content: |
-      The user will use the POST API for creating a bulk Job. The response will include the generated job_id
+      The user will use the POST API for creating a bulk Job. The response will include the generated job_id.
+      Note: The more conversations you have this part will take longer to complete.
+      According to latest load test this part can take up to an hour for 500K conversations for a single organization.
   - title: Get Job status
     content: |
       The user will use the get recording job API in order to check what is the status of the bulk job. Once the status is Ready, the execute action PUT API can be used
