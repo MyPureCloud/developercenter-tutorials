@@ -10,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             //Define your OAuth client credentials
-            final String clientId = "e07e5863-48ec-4b59-bf76-88e07dc33t98";
-            final String clientSecret = "ncvyR0yk7heFwNze0pm83wcRa-Ayg56RZX92dSHIEJG";
+            final String clientId = System.getenv("PURECLOUD_CLIENT_ID");
+            final String clientSecret = System.getenv("PURECLOUD_CLIENT_SECRET");
             
             // Define APIs
             ApiClient oAuthApiClient;
