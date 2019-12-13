@@ -26,8 +26,8 @@
     <dependencies>
         <dependency>
             <groupId>com.mypurecloud</groupId>
-            <artifactId>platform-client-internal-v2</artifactId>
-            <version>409.0.0</version>
+            <artifactId>platform-client-v2</artifactId>
+            <version>75.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
