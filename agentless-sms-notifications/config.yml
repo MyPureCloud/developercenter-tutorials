@@ -1,0 +1,59 @@
+---
+title: Agentless SMS Notifications
+description: Sending outbound sms notifications from Purecloud without needing a user context
+categories:
+- Messaging
+- SMS
+steps:
+- title: Introduction
+  content: |
+    This tutorial will explain how to use Purecloud public api to send agentless outbound sms notifications and invoke them from another system.
+
+- title: Create or use an existing OAuth client.
+  content: |
+    You will need an OAuth client with the `Conversation:Message:Create` permission assigned to the OAuth client. See: https://help.mypurecloud.com/articles/create-an-oauth-client/ for more info
+
+- title: Generate an OAuth client token
+  content: |
+    In order to call the endpoint to send agentless outbound sms notifications you will need to use your OAuth client to generate a token. See: https://developer.mypurecloud.com/api/rest/authorization/use-client-credentials.html for more info
+
+
+- title: Use the OAuth client token to call the agentless outbound sms endpoint
+  content: |
+    Using the public api you will need to call the POST /api/v2/conversations/messages/agentless to send the message. Use the previously generated Oauth client token as "Authoization: Bearer {OAuthClientToken}"" header in the request. The POST body should look like this
+    ```{"language":"json"}
+    {
+     "fromAddress": "", //An already provisioned sms number provisioned in the org
+     "toAddress": "", //The e164 formatted number you are sending the notification to
+     "toAddressMessengerType": "sms",
+     "textBody": "" //The text body of the notification to send
+    }
+    ```
+
+    The response body will look like the following
+    ```{"language":"json"}
+    {
+        "id": "", //Id of the message
+        "conversationId": "", //The conversation id that was used to send the message
+        "fromAddress": "", //The from address used from the request body
+        "toAddress": "", //The to address used from the request body
+        "messengerType": "", //The messenger type used from the request body
+        "textBody": "", //The text body used from the request body
+        "timestamp": "2019-12-12T14:11:08.458Z", //The time the sms notification was sent
+        "selfUri": "" //self uri for this message Id
+    }
+    ```
+
+languages: 
+  java:
+    displayName: Java
+    steps:
+    - file: "java/src/com/genesys/Main.java"
+      highlight: "0-49"
+    - file: "java/src/com/genesys/Main.java"
+      highlight: "0-15"
+    - file: "java/src/com/genesys/Main.java"
+      highlight: "20-27"
+      note: You need to make sure to build the basePath for the correct Purecloud region you are working in. See https://developer.mypurecloud.com/api/rest/
+    - file: "java/src/com/genesys/Main.java"
+      highlight: "29-43"
