@@ -1,0 +1,51 @@
+---
+title: Authorizing the iOS SDK
+description: Example of using an embedded web browser to complete the OAuth Implicit Grant flow in an iOS app.
+categories:
+- OAuth
+steps:
+- title: Introduction
+  content: |
+    The iOS SDK provides Swift 5 classes and methods to access the PureCloud Platform API. This tutorial will demonstrate how a user can authorize the SDK using the [OAuth Implicit Grant](/api/rest/authorization/use-implicit-grant.html) in a Swift 5 iOS app using Swift's [WKWebView](https://developer.apple.com/documentation/webkit/wkwebview) in-app web browser.
+
+    For more information about the SDK, see the [PureCloud iOS SDK](/api/rest/client-libraries/ios/) on the Developer Center.
+
+- title: Authentication Settings
+  content: |
+    This application uses the [OAuth Implicit Grant](/api/rest/authorization/use-implicit-grant.html) flow to allow the user to to authorize the SDK. The OAuth client must be configured as as type _Token Implicit Grant_. The redirect URI used by this application, and configured on the OAuth client, is `http://fakeredirecturi/oauth2/callback`. In a future step, the application will check for this fake URI and end the authorization process when navigation is referred to this URI.
+
+    For more information about OAuth clients, see [Create an OAuth Client](https://help.mypurecloud.com/articles/create-an-oauth-client/) on the PureCloud Resource Center.
+
+- title: Authenticate with PureCloud
+  content: |
+    The application constructs the URL to initiate the OAuth flow, unhides the embedded web browser, and navigates it to the authorization URL using `webView.load(myRequest)`. 
+
+- title: Handle Browser Navigation
+  content: |
+    The WKWebView object allows the view controller to intercept navigation requests. This code will allow all navigation requests by default.
+
+    When the configured redirect URI is encountered, the code checks for the presences of an access token. If found, the access token is extracted from the URL and set on the SDK using `PureCloudPlatformClientV2API.accessToken = access_token`. The web view is then hidden and navigation canceled. At this point, the SDK is now authorized and may begin making API requests.
+
+    Note that this example does not handle authorization failures. Refer to the OAuth documentation for information on authorization failure scenarios.
+
+- title: Make API Requests
+  content: |
+    This section demonstrates using the SDK to make authenticated requests to the PureCloud Platform API.
+
+    First, a request is made to `UsersAPI.getUsersMe(expand: expand)` (GET /api/v2/users/me). If this request is successful, the user's name from the response is used to populate a label in the UI. Additionally, if the response contains a profile image, it will be downloaded and displayed in a UIImageView in the UI.
+
+
+languages:
+  swift:
+    displayName: Swift 5
+    steps:
+    - file: "swift/iOS Auth Tutorial/ViewController.swift"
+      highlight: "0-183"
+    - file: "swift/iOS Auth Tutorial/ViewController.swift"
+      highlight: "36-40"
+    - file: "swift/iOS Auth Tutorial/ViewController.swift"
+      highlight: "51-70"
+    - file: "swift/iOS Auth Tutorial/ViewController.swift"
+      highlight: "89-126"
+    - file: "swift/iOS Auth Tutorial/ViewController.swift"
+      highlight: "128-181"

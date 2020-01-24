@@ -7,13 +7,10 @@ This project is based off of [Viewsaurus](https://www.npmjs.com/package/viewsaur
 3. Create the file  _/\<tutorialdir>/index.html.haml_ for the tutorial directory created in step 1. Write the step-by-step walkthrough for the tutorial in this file.
 4. To create the tutorial for each language, subfolders should be created at _/\<tutorialdir>/\<language>/_ that share an exact name with an [ace supported language](https://cdnjs.com/libraries/ace/). The ace-specific folder name is used to infer a particular ace language for styling, formatting, and identifying which languages exist for a tutorial. Put the source code for the tutorial in the _\<language>_ directory.
 5. For each language, add the lines to highlight for each step to _/\<tutorialdir>/config.yaml_.
-6. Run a local server by running `ruby server.rb`
-	1. If necessary, run the following
-	    1. `gem install sinatra`
-	    2. `gem install haml`
-	    3. `gem install mustache`
-	    4. `gem install redcarpet`
-7. Open your browser and browser to `http://localhost:4567/<tutorialdir>/index`
+
+# Running locally
+
+_TBD_
 
 # Tutorial guidelines
 

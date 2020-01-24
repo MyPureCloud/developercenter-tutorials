@@ -44,10 +44,10 @@ languages:
     displayName: Python
     steps:
     - file: "python/callbacks.py"
-      highlight: "0-56"
+      highlight: "0-32"
     - file: "python/callbacks.py"
-      highlight: "13-38"
+      highlight: "10-11"
     - file: "python/callbacks.py"
-      highlight: "40-48"
+      highlight: "16-24"
     - file: "python/callbacks.py"
-      highlight: "50-56"
+      highlight: "26-31"

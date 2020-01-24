@@ -244,3 +244,7 @@ oauth-auth-code/csharp/authorization_code_aspdotnet/wwwroot/lib/**
 
 /env
 /.vscode
+
+# Intellij
+
+**/.idea/

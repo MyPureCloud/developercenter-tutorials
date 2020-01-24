@@ -1,0 +1,50 @@
+---
+title: Bulk delete\export of recordings
+description: Bulk delete\export of recordings based on analytics query parameters
+categories:
+  - Recordings
+steps:
+  - title: Introduction
+    content: |
+      User will specify an analytics query and a time range over which we should match conversation recordings.
+      Additonaly, the user need to specify the action type (export\delete) and the action date. This will result in deletion\export of the matched recordings
+  - title: Authenticate with PureCloud
+    content: |
+      The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+  - title: Create a recording Job
+    content: |
+      The user will use the POST API for creating a bulk Job. The response will include the generated job_id.
+      Note: The more conversations you have this part will take longer to complete.
+      According to latest load test this part can take up to an hour for 500K conversations for a single organization.
+  - title: Get Job status
+    content: |
+      The user will use the get recording job API in order to check what is the status of the bulk job. Once the status is Ready, the execute action PUT API can be used
+  - title: Execute Job
+    content: |
+      The user will specify the job_id and use the PUT for excuting the bulk job
+  - title: Cancel Job
+    content: |
+        The user will specify the job_id and use the DELETE for canceling the bulk job
+  - title: Get Several Jobs
+    content: |
+        The user will specify the parameters in a dictionary as in the example and will get all jobs satisfying the filters
+        and in the requested order.
+
+languages:
+  python:
+    displayName: Python
+    steps:
+      - file: "python/recordings-bulk-action.py"
+        highlight: "0-91"
+      - file: "python/recordings-bulk-action.py"
+        highlight: "10-23"
+      - file: "python/recordings-bulk-action.py"
+        highlight: "25-44"
+      - file: "python/recordings-bulk-action.py"
+        highlight: "46-57"
+      - file: "python/recordings-bulk-action.py"
+        highlight: "59-67"
+      - file: "python/recordings-bulk-action.py"
+        highlight: "69-77"
+      - file: "python/recordings-bulk-action.py"
+        highlight: "79-91"
