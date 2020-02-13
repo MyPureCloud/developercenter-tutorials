@@ -48,3 +48,20 @@ languages:
         highlight: "69-77"
       - file: "python/recordings-bulk-action.py"
         highlight: "79-91"
+  nodejs:
+    displayName: NodeJS
+    steps:
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "0-96"
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "3-14"
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "48-61"
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "62-78"
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "80-84"
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "30-32"
+      - file: "nodejs/recordings-bulk-action.js"
+        highlight: "86-96"
