@@ -5,6 +5,7 @@ import com.mypurecloud.sdk.v2.model.*;
 import com.mypurecloud.sdk.v2.PureCloudRegionHosts;
 import com.mypurecloud.sdk.v2.ApiClient;
 import com.mypurecloud.sdk.v2.ApiResponse;
+import com.mypurecloud.sdk.v2.ApiException;
 import com.mypurecloud.sdk.v2.extensions.AuthResponse;
 
 import java.io.*;
@@ -47,6 +48,7 @@ public class Main {
         } catch (Exception e){
             System.err.println("Exception when authenticating.");
             e.printStackTrace();
+            System.out.println(((ApiException)e).getRawBody());
         }
 
         // Use the ApiClient instance
@@ -68,6 +70,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Exception when calling ConversationsApi#postAnalyticsConversationsDetailsQuery");
             e.printStackTrace();
+            System.out.println(((ApiException)e).getRawBody());
         }
     }
 
@@ -97,6 +100,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Exception when calling RecordingApi#getConversationRecordingmetadata");
             e.printStackTrace();
+            System.out.println(((ApiException)e).getRawBody());
         }
     }
 
@@ -117,6 +121,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Exception when calling RecordingApi#postRecordingBatchrequests");
             e.printStackTrace();
+            System.out.println(((ApiException)e).getRawBody());
         }
     }
 
@@ -136,6 +141,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Exception when calling RecordingApi#getRecordingBatchrequest");
             e.printStackTrace();
+            System.out.println(((ApiException)e).getRawBody());
         }
     }
 
