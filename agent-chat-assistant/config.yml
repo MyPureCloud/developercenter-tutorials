@@ -1,0 +1,75 @@
+---
+title: Agent Chat Assistant
+description: Step by step procedure on how to create an agent assistant for chat interactions.
+categories:
+- Chat
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps to create an agent assistant for chat interactions. An agent assistant will display suggested responses based on predefined keywords and responses.
+- title: Configure SDK Settings
+  content: |
+    Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
+    To obtain a token, separate function is created to request token from PureCloud.
+- title: Obtain an Access Token
+  content: |
+    Start by making a POST call to https://login.mypurecloud.com/oauth/token to request a token. Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
+    For this tutorial, Implicit Grant Type will be used as user context is not needed in acquiring the desired information.
+    More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
+- title: Instantiate APIs
+  content: |
+    Instance of User API, Conversation API and Notification API will be created and will be passed to different methods.
+- title: Get User Details
+  content: |
+    Before getting the conversations, we need to get the logged in user's details. We will then call the getUsersMe function of the Users API to get the userId.
+- title: Setup Chat Channel
+  content: |
+    The setupChatChannel function will be called to subscribe to incoming chat conversations. This function handles the events when a chat conversation fires.
+- title: Create a Channel in the setupChatChannel function
+  content: |
+    In the setupChatChannel function, we will first create a channel. The Notifications API will be called to post a notifications channel. We will also create a web socket to handle the on socket messages.
+- title: Subscribe to Incoming Chat Conversations in the setupChatChannel function
+  content: |
+    Once a channel has been created, we can now subscribe to incoming chat conversations. The addSubscription function will be called to call the postNotificationsChannelSubscriptions function of the Notifications API with the topic v2.users.${userId}.conversations.chats.
+- title: Callback When Chat Conversation Event Fires in the setupChatChannel function
+  content: |
+    A callback will be fired when a chat conversation event occurs. This part of the code can handle multiple events such as when an agent is connected, when agent has multiple chat interactions and when a chat has ended.
+- title: When Agent is Connected Event
+  content: |
+    When an agent is connected and the isExisting flag returns false, the registerConversation function will be called to call the getConversation function of the Conversations API. Once we get the conversation details, we will display the conversation to the view then call the addSubscription function to add a subscription to the channel with the topic v2.conversations.chats.${conversationId}.messages.
+- title: When Agent has Multiple Interactions
+  content: |
+    When an agent has multiple chat interactions, we can determine which customer the agent is currently working on. If the agent participant's held status is false, it means that the agent has the chat opened to this customer.
+    If this event triggers, the showChatTranscript will be called to show the chat messages of the conversaiton then the tab of this customer will be active in the view.
+- title: When Chat has Ended
+  content: |
+    When a chat has ended, we can know by the state of the agent participant.
+    If this event triggers, the tab of the customer will be removed from the view and the clearRecommendations dunction will be called to clear the recommended responses of the agent assistant.
+languages:
+  javascript:
+    displayName: JavaScript
+    steps:
+    - file: "javascript/scripts/main.js"
+      highlight: "0-307"
+    - file: "javascript/scripts/main.js"
+      highlight: "286-288"
+    - file: "javascript/scripts/main.js"
+      highlight: "286-288"
+    - file: "javascript/scripts/main.js"
+      highlight: "9-12"
+    - file: "javascript/scripts/main.js"
+      highlight: "293-295"
+    - file: "javascript/scripts/main.js"
+      highlight: "124-173"
+    - file: "javascript/scripts/main.js"
+      highlight: "179-189"
+    - file: "javascript/scripts/main.js"
+      highlight: "128-129"
+    - file: "javascript/scripts/main.js"
+      highlight: "132-171"
+    - file: "javascript/scripts/main.js"
+      highlight: "143-157"
+    - file: "javascript/scripts/main.js"
+      highlight: "159-164"
+    - file: "javascript/scripts/main.js"
+      highlight: "166-170"
