@@ -91,7 +91,6 @@ function processActiveChats(){
 
         data.entities.forEach((conv) => {
             promiseArr.push(registerConversation(conv.id));
-            // subscribeChatConversation(conv.id);
 
             addSubscription(
                 `v2.conversations.chats.${conv.id}.messages`,
@@ -135,13 +134,15 @@ function setupChatChannel(){
                 let conversationId = conversation.id;
                 let agentParticipant = participants.find(
                     p => p.purpose == 'agent');
+                let customerParticipant = participants.find(
+                    p => p.purpose == 'customer');
                 
                 // Value to determine if conversation is already taken into account before
                 let isExisting = activeConversations.map((conv) => conv.id)
                                     .indexOf(conversationId) != -1;
 
                 // Once agent is connected subscribe to the conversation's messages 
-                if(agentParticipant.state == 'connected' && !isExisting){
+                if(agentParticipant.state == 'connected' && customerParticipant.state == 'connected' && !isExisting){
                     // Add conversationid to existing conversations array
                     return registerConversation(conversation.id)
                     .then(() => {
@@ -158,7 +159,7 @@ function setupChatChannel(){
 
                 // If agent has multiple interactions,
                 // open the active conversation based on PureCloud
-                if(agentParticipant.held == false){
+                if(agentParticipant.state == 'connected' && customerParticipant.state == 'connected' && agentParticipant.held == false){
                     showChatTranscript(conversationId);
                     view.makeTabActive(conversationId);
                 }
