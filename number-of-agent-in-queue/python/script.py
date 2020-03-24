@@ -9,8 +9,9 @@ print('-------------------------------------------------------------')
 # Configure the token for use by the SDK
 apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
 
-# Create an instance of the Routing API
+# Create an instance of the Routing API and Analytics API
 routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)
+analytics_api = PureCloudPlatformClientV2.AnalyticsApi(apiClient)
 
 def get_on_queue_agents(queue_name):
 	""" Get number of agents active on a queue given the name of the queue.
@@ -41,10 +42,27 @@ def get_on_queue_agents(queue_name):
 		
 	# Count the 'on-queue' agents on the queue.
 	try:
-		api_response = routing_api.get_routing_queue_users(queue_id, 
-			routing_status=["IDLE","INTERACTING"])
-		on_queue_agents = api_response.total
+		# Build analytics query
+		query = PureCloudPlatformClientV2.QueueObservationQuery()
+		query.metrics = ['oOnQueueUsers']
+		query.filter = PureCloudPlatformClientV2.ConversationAggregateQueryFilter()
+		query.filter.type = 'or'
+		query.filter.clauses = [PureCloudPlatformClientV2.ConversationAggregateQueryClause()]
+		query.filter.clauses[0].type = 'or'
+		query.filter.clauses[0].predicates = [PureCloudPlatformClientV2.ConversationAggregateQueryPredicate()]
+		query.filter.clauses[0].predicates[0].dimension = 'queueId'
+		query.filter.clauses[0].predicates[0].value = queue_id
+
+		# Execute analytics query
+		query_result = analytics_api.post_analytics_queues_observations_query(query)
+
+		on_queue_agents = query_result.results[0].data[0].stats.count
 	except ApiException as e:
 		print("Error on RoutingAPI -> " + e)
 
 	return on_queue_agents
+
+if __name__ == "__main__":
+	queue_name = input("Enter queue name: ")
+	on_queue_agents = get_on_queue_agents(queue_name)
+	print(f"Number of agents in \"{queue_name}\": {on_queue_agents}")
