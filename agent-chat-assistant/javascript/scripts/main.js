@@ -13,7 +13,7 @@ const notificationsApi = new platformClient.NotificationsApi();
 
 let userId = '';
 let activeConversations = [];
-let agentID;
+let communicationId;
 let channel = {};
 let ws = null;
 
@@ -55,15 +55,15 @@ let onMessage = (data) => {
 
             // Get agent communication ID
             if(purpose == 'agent') {
-                agentID = senderId;
+                communicationId = senderId;
                 stackedText = '';
             } else {
                 let agent = conversation.participants.find(p => p.purpose == 'agent');
-                agentID = agent.chats[0].id;
+                communicationId = agent.chats[0].id;
             }
 
             // Get some recommended replies
-            if(purpose == 'customer') getRecommendations(message, convId, agentID);
+            if(purpose == 'customer') getRecommendations(message, convId, communicationId);
 
             break;
     }
@@ -122,6 +122,19 @@ function showChatTranscript(conversationId){
  */
 function setupChatChannel(){
     return createChannel()
+    .then(data => {
+        return conversationsApi.getConversations()
+        .then((conversation) => {
+            if(conversation.entities.length > 0) {
+                conversation.entities[0].participants.forEach((participant) => {
+                    if (participant.purpose == 'agent' && participant.chats[0].provider == 'PureCloud Webchat v2'
+                        && (participant.chats[0].state == 'alerting' || participant.chats[0].state == 'connected')) {
+                            communicationId = participant.chats[0].id;
+                    }
+                });
+            }            
+        });
+    })
     .then(data => {
         // Subscribe to incoming chat conversations
         return addSubscription(
