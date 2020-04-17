@@ -57,3 +57,14 @@ languages:
       note: You need to make sure to build the basePath for the correct Purecloud region you are working in. See https://developer.mypurecloud.com/api/rest/
     - file: "java/src/com/genesys/Main.java"
       highlight: "29-43"
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-34"
+    - file: "nodejs/index.js"
+      highlight: "0-11"
+    - file: "nodejs/index.js"
+      highlight: "12-15"
+    - file: "nodejs/index.js"
+      highlight: "16-32"
