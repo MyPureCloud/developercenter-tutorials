@@ -63,7 +63,7 @@ steps:
     This calls the getConversationsChats function of the Conversations API to get the conversation details. Then adds a subscription to the topic v2.conversations.chats.${conversationId}.messages. And finally calls the populateActiveChatList to display the current customer interactions as tabs.
 - title: view.js file
   content: |
-    All view related codes are placed in this JavaScript module.
+    All HTML related codes are placed in this JavaScript module.
 - title: agent-assistant-service.js file
   content: |
     This JavaScript module simulates an agent assistant. It listens for keywords from the customer and suggets possible responses for the agent.
@@ -74,27 +74,27 @@ languages:
     - file: "javascript/scripts/main.js"
       highlight: "0-324"
     - file: "javascript/scripts/main.js"
-      highlight: "303-305"
+      highlight: "300-302"
     - file: "javascript/scripts/main.js"
-      highlight: "303-305"
+      highlight: "300-302"
     - file: "javascript/scripts/main.js"
       highlight: "9-12"
     - file: "javascript/scripts/main.js"
       highlight: "309-312"
     - file: "javascript/scripts/main.js"
-      highlight: "218-225"
+      highlight: "215-222"
     - file: "javascript/scripts/main.js"
-      highlight: "199-213"
+      highlight: "196-210"
     - file: "javascript/scripts/main.js"
-      highlight: "222-223"
+      highlight: "219-220"
     - file: "javascript/scripts/main.js"
-      highlight: "232-281"
+      highlight: "229-278"
     - file: "javascript/scripts/main.js"
-      highlight: "250-265"
+      highlight: "247-262"
     - file: "javascript/scripts/main.js"
-      highlight: "269-271"
+      highlight: "266-268"
     - file: "javascript/scripts/main.js"
-      highlight: "75-115"
+      highlight: "75-112"
     - file: "javascript/scripts/main.js"
       highlight: "118-128"
     - file: "javascript/scripts/main.js"
