@@ -30,11 +30,11 @@ languages:
     displayName: NodeJS
     steps:
     - file: nodejs/isOpen.js
-      highlight: 0-100
+      highlight: 1-91
     - file: nodejs/isOpen.js
-      highlight: 72-82
+      highlight: 73-88
     - file: nodejs/isOpen.js
-      highlight: 27-61
+      highlight: 25-63
     - file: nodejs/isOpen.js
-      highlight: 5-24
+      highlight: 5-23
       note: To evaluate the times and rrule, we are relying on the <a href="https://www.npmjs.com/package/rrule">rrule</a> and <a href="https://www.npmjs.com/package/moment">moment</a> node packages to do the heavy lifting for us.
