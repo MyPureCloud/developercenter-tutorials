@@ -9,12 +9,15 @@ steps:
     This tutorial walks through the steps to create an agent assistant for chat interactions. An agent assistant will display suggested responses based on predefined keywords and responses.
 - title: Configure SDK Settings
   content: |
-    Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
+    First is the configuration of SDK setting by providing an access token which will be used in processing API calls.
+
     To obtain a token, separate function is created to request token from PureCloud.
 - title: Obtain an Access Token
   content: |
     Start by making a POST call to https://login.mypurecloud.com/oauth/token to request a token. Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
+    
     For this tutorial, Implicit Grant Type will be used as user context is not needed in acquiring the desired information.
+    
     More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
 - title: Instantiate APIs
   content: |
@@ -24,52 +27,81 @@ steps:
     Before getting the conversations, we need to get the logged in user's details. We will then call the getUsersMe function of the Users API to get the userId.
 - title: Setup Chat Channel
   content: |
-    The setupChatChannel function will be called to subscribe to incoming chat conversations. This function handles the events when a chat conversation fires.
+    The setupChatChannel function will be called to subscribe to incoming chat conversations. This function triggers the onChatConversationEvent function.
 - title: Create a Channel in the setupChatChannel function
   content: |
-    In the setupChatChannel function, we will first create a channel. The Notifications API will be called to post a notifications channel. We will also create a web socket to handle the on socket messages.
+    In the setupChatChannel function, we will first create a channel. The postNotificationsChannels of Notifications API will be called. We will also create a web socket to handle the on socket messages.
 - title: Subscribe to Incoming Chat Conversations in the setupChatChannel function
   content: |
     Once a channel has been created, we can now subscribe to incoming chat conversations. The addSubscription function will be called to call the postNotificationsChannelSubscriptions function of the Notifications API with the topic v2.users.${userId}.conversations.chats.
-- title: Callback When Chat Conversation Event Fires in the setupChatChannel function
+- title: onChatConversationEvent function
   content: |
-    A callback will be fired when a chat conversation event occurs. This part of the code can handle multiple events such as when an agent is connected, when agent has multiple chat interactions and when a chat has ended.
+    This function is triggered by the setupChatChannel function when a conversation event fires. This function handles multiple events such as when an agent is connected, when an agent has multiple chat interactions and when a chat has ended.
 - title: When Agent is Connected Event
   content: |
     When an agent is connected and the isExisting flag returns false, the registerConversation function will be called to call the getConversation function of the Conversations API. Once we get the conversation details, we will display the conversation to the view then call the addSubscription function to add a subscription to the channel with the topic v2.conversations.chats.${conversationId}.messages.
 - title: When Agent has Multiple Interactions
   content: |
     When an agent has multiple chat interactions, we can determine which customer the agent is currently working on. If the agent participant's held status is false, it means that the agent has the chat opened to this customer.
-    If this event triggers, the showChatTranscript will be called to show the chat messages of the conversaiton then the tab of this customer will be active in the view.
+- title: setActiveChat function
+  content: |
+    This function calls getConversationsChatMessages of the Conversations API to display the messages in the view.
+    
+    Then calls the makeTabActive to set the focus to the active interaction of the agent and the displayTranscript to display the messages in the view.
+    
+    Finally, it will call the showRecommendations function that triggers the service to get the recommended responses to show in the view.
+- title: showRecommendations function
+  content: |
+    This function calls a service to get the recommended response and shows it to the view. When the agent selects a recommended response, it will trigger the sendMessage function to send the selected text to the customer.
 - title: When Chat has Ended
   content: |
-    When a chat has ended, we can know by the state of the agent participant.
-    If this event triggers, the tab of the customer will be removed from the view and the clearRecommendations dunction will be called to clear the recommended responses of the agent assistant.
+    When a chat has ended, we can know by the state of the agent participant. If this event triggers, the tab of the customer will be removed from the view.
+- title: processExistingChats function
+  content: |
+    This handles the logic when an agent has existing chat interaction/s when the app loads.
+    
+    This calls the getConversationsChats function of the Conversations API to get the conversation details. Then adds a subscription to the topic v2.conversations.chats.${conversationId}.messages. And finally calls the populateActiveChatList to display the current customer interactions as tabs.
+- title: view.js file
+  content: |
+    All view related codes are placed in this JavaScript module.
+- title: agent-assistant-service.js file
+  content: |
+    This JavaScript module simulates an agent assistant. It listens for keywords from the customer and suggets possible responses for the agent.
 languages:
   javascript:
     displayName: JavaScript
     steps:
     - file: "javascript/scripts/main.js"
-      highlight: "0-308"
+      highlight: "0-324"
     - file: "javascript/scripts/main.js"
-      highlight: "287-289"
+      highlight: "303-305"
     - file: "javascript/scripts/main.js"
-      highlight: "287-289"
+      highlight: "303-305"
     - file: "javascript/scripts/main.js"
       highlight: "9-12"
     - file: "javascript/scripts/main.js"
-      highlight: "293-296"
+      highlight: "309-312"
     - file: "javascript/scripts/main.js"
-      highlight: "123-174"
+      highlight: "218-225"
     - file: "javascript/scripts/main.js"
-      highlight: "180-190"
+      highlight: "199-213"
     - file: "javascript/scripts/main.js"
-      highlight: "127-128"
+      highlight: "222-223"
     - file: "javascript/scripts/main.js"
-      highlight: "131-172"
+      highlight: "232-281"
     - file: "javascript/scripts/main.js"
-      highlight: "145-158"
+      highlight: "250-265"
     - file: "javascript/scripts/main.js"
-      highlight: "162-165"
+      highlight: "269-271"
     - file: "javascript/scripts/main.js"
-      highlight: "168-171"
+      highlight: "75-115"
+    - file: "javascript/scripts/main.js"
+      highlight: "118-128"
+    - file: "javascript/scripts/main.js"
+      highlight: "271-277"
+    - file: "javascript/scripts/main.js"
+      highlight: "161-185"
+    - file: "javascript/scripts/view.js"
+      highlight: "0"
+    - file: "javascript/scripts/agent-assistant-service.js"
+      highlight: "0"

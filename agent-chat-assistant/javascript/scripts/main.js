@@ -12,14 +12,15 @@ const conversationsApi = new platformClient.ConversationsApi();
 const notificationsApi = new platformClient.NotificationsApi();
 
 let userId = '';
-let activeConversations = [];
-let communicationId;
+let chatConversations = []; // Chat conversations handled by the user
+let activeChatId = ''; // Chat that is in focus on the UI
+let activeCommunicationId = '';
 let channel = {};
-let ws = null;
 
-// Object that will contain the subscription topic as key and the
-// callback function as the value
-let subscriptionMap = {
+// Contains the calback functions for the subscribed topics 
+// in the notifications channel.
+// <topic name>:<callback function>
+let topicCallbackMap = {
     'channel.metadata': () => {
         console.log('Notification heartbeat.');
     }
@@ -46,7 +47,7 @@ let onMessage = (data) => {
             let senderId = eventBody.sender.id;
 
             // Conversation values for cross reference
-            let conversation = activeConversations.find(c => c.id == convId);
+            let conversation = chatConversations.find(c => c.id == convId);
             let participant = conversation.participants.find(p => p.chats[0].id == senderId);
             let name = participant.name;
             let purpose = participant.purpose;
@@ -55,19 +56,92 @@ let onMessage = (data) => {
 
             // Get agent communication ID
             if(purpose == 'agent') {
-                communicationId = senderId;
                 stackedText = '';
-            } else {
-                let agent = conversation.participants.find(p => p.purpose == 'agent');
-                communicationId = agent.chats[0].id;
-            }
-
+            } 
             // Get some recommended replies
-            if(purpose == 'customer') getRecommendations(message, convId, communicationId);
+            if(purpose == 'customer'){
+                stackedText += message;
+                showRecommendations(stackedText);
+            }
 
             break;
     }
 };
+
+/**
+ * Set the focus to the specified chat conversation.
+ * @param {String} conversationId conversation id of the new active chat
+ */
+function setActiveChat(conversationId){
+    let conversation = chatConversations.find(c => c.id == conversationId);
+
+    // Store global references to the current chat conversation
+    activeChatId = conversationId;
+    activeCommunicationId = conversation.participants.slice().reverse()
+                                    .find(p => p.purpose == 'agent').chats[0].id;
+
+    return conversationsApi.getConversationsChatMessages(conversationId)
+    .then((data) => {
+        // Get messages and display to page
+        view.makeTabActive(conversationId);
+        view.displayTranscript(data.entities, conversation);
+
+        // Rebuild the stacked text string
+        stackedText = '';
+        let messages = data.entities;
+        messages.forEach((msg) => {
+            if(msg.hasOwnProperty("body")) {
+                let message = msg.body;
+
+                let senderId = msg.sender.id;
+                let purpose = conversation
+                            .participants.find(p => p.chats[0].id == senderId)
+                            .purpose;
+                
+                if(purpose == 'customer'){
+                    stackedText += message;
+                }else{
+                    stackedText = '';
+                }
+            }
+        });
+
+        // Show recommendations
+        showRecommendations(stackedText);
+    });
+}
+
+/**
+ * Agent assistant to get recommended response
+ * @param {String} text Chat message
+ */
+function showRecommendations(text){
+    console.log(text);
+
+    // Unoptimized because it's reanalyzing a growing amount of text as long as
+    // customer is uninterrupted. But good enough for the sample.
+    let recommendations = assistService.getRecommendations(stackedText);
+    console.log(recommendations);
+
+    view.showRecommendations(
+        recommendations, activeChatId, activeCommunicationId, sendMessage);
+}
+
+/**
+ * Agent assistant to send the selected recommended response
+ * @param {String} message
+ * @param {String} conversationId
+ * @param {String} communicationId
+ */
+function sendMessage(message, conversationId, communicationId){    
+    conversationsApi.postConversationsChatCommunicationMessages(
+        conversationId, communicationId,
+        {
+            "body": message,
+            "bodyType": "standard"
+        }
+    )
+}
 
 /**
  * Should be called when there's a new conversation. 
@@ -76,15 +150,15 @@ let onMessage = (data) => {
  */
 function registerConversation(conversationId){
     return conversationsApi.getConversation(conversationId)
-        .then((data) => activeConversations.push(data));
+        .then((data) => chatConversations.push(data));
 }
 
 /**
- * Get current active chat conversations, subscribe the conversations to the 
+ * Get already existing chat conversations, subscribe the conversations to the 
  * notifications and display each name on the tab menu
  * @returns {Promise} 
  */
-function processActiveChats(){
+function processExistingChats(){
     return conversationsApi.getConversationsChats()
     .then((data) => {
         let promiseArr = [];
@@ -97,97 +171,26 @@ function processActiveChats(){
                 onMessage);
         });
 
-        view.populateActiveChatList(data.entities, showChatTranscript);
+        view.populateActiveChatList(data.entities, setActiveChat);
+
 
         return Promise.all(promiseArr);
     })
-}
-
-/**
- * Show the chat messages for a conversation
- * @param {String} conversationId 
- * @returns {Promise} 
- */
-function showChatTranscript(conversationId){
-    let conversation = activeConversations.find(c => c.id == conversationId);
-
-    return conversationsApi.getConversationsChatMessages(conversationId)
-    .then((data) => {
-        view.displayTranscript(data.entities, conversation);
-    });
-}
-
-/**
- * Set-up the channel for chat conversations
- */
-function setupChatChannel(){
-    return createChannel()
-    .then(data => {
-        return conversationsApi.getConversations()
-        .then((conversation) => {
-            if(conversation.entities.length > 0) {
-                conversation.entities[0].participants.forEach((participant) => {
-                    if (participant.purpose == 'agent' && participant.chats[0].provider == 'PureCloud Webchat v2'
-                        && (participant.chats[0].state == 'alerting' || participant.chats[0].state == 'connected')) {
-                            communicationId = participant.chats[0].id;
-                    }
-                });
-            }            
-        });
+    .then(() => {
+        // Set the first one as the active one
+        if(chatConversations.length > 0){
+            setActiveChat(chatConversations[0].id);
+        }
     })
-    .then(data => {
-        // Subscribe to incoming chat conversations
-        return addSubscription(
-            `v2.users.${userId}.conversations.chats`,
-
-            // Called when a chat conversation event fires (connected to agent, etc.)
-            (data) => {
-                let conversation = data.eventBody;
-                let participants = conversation.participants;
-                let conversationId = conversation.id;
-                let agentParticipant = participants.find(
-                    p => p.purpose == 'agent');
-                let customerParticipant = participants.find(
-                    p => p.purpose == 'customer');
-                
-                // Value to determine if conversation is already taken into account before
-                let isExisting = activeConversations.map((conv) => conv.id)
-                                    .indexOf(conversationId) != -1;
-
-                // Once agent is connected subscribe to the conversation's messages 
-                if(agentParticipant.state == 'connected' && customerParticipant.state == 'connected' && !isExisting){
-                    // Add conversationid to existing conversations array
-                    return registerConversation(conversation.id)
-                    .then(() => {
-                        // Add conversation to tab
-                        let participant = data.eventBody.participants.filter(
-                            participant => participant.purpose === "customer")[0];
-                        view.addCustomerList(participant.name, data.eventBody.id, showChatTranscript);
-
-                        return addSubscription(
-                            `v2.conversations.chats.${conversationId}.messages`,
-                            onMessage);
-                    })
-                }
-
-                // If agent has multiple interactions,
-                // open the active conversation based on PureCloud
-                if(agentParticipant.state == 'connected' && customerParticipant.state == 'connected' && agentParticipant.held == false){
-                    showChatTranscript(conversationId);
-                    view.makeTabActive(conversationId);
-                }
-
-                // If chat has ended remove the tab
-                if(agentParticipant.state == 'disconnected' && isExisting){
-                    view.removeTab(conversationId);
-                    clearRecommendations();
-                }
-            });
-    });
 }
 
+/**--------------------------------------------------------
+ *                NOTIFICATIONS SECTION
+ * ---------------------------------------------------------
+ */
+
 /**
- * Creation of the channel. If called multiple times,
+ * Create the channel. If called multiple times,
  * the last one will be the active one.
  */
 function createChannel(){
@@ -197,13 +200,86 @@ function createChannel(){
         console.log(data);
 
         channel = data;
-        ws = new WebSocket(channel.connectUri);
-        ws.onmessage = onSocketMessage;
+        let ws = new WebSocket(channel.connectUri);
+        ws.onmessage = () => {
+            let data = JSON.parse(event.data);
+
+            topicCallbackMap[data.topicName](data);
+        };
     });
 }
 
 /**
- * Add a subscription to the channel
+ * Set-up the channel for chat conversations
+ */
+function setupChatChannel(){
+    return createChannel()
+    .then(data => {
+        // Subscribe to incoming chat conversations
+        return addSubscription(
+            `v2.users.${userId}.conversations.chats`, onChatConversationEvent)
+    });
+}
+
+/**
+ * Calback function to when a chat conversation event occurs 
+ * for the current user
+ * @param {Object} event The Genesys Cloud event
+ */
+function onChatConversationEvent(event){
+    let conversation = event.eventBody;
+    let participants = conversation.participants;
+    let conversationId = conversation.id;
+
+    console.log(conversation);
+
+    // Get the last agent participant. This happense when a conversation
+    // has multiple agent participants, we need to get the latest one.
+    let agentParticipant = participants.slice().reverse().find(
+        p => p.purpose == 'agent');
+    let customerParticipant = participants.find(
+        p => p.purpose == 'customer');
+    // Value to determine if conversation is already taken into account before
+    let isExisting = chatConversations.map((conv) => conv.id)
+                        .indexOf(conversationId) != -1;
+
+    // Once agent is connected subscribe to the conversation's messages 
+    if(agentParticipant.state == 'connected' && 
+            customerParticipant.state == 'connected' && 
+            !isExisting){
+        // Add conversationid to existing conversations array
+        return registerConversation(conversation.id)
+        .then(() => {
+            // Add conversation to tab
+            let participant = conversation.participants.filter(
+                participant => participant.purpose === "customer")[0];
+            view.addCustomerList(participant.name, conversation.id, setActiveChat);
+
+            return addSubscription(
+                `v2.conversations.chats.${conversationId}.messages`,
+                onMessage);
+        })
+    }
+
+    // If agent has multiple interactions,
+    // open the active conversation based on PureCloud
+    if(agentParticipant.state == 'connected' && customerParticipant.state == 'connected' && agentParticipant.held == false){
+        setActiveChat(conversationId);
+    }
+
+    // If chat has ended remove the tab and the chat conversation
+    if(agentParticipant.state == 'disconnected' && isExisting){
+        view.removeTab(conversationId);
+        chatConversations = chatConversations.filter(c => c.id != conversationId);
+        if(chatConversations.length > 0){
+            setActiveChat(chatConversations[0].id);
+        }
+    }
+}
+
+/**
+ * Add a subscription to the channel and store the 
+ * callback function mapping to the global variable
  * @param {String} topic PureCloud notification topic string
  * @param {Function} callback callback function to fire when the event occurs
  */
@@ -213,85 +289,9 @@ function addSubscription(topic, callback){
     return notificationsApi.postNotificationsChannelSubscriptions(
             channel.id, body)
     .then((data) => {
-        subscriptionMap[topic] = callback;
+        topicCallbackMap[topic] = callback;
         console.log(`Added subscription to ${topic}`);
     });
-}
-
-function onSocketMessage(event){
-    let data = JSON.parse(event.data);
-
-    subscriptionMap[data.topicName](data);
-}
-
-/**
- * Agent assistant to get recommended response
- * @param {String} text Chat message
- * @param {String} conversationId
- * @param {String} communicationId
- */
-function getRecommendations(text, conversationId, communicationId){
-    stackedText += text;
-    console.log(stackedText);
-    // Unoptimized because it's reanalyzing a growing amount of text as long as
-    // customer is uninterrupted. But good enough for the sample.
-    let recommendations = assistService.analyzeText(stackedText);
-    console.log(recommendations);
-    showRecommendations(recommendations, conversationId, communicationId);
-}
-
-/**
- * Agent assistant to show recommended response
- * @param {Array} suggArr
- * @param {String} conversationId
- * @param {String} communicationId
- */
-function showRecommendations(suggArr, conversationId, communicationId){    
-    // Clears all the recommended mesages from the page
-    clearRecommendations();
-
-    // Display recommended replies in HTML
-    for (var i = 0; i < suggArr.length; i++) {
-        var suggest = document.createElement("a");
-        suggest.innerHTML = suggArr[i];
-        suggest.addEventListener('click', function(event) {
-            sendMessage(this.innerText, conversationId, communicationId);
-        });
-
-        var suggestContainer = document.createElement("div");
-        suggestContainer.appendChild(suggest);
-        suggestContainer.className = "suggest-container";
-        document.getElementById("agent-assist").appendChild(suggestContainer);
-    }    
-}
-
-/**
- * Agent assistant to send the selected recommended response
- * @param {String} message
- * @param {String} conversationId
- * @param {String} communicationId
- */
-function sendMessage(message, conversationId, communicationId){
-    conversationsApi.postConversationsChatCommunicationMessages(
-        conversationId, communicationId,
-        {
-            "body": message,
-            "bodyType": "standard"
-        }
-    )
-}
-
-/**
- * Agent assistant to clear recommended responses
- * @param {String} message
- * @param {String} conversationId
- * @param {String} communicationId
- */
-function clearRecommendations(){
-    const suggContents = document.getElementById("agent-assist");
-    while (suggContents.firstChild) {
-        suggContents.removeChild(suggContents.firstChild);
-    }
 }
 
 /** --------------------------------------------------------------
@@ -313,7 +313,7 @@ client.loginImplicitGrant(
 }).then(data => { 
     
     // Get current chat conversations
-    return processActiveChats();
+    return processExistingChats();
 }).then(data => {
     console.log('Finished Setup');
 
