@@ -32,7 +32,7 @@ steps:
     The setupChatChannel function will be called to subscribe to incoming chat conversations. This function triggers the onChatConversationEvent function.
 - title: Create a Channel in the setupChatChannel function
   content: |
-    In the setupChatChannel function, we will first create a channel. The postNotificationsChannels of Notifications API will be called. We will also create a web socket to handle the on socket messages.
+    In the setupChatChannel function, we will first create a channel. The postNotificationsChannels function of Notifications API will be called. We will also create a web socket to handle the on socket messages.
 - title: Subscribe to Incoming Chat Conversations in the setupChatChannel function
   content: |
     Once a channel has been created, we can now subscribe to incoming chat conversations. The addSubscription function will be called to call the postNotificationsChannelSubscriptions function of the Notifications API with the topic `v2.users.${userId}.conversations.chats`.
