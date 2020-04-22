@@ -31,6 +31,7 @@ export default {
      */
     displayTranscript(messagesArr, conversation){
         this.clearActiveChat();
+        console.log(conversation);
         let conversationId = conversation.id;
 
         // Show each message
@@ -169,5 +170,45 @@ export default {
             if(tab.classList.contains('active')) this.clearActiveChat();
             tab.remove();
         }
+    },
+
+    /**
+     * Agent assistant to clear recommended responses
+     * @param {String} message
+     * @param {String} conversationId
+     * @param {String} communicationId
+     */
+    clearRecommendations(){
+        const suggContents = document.getElementById("agent-assist");
+        while (suggContents.firstChild) {
+            suggContents.removeChild(suggContents.firstChild);
+        }
+    },
+
+    
+    /**
+     * Agent assistant to show recommended response
+     * @param {Array} suggArr
+     * @param {String} conversationId
+     * @param {String} communicationId
+     * @param {Function} onClickCb Callback function when a recommendation is clicked
+     */
+    showRecommendations(suggArr, conversationId, communicationId, onClickCb){    
+        // Clears all the recommended mesages from the page
+        this.clearRecommendations();
+
+        // Display recommended replies in HTML
+        for (var i = 0; i < suggArr.length; i++) {
+            var suggest = document.createElement('a');
+            suggest.innerHTML = suggArr[i];
+            suggest.addEventListener('click', function(event) {
+                onClickCb(this.innerText, conversationId, communicationId);
+            });
+
+            var suggestContainer = document.createElement('div');
+            suggestContainer.appendChild(suggest);
+            suggestContainer.className = 'suggest-container';
+            document.getElementById('agent-assist').appendChild(suggestContainer);
+        }    
     }
 }

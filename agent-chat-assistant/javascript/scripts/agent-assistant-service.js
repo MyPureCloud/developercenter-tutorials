@@ -32,7 +32,7 @@ export default {
      * @param {String} origText the text to be analyzed
      * @returns {Array} possible responses 
      */
-    analyzeText(origText){
+    getRecommendations(origText){
         let responses = [];
         let text = origText.toLowerCase();
         let responseIndexArr = []; 
