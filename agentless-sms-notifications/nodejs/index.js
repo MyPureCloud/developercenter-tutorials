@@ -6,11 +6,11 @@ const client = platformClient.ApiClient.instance;
 let ConversationsApi = new platformClient.ConversationsApi();
 
 // Get client credentials from environment variables
-const PURECLOUD_CLIENT_ID = process.env.PURECLOUD_CLIENT_ID;
-const PURECLOUD_CLIENT_SECRET = process.env.PURECLOUD_CLIENT_SECRET;
+const CLIENT_ID = '-- client id here --';
+const CLIENT_SECRET = '-- client secret here --';
 
 // Authenticate with PureCloud
-client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
     .then(() => {
 
         let body = {

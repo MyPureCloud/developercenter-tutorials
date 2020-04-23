@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "purecloud-platform-client-v2": "^76.0.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^8.2.0",
-    "getenv": "^1.0.0",
-    "purecloud-platform-client-v2": "^76.0.0"
-  }
+  "author": "Russelle",
+  "license": "MIT"
 }
