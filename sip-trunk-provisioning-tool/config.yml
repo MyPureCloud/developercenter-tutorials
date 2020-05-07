@@ -1,0 +1,98 @@
+---
+title: Proviaioning Telephony
+description: This tutorial implements BYOC Cloud solution with a cloud-based carrier 
+categories:
+- Trunk
+- Telephony
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps on how to implement BYOC Cloud in Genesys Cloud using [Purecloud Platform API](https://developer.mypurecloud.com/api/rest/client-libraries/index.html). In order for BYOC Cloud to work with a third-party carrier, the carrier must:
+    
+    * Be SIP-compliant
+    * Support the UDP or TCP trunk transport protocol
+    * Have a publicly routable IP address or host name
+      * Carriers must fully support Record-Routing as required by RFC 3261 to ensure proper routing of sequential SIP requests.
+    
+    For more information about carrier requirements, check Genesys Resource Center article [Carrier requirements for BYOC Cloud](https://help.mypurecloud.com/articles/carrier-requirements-byoc-cloud/) 
+    
+    To test the code in the tutorial, A JSON file is needed to provide the required inputs needed to run the program. In this tutorial the JSON file is titled input-template.json, see the JSON format below:
+    
+    ```{"language":"json"}
+    {
+      "client_id":"", // Genesys Cloud client id
+      "client_secret":"", // Genesys Cloud client secret
+
+      "location": {
+          "name":"", // Asign any location name
+          "number":"", // Phone number
+          "street1":"", 
+          "city":"",
+          "state":"",
+          "zipcode":"",
+          "country":"", // Alpha-2 code format
+          "countryFullName":"" 
+      },
+
+      "site": {
+          "name":"", // Assign any site name
+          "timeZone":"" // ex: America/New_York
+      
+      },     
+      "SipTrunk": {
+          "ExternalTrunkName" :"",
+          "SipServers":"",
+          "Realm":"",
+          "Password":"",
+          "Address":"",
+          "CallingName":"",
+          "UserName":"",
+          "instance": []
+      }
+    }
+    ```   
+
+- title: JSON Files and Variables
+  content: |
+
+- title: Authentication
+  content: |
+
+- title: Check BYOC Feature
+  content: |
+
+- title: Create Location
+  content: |
+    Create a location in Genesys Cloud by calling [locationsApi.postLocations()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function and save the return location data in a global variable.
+
+- title: Check AWS And Create Site
+  content: |
+    In PureCloud Admin > Telephony > Edge Groups, a default Edge Group should be available. Find the default Edge Group by calling [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and find "PureCloud Voice – AWS". Save the return data and proceed to creating a new site with [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function.
+
+- title: Create Trunk
+  content: |
+
+- title: Set Outbound Route
+  content: |
+    Lastly, find the created default Outbound Route with [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSiteOutboundroutes) and delete it using [telephonyProvidersEdgeApi.deleteTelephonyProvidersEdgesOutboundroute()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#deleteTelephonyProvidersEdgesOutboundroute). Then create a new Outbound Route and assign the previously created trunk using [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSiteOutboundroutes).
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-348"
+    - file: "nodejs/index.js"
+      highlight: "0-15"
+    - file: "nodejs/index.js"
+      highlight: "16-27"
+    - file: "nodejs/index.js"  
+      highlight: "28-45"
+    - file: "nodejs/index.js"
+      highlight: "46-75"
+    - file: "nodejs/index.js"
+      highlight: "76-143"
+    - file: "nodejs/index.js"
+      highlight: "144-293"
+    - file: "nodejs/index.js"
+      highlight: "294-348"

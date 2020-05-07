@@ -1,0 +1,34 @@
+{
+    "client_id":"264f2b22-1a6e-4568-8cab-48ce5210fb0f",
+    "client_secret":"RaBjmRQ1bFZbdEz0thIkqput7Yjj4OgcpcM8rlqSFrU",
+
+    "location": {
+        "name":"Russ' Location",
+        "number":"+639999445756", 
+        "street1":"Manggahan st, Bagumbayan",
+        "city":"Quezon city",
+        "state":"Manila",
+        "zipcode":"0111",
+        "country":"PH",
+        "countryFullName":"Philippines"
+    },
+
+    "site": {
+        "name":"Russ' try Location",
+        "timeZone":"America/New_York"
+    },
+
+    "SipTrunk": {
+        "ExternalTrunkName" :"Russ' tutorial sample",
+        "SipServers":"devorgsiptrunk.pstn.twilio.com",
+        "Realm":"sip.twilio.com",
+        "Password":"DevOrg12345!",
+        "Address":"+15804405546",
+        "CallingName":"DOPTName1",
+        "UserName":"doptCredential1",
+        "instance": [
+            "54.172.60.0/23", "34.203.250.0/23", "54.244.51.0/24", "54.65.63.192/26", 
+            "3.112.80.0/24", "54.169.127.128/26", "3.1.77.0/24"
+        ]
+    }
+}
