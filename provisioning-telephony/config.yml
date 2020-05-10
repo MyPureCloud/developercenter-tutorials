@@ -99,4 +99,4 @@ languages:
     - file: "nodejs/index.js"
       highlight: "139-287"
     - file: "nodejs/index.js"
-      highlight: "289-241"
+      highlight: "289-341"
