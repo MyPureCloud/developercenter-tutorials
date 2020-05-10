@@ -1,0 +1,31 @@
+{
+    "client_id":"", 
+    "client_secret":"",
+
+    "location": {
+        "name":"",
+        "number":"", 
+        "street1":"",
+        "city":"",
+        "state":"",
+        "zipcode":"",
+        "country":"",
+        "countryFullName":""
+    },
+
+    "site": {
+        "name":"",
+        "timeZone":""
+    },
+
+    "SipTrunk": {
+        "ExternalTrunkName" :"",
+        "SipServers":"",
+        "Realm":"",
+        "Password":"!",
+        "Address":"",
+        "CallingName":"",
+        "UserName":"",
+        "instance": []
+    }
+}

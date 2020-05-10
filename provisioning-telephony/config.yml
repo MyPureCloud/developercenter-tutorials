@@ -1,0 +1,102 @@
+---
+title: Provisioning Telephony
+description: This tutorial implements BYOC Cloud solution with a cloud-based carrier 
+categories:
+- Trunk
+- Telephony
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps on how to implement BYOC Cloud in Genesys Cloud using [Purecloud Platform API](https://developer.mypurecloud.com/api/rest/client-libraries/index.html). In order for BYOC Cloud to work with a third-party carrier, the carrier must:
+    
+    * Be SIP-compliant
+    * Support the UDP or TCP trunk transport protocol
+    * Have a publicly routable IP address or host name
+      * Carriers must fully support Record-Routing as required by RFC 3261 to ensure proper routing of sequential SIP requests.
+    
+    For more information about carrier requirements, check Genesys Resource Center article [Carrier requirements for BYOC Cloud](https://help.mypurecloud.com/articles/carrier-requirements-byoc-cloud/) 
+    
+    To test the code in the tutorial, A JSON file is needed to provide the required inputs needed to run the program. In this tutorial the JSON file is titled input-template.json.
+
+- title: JSON Files and Variables
+  content: |
+    This file is used as substitute to input text box. This is where the user will enter all the necessary details. Key value pair has its corresponding description. Please make sure to fill all the required fields to proceed. 
+    
+    Please refer to [BYOC Cloud public SIP IP addresses](https://help.mypurecloud.com/articles/byoc-cloud-public-sip-ip-addresses/) for instance or Public SIP Addresses.
+
+    ```{"language":"json"}
+    {
+      "client_id":"", // Genesys Cloud client id
+      "client_secret":"", // Genesys Cloud client secret
+      "location": {
+          "name":"", // Asign any location name
+          "number":"", // Please make sure to follow the number format E.164 e.g: +12345678911
+          "street1":"", 
+          "city":"",
+          "state":"",
+          "zipcode":"",
+          "country":"", // Alpha-2 code format
+          "countryFullName":"" 
+      },
+      "site": {
+          "name":"", // Assign any site name
+          "timeZone":"" // ex: America/New_York
+      
+      },     
+      "SipTrunk": {
+          "ExternalTrunkName" :"", // [Required] User's chosen trunk name.
+          "SipServers":"", // [Required] The Sip Servers or Termination URI is unique within user's Genesys Cloud Organization's region. The termination URI will be used by the 3rd party PBX or Carrier to direct SIP traffic to Genesys Cloud.
+          "Realm":"", // Realm must match the username and password to be sent.
+          "Password":"", // Password to send when trunk is challenged for the realm.
+          "Address":"", // [Required] Specific overriding caller ID adddress to use as the outgoing origination address. May be a URI or raw phone number.
+          "CallingName":"", // Specific overriding caller ID name to use as the outgoing origination address. May be a URI or raw phone number.
+          "UserName":"", // User name to send when trunk is challenged for the realm.
+          "instance": [] // [Required] BYOC Cloud public SIP IP addresses
+      }
+    }
+    ```   
+
+- title: Authentication
+  content: |
+    Genesys Clound will verify user's credentials using Client Credential authentication. Once the validation is successful, it will proceed with the succeeding process.
+
+- title: Check BYOC Feature
+  content: |
+    Get the list of products available for the org used, and check if the org has BYOC Capability.
+
+- title: Create Location
+  content: |
+    Create a location in Genesys Cloud by calling [locationsApi.postLocations()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function and save the return location data in a global variable.
+
+- title: Check AWS And Create Site
+  content: |
+    In PureCloud Admin > Telephony > Edge Groups, a default Edge Group should be available. Find the default Edge Group by calling [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and find "PureCloud Voice – AWS". Save the return data and proceed to creating a new site with [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function.
+
+- title: Create Trunk
+  content: |
+    Create a trunk base setting object base from the user input credentials from the JSON file.
+
+- title: Set Outbound Route
+  content: |
+    Lastly, find the created default Outbound Route with [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSiteOutboundroutes) and delete it using [telephonyProvidersEdgeApi.deleteTelephonyProvidersEdgesOutboundroute()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#deleteTelephonyProvidersEdgesOutboundroute). Then create a new Outbound Route and assign the previously created trunk using [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSiteOutboundroutes).
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-348"
+    - file: "nodejs/input-template.json"
+      highlight: "1-34"
+    - file: "nodejs/index.js"
+      highlight: "16-27"
+    - file: "nodejs/index.js"  
+      highlight: "28-44"
+    - file: "nodejs/index.js"
+      highlight: "46-75"
+    - file: "nodejs/index.js"
+      highlight: "76-143"
+    - file: "nodejs/index.js"
+      highlight: "144-292"
+    - file: "nodejs/index.js"
+      highlight: "294-348"
