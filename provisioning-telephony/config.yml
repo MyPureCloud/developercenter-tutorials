@@ -26,21 +26,21 @@ steps:
 
     ```{"language":"json"}
     {
-      "client_id":"", // Genesys Cloud client id
-      "client_secret":"", // Genesys Cloud client secret
+      "client_id":"", // [Required] Genesys Cloud client id
+      "client_secret":"", // [Required] Genesys Cloud client secret
       "location": {
-          "name":"", // Asign any location name
-          "number":"", // Please make sure to follow the number format E.164 e.g: +12345678911
-          "street1":"", 
-          "city":"",
-          "state":"",
-          "zipcode":"",
-          "country":"", // Alpha-2 code format
-          "countryFullName":"" 
+          "name":"", // [Required] Assign any location name
+          "number":"", // [Required] Please make sure to follow the number format E.164 e.g: +12345678911
+          "street1":"", // [Required] 
+          "city":"", // [Required] 
+          "state":"", 
+          "zipcode":"", // [Required] 
+          "country":"", // [Required] Alpha-2 code format
+          "countryFullName":"" // [Required] 
       },
       "site": {
-          "name":"", // Assign any site name
-          "timeZone":"" // ex: America/New_York
+          "name":"", // [Required] Assign any site name
+          "timeZone":"" // [Required] ex: America/New_York
       
       },     
       "SipTrunk": {
@@ -58,7 +58,7 @@ steps:
 
 - title: Authentication
   content: |
-    Genesys Clound will verify user's credentials using Client Credential authentication. Once the validation is successful, it will proceed with the succeeding process.
+    Genesys Cloud will verify user's credentials using Client Credential authentication. Once the validation is successful, it will proceed with the succeeding process.
 
 - title: Check BYOC Feature
   content: |
@@ -66,11 +66,11 @@ steps:
 
 - title: Create Location
   content: |
-    Create a location in Genesys Cloud by calling [locationsApi.postLocations()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function and save the return location data in a global variable.
+    Create a Location in Genesys Cloud and save the return location data in a global variable.
 
-- title: Check AWS And Create Site
+- title: Create Site
   content: |
-    In PureCloud Admin > Telephony > Edge Groups, a default Edge Group should be available. Find the default Edge Group by calling [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and find "PureCloud Voice – AWS". Save the return data and proceed to creating a new site with [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function.
+    To Create a new Site Two information is needed, one is the Location information and second is a Default Edge Group. The Location data is already saved to a variable. Now for the Edge Group. In PureCloud Admin > Telephony > Edge Groups, a default Edge Group should be available. Get the default Edge Group information and find "PureCloud Voice – AWS".
 
 - title: Create Trunk
   content: |
@@ -78,14 +78,14 @@ steps:
 
 - title: Set Outbound Route
   content: |
-    Lastly, find the created default Outbound Route with [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSiteOutboundroutes) and delete it using [telephonyProvidersEdgeApi.deleteTelephonyProvidersEdgesOutboundroute()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#deleteTelephonyProvidersEdgesOutboundroute). Then create a new Outbound Route and assign the previously created trunk using [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSiteOutboundroutes).
+    Lastly, get the Outbound Route created by default when the Site was created, then update the External Trunk value with the previously created trunk.
 
 languages:
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-342"
+      highlight: "0-331"
     - file: "nodejs/input-template.json"
       highlight: "1-32"
     - file: "nodejs/index.js"
@@ -99,4 +99,4 @@ languages:
     - file: "nodejs/index.js"
       highlight: "139-287"
     - file: "nodejs/index.js"
-      highlight: "289-341"
+      highlight: "289-331"

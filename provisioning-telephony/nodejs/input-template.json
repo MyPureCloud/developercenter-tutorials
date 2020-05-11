@@ -22,7 +22,7 @@
         "ExternalTrunkName" :"",
         "SipServers":"",
         "Realm":"",
-        "Password":"!",
+        "Password":"",
         "Address":"",
         "CallingName":"",
         "UserName":"",

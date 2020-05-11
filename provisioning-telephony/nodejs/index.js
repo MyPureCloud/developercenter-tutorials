@@ -1,8 +1,8 @@
 // Import json file that will be used later for creating objects.
 const inputTemplate = require('./input-template.json');
 // Set Genesys cloud objects
-const client = platformClient.ApiClient.instance;
 const platformClient = require('purecloud-platform-client-v2');
+const client = platformClient.ApiClient.instance;
 // Instantiate APIs
 const AuthorizationApi = new platformClient.AuthorizationApi();
 const telephonyProvidersEdgeApi = new platformClient.TelephonyProvidersEdgeApi();
@@ -286,7 +286,7 @@ function createTrunk() {
         });
 }
 
-// Get list of Outbound Routes and delete it
+// Find default outbound route of the created site then save the ID reference
 function siteOutboundroutes(trunkData) {
     const opts = {
         pageSize: 25,
@@ -294,20 +294,8 @@ function siteOutboundroutes(trunkData) {
     };
     telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSiteOutboundroutes(siteId, opts)
         .then((data) => {
-            const routeEntities = data.entities;
-            // Delete default route
-            routeEntities.forEach((entity) => {
-                const entityId = entity.id;
-                telephonyProvidersEdgeApi.deleteTelephonyProvidersEdgesOutboundroute(entityId)
-                    .then((data) => {
-                        console.log(`deleteTelephonyProvidersEdgesOutboundroute success! data: ${JSON.stringify(data, null, 2)}`);
-                    })
-                    .catch((err) => {
-                        console.log('There was a failure calling getTelephonyProvidersEdgesSiteOutboundroutes');
-                        console.error(err);
-                    });
-            });
-            createOutboundRoute(trunkData);
+            let outboundRouteId = data.entities[0].id;
+            createOutboundRoute(trunkData, outboundRouteId);
         })
         .catch((err) => {
             console.log('There was a failure calling getTelephonyProvidersEdgesSiteOutboundroutes');
@@ -315,23 +303,25 @@ function siteOutboundroutes(trunkData) {
         });
 }
 
-// Set up outbound routes in the site created
-function createOutboundRoute(trunkData) {
+// Update default outbound routes in the site created
+function createOutboundRoute(trunkData, outboundRouteId) {
     const body = {
-        name: 'My Outbound Route',
-        classificationTypes: ['National', 'International'], // leveraged for outbound calls to national or international numbers
+        name: 'Default Outbound Route',
+        classificationTypes: [
+            'National',
+            'International',
+        ], // leveraged for outbound calls to national or international numbers
         enabled: true,
-        distribution: '',
         externalTrunkBases: [{
             id: trunkData.id,
             name: trunkData.name,
             selfUri: trunkData.selfUri,
         }],
     };
-    telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSiteOutboundroutes(siteId, body)
+    telephonyProvidersEdgeApi.putTelephonyProvidersEdgesSiteOutboundroute(siteId, outboundRouteId, body)
         .then((data) => {
             console.log(`postTelephonyProvidersEdgesSiteOutboundroutes success! data: ${JSON.stringify(data, null, 2)}`);
-            console.log('Outbound route created!');
+            console.log('Outbound route updated!');
             console.log('Process Completed!');
         })
         .catch((err) => {
