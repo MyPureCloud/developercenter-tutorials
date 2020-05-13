@@ -4,7 +4,7 @@ const inputTemplate = require('./input-template.json');
 const platformClient = require('purecloud-platform-client-v2');
 const client = platformClient.ApiClient.instance;
 // Instantiate APIs
-const AuthorizationApi = new platformClient.AuthorizationApi();
+const authorizationApi = new platformClient.AuthorizationApi();
 const telephonyProvidersEdgeApi = new platformClient.TelephonyProvidersEdgeApi();
 const locationsApi = new platformClient.LocationsApi();
 
@@ -26,7 +26,7 @@ client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 
 // Check if BYOC is in the list of enabled products
 function checkBYOC() {
-    AuthorizationApi.getAuthorizationProducts()
+    authorizationApi.getAuthorizationProducts()
         .then((data) => {
             console.log(`getAuthorizationProducts success! data: ${JSON.stringify(data, null, 2)}`);
             if (data.entities.find((entity) => entity.id === 'byoc') != undefined) {
@@ -62,7 +62,7 @@ function createLocation() {
     locationsApi.postLocations(body)
         .then((data) => {
             console.log(`postLocations success! data: ${JSON.stringify(data, null, 2)}`);
-            console.log('Location Created!');
+            console.log('Location successfully created!');
             locationInfo = data;
             getEdgeSite();
         })
@@ -126,7 +126,7 @@ function createSite(awsItem) {
     telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites(body)
         .then((data) => {
             console.log(`postTelephonyProvidersEdgesSites success! data: ${JSON.stringify(data, null, 2)}`);
-            console.log('Site Created!');
+            console.log('Site successfully created!');
             siteId = data.id; // save site id as global id
             createTrunk();
         })
@@ -139,7 +139,7 @@ function createSite(awsItem) {
 // Create trunk using the credentials from config file.
 function createTrunk() {
     const trunkBody = {
-        name: inputTemplate.SipTrunk.ExternalTrunkName, // External Trunk Name
+        name: inputTemplate.sipTrunk.externalTrunkName, // External Trunk Name
         state: 'active',
         trunkMetabase: {
             id: 'external_sip_pcv_byoc_carrier.json',
@@ -175,7 +175,7 @@ function createTrunk() {
                 uniqueItems: true,
                 value: {
                     default: null,
-                    instance: [inputTemplate.SipTrunk.SipServers], // SIP Servers or Proxies
+                    instance: [inputTemplate.sipTrunk.sipServers], // SIP Servers or Proxies
                 },
                 required: true,
             },
@@ -186,7 +186,7 @@ function createTrunk() {
                 },
                 value: {
                     default: [],
-                    instance: inputTemplate.SipTrunk.instance, // BYOC signaling IP
+                    instance: inputTemplate.sipTrunk.instance, // BYOC signaling IP
                 },
             },
             trunk_protocol: {
@@ -201,21 +201,21 @@ function createTrunk() {
                 type: 'string',
                 value: {
                     default: '',
-                    instance: inputTemplate.SipTrunk.Realm, // Realm
+                    instance: inputTemplate.sipTrunk.realm, // Realm
                 },
             },
             trunk_sip_authentication_credentials_username: {
                 type: 'string',
                 value: {
                     default: '',
-                    instance: inputTemplate.SipTrunk.UserName, // User Name
+                    instance: inputTemplate.sipTrunk.userName, // User Name
                 },
             },
             trunk_sip_authentication_credentials_password: {
                 type: 'string',
                 value: {
                     default: '',
-                    instance: inputTemplate.SipTrunk.Password, // Password
+                    instance: inputTemplate.sipTrunk.password, // Password
                 },
             },
             trunk_outboundIdentity_callingName: {
@@ -223,7 +223,7 @@ function createTrunk() {
                 pattern: '^[\\S ]{0,40}$',
                 value: {
                     default: '',
-                    instance: inputTemplate.SipTrunk.CallingName, // Calling Name
+                    instance: inputTemplate.sipTrunk.callingName, // Calling Name
                 },
             },
             trunk_outboundIdentity_callingName_overrideMethod: {
@@ -238,7 +238,7 @@ function createTrunk() {
                 type: 'string',
                 value: {
                     default: '',
-                    instance: inputTemplate.SipTrunk.Address, // Calling Address
+                    instance: inputTemplate.sipTrunk.address, // Calling Address
                 },
             },
             trunk_outboundIdentity_callingAddress_overrideMethod: {
@@ -266,7 +266,7 @@ function createTrunk() {
             trunk_sip_termination_uri: {
                 type: 'string',
                 value: {
-                    instance: inputTemplate.SipTrunk.SipServers, // Inbound SIP Termination Identifier
+                    instance: inputTemplate.sipTrunk.sipServers, // Inbound SIP Termination Identifier
                 },
                 required: false,
             },
@@ -278,7 +278,7 @@ function createTrunk() {
         .then((data) => {
             console.log(`postTelephonyProvidersEdgesTrunkbasesettings success! data: ${JSON.stringify(data, null, 2)}`);
             console.log('Trunk was successfully created!');
-            siteOutboundroutes(data);
+            siteOutboundRoutes(data);
         })
         .catch((err) => {
             console.log('There was a failure calling postTelephonyProvidersEdgesTrunkbasesettings');
@@ -287,7 +287,7 @@ function createTrunk() {
 }
 
 // Find default outbound route of the created site then save the ID reference
-function siteOutboundroutes(trunkData) {
+function siteOutboundRoutes(trunkData) {
     const opts = {
         pageSize: 25,
         pageNumber: 1,
@@ -322,7 +322,7 @@ function createOutboundRoute(trunkData, outboundRouteId) {
         .then((data) => {
             console.log(`postTelephonyProvidersEdgesSiteOutboundroutes success! data: ${JSON.stringify(data, null, 2)}`);
             console.log('Outbound route updated!');
-            console.log('Process Completed!');
+            console.log('Process completed!');
         })
         .catch((err) => {
             console.log('There was a failure calling postTelephonyProvidersEdgesSiteOutboundroutes');
