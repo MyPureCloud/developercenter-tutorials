@@ -44,7 +44,7 @@ steps:
 
 - title: Create Trunk
   content: |
-    Create a trunk base setting object from the user input credentials from the JSON file by calling [postTelephonyProvidersEdgesTrunkbasesettings()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#trunkbase_posttelephonyprovidersedgestrunkbasesettings_body_) of Telephony Providers Edge API. Once the trunk is successfully created, it will proceed to siteOutboundRoutes function. 
+    Create a trunk base setting object from the user input credentials from the JSON file by calling [postTelephonyProvidersEdgesTrunkbasesettings()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#trunkbase_posttelephonyprovidersedgestrunkbasesettings_body_) function of Telephony Providers Edge API. Once the trunk is successfully created, it will proceed to siteOutboundRoutes function. 
 
 - title: Set Outbound Route
   content: |
