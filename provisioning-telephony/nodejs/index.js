@@ -42,7 +42,7 @@ function checkBYOC() {
         });
 }
 
-// Create location function
+// Create location function 
 function createLocation() {
     const body = {
         name: inputTemplate.location.name, // ex: My Location Name
@@ -72,7 +72,7 @@ function createLocation() {
         });
 }
 
-// This function will get details of 2 virtual Edges, assigned to an Edge Group and to a Site (created by default in your org).
+// This function will get the default Edge Group - PureCloud Voice - AWS
 function getEdgeSite() {
     const opts = {
         pageSize: 25,
@@ -94,9 +94,9 @@ function getEdgeSite() {
         });
 }
 
-// Create site function, accepting the default default PureCloud Voice - AWS information
+// This function will create a site using the location value and edge group value saved to a variable earlier
 function createSite(awsItem) {
-    // Format todays date to make default edgeAutoUpdateConfig start date and end date
+    // Format current date to make default edgeAutoUpdateConfig's start date and end date
     const today = new Date();
     const dateConfig = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     const body = {
@@ -286,7 +286,7 @@ function createTrunk() {
         });
 }
 
-// Find default outbound route of the created site then save the ID reference
+// Find the default outbound route of the site previously created, then save the ID reference
 function siteOutboundRoutes(trunkData) {
     const opts = {
         pageSize: 25,
@@ -295,7 +295,7 @@ function siteOutboundRoutes(trunkData) {
     telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSiteOutboundroutes(siteId, opts)
         .then((data) => {
             let outboundRouteId = data.entities[0].id;
-            createOutboundRoute(trunkData, outboundRouteId);
+            updateOutboundRoute(trunkData, outboundRouteId);
         })
         .catch((err) => {
             console.log('There was a failure calling getTelephonyProvidersEdgesSiteOutboundroutes');
@@ -304,14 +304,14 @@ function siteOutboundRoutes(trunkData) {
 }
 
 // Update default outbound routes in the site created
-function createOutboundRoute(trunkData, outboundRouteId) {
+function updateOutboundRoute(trunkData, outboundRouteId) {
     const body = {
         name: 'Default Outbound Route',
         classificationTypes: [
             'National',
             'International',
         ], // leveraged for outbound calls to national or international numbers
-        enabled: true,
+        enabled: true, // make sure the outbound route is enabled
         externalTrunkBases: [{
             id: trunkData.id,
             name: trunkData.name,

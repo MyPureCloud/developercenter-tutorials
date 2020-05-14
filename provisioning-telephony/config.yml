@@ -34,21 +34,21 @@ steps:
 
 - title: Create Location
   content: |
-    Create a location in Genesys Cloud  by calling [locationsApi.postLocations()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function and save the returned location data in a global variable.
+    Create a location in Genesys Cloud  by calling [postLocations()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function of the locations API and save the returned location data in a global variable.
 
 - title: Create Site
   content: |
     To create a new site, two pieces of information is needed. One is the location information, which is saved in a global variable and second is a default edge group which is found in PureCloud Admin > Telephony > Edge Groups.
 
-    Get the default edge group by calling [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and look for "PureCloud Voice – AWS". Save the returned data and proceed to creating a new site with [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function.
+    Get the default edge group by calling [getTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and look for "PureCloud Voice – AWS". Save the returned data and proceed to creating a new site with [postTelephonyProvidersEdgesSites()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function. Both functions are under telephony providers edge API.
 
 - title: Create Trunk
   content: |
-    Create a trunk base setting object from the user input credentials from the JSON file by calling [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesTrunkbasesettings()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#trunkbase_posttelephonyprovidersedgestrunkbasesettings_body_). Once the trunk is successfully created, it will proceed to siteOutboundRoutes function. 
+    Create a trunk base setting object from the user input credentials from the JSON file by calling [postTelephonyProvidersEdgesTrunkbasesettings()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#trunkbase_posttelephonyprovidersedgestrunkbasesettings_body_) of Telephony Providers Edge API. Once the trunk is successfully created, it will proceed to siteOutboundRoutes function. 
 
 - title: Set Outbound Route
   content: |
-    Lastly, get the outbound route created by default when the site was created using [telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSiteOutboundroutes) function, then update the external trunk base value to the trunk created in the previous step by calling [telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#putTelephonyProvidersEdgesEdgegroupEdgetrunkbase) function.
+    Lastly, with the use of telephony providers edge API, get the outbound route created by default when the site was created using [getTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSiteOutboundroutes) function, then update the external trunk base value of the trunk created in the previous step by calling [putTelephonyProvidersEdgesSiteOutboundroutes()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#putTelephonyProvidersEdgesEdgegroupEdgetrunkbase) function.
 
 languages:
   nodejs:
