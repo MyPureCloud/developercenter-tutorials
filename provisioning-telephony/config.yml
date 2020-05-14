@@ -30,7 +30,7 @@ steps:
 
 - title: Check BYOC Feature
   content: |
-    Get the list of products available for the org used by calling [getAuthorizationProducts()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/AuthorizationApi.html#organizationproductentitylisting_getauthorizationproducts__) of Authorization API and check if the org has BYOC capability. If the org is BYOC capable, it will proceed to create location function.  Please take note that only BYOC enabled orgs can proceed.
+    Get the list of products available for the org used by calling [getAuthorizationProducts()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/AuthorizationApi.html#organizationproductentitylisting_getauthorizationproducts__) function of Authorization API and check if the org has BYOC capability. If the org is BYOC capable, it will proceed to create location function.  Please take note that only BYOC enabled orgs can proceed.
 
 - title: Create Location
   content: |
