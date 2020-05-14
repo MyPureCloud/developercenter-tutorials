@@ -127,7 +127,7 @@ function createSite(awsItem) {
         .then((data) => {
             console.log(`postTelephonyProvidersEdgesSites success! data: ${JSON.stringify(data, null, 2)}`);
             console.log('Site successfully created!');
-            siteId = data.id; // save site id as global id
+            siteId = data.id; // Save site id as global id
             createTrunk();
         })
         .catch((err) => {
@@ -136,7 +136,7 @@ function createSite(awsItem) {
         });
 }
 
-// Create trunk using the credentials from config file.
+// Create trunk using the credentials from input-template file.
 function createTrunk() {
     const trunkBody = {
         name: inputTemplate.sipTrunk.externalTrunkName, // External Trunk Name
@@ -277,7 +277,7 @@ function createTrunk() {
     telephonyProvidersEdgeApi.postTelephonyProvidersEdgesTrunkbasesettings(trunkBody)
         .then((data) => {
             console.log(`postTelephonyProvidersEdgesTrunkbasesettings success! data: ${JSON.stringify(data, null, 2)}`);
-            console.log('Trunk was successfully created!');
+            console.log('Trunk successfully created!');
             siteOutboundRoutes(data);
         })
         .catch((err) => {
@@ -320,12 +320,12 @@ function updateOutboundRoute(trunkData, outboundRouteId) {
     };
     telephonyProvidersEdgeApi.putTelephonyProvidersEdgesSiteOutboundroute(siteId, outboundRouteId, body)
         .then((data) => {
-            console.log(`postTelephonyProvidersEdgesSiteOutboundroutes success! data: ${JSON.stringify(data, null, 2)}`);
+            console.log(`putTelephonyProvidersEdgesSiteOutboundroutes success! data: ${JSON.stringify(data, null, 2)}`);
             console.log('Outbound route updated!');
             console.log('Process completed!');
         })
         .catch((err) => {
-            console.log('There was a failure calling postTelephonyProvidersEdgesSiteOutboundroutes');
+            console.log('There was a failure calling putTelephonyProvidersEdgesSiteOutboundroutes');
             console.error(err);
         });
 }
