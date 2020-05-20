@@ -98,3 +98,22 @@ languages:
       highlight: 53-57
     - file: results.json
       highlight: 1-100
+  go:
+    displayName: Go
+    steps:
+    - file: go/main.go
+      highlight: 1-77
+    - file: go/main.go
+      highlight: 45-64
+    - file: go/main.go
+      highlight: 41-43
+    - file: go/main.go
+      highlight: 48-48
+    - file: go/main.go
+      highlight: 49-49
+    - file: go/main.go
+      highlight: 50-63
+    - file: go/main.go
+      highlight: 66-75
+    - file: results.json
+      highlight: 1-39
