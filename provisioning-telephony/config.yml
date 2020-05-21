@@ -36,9 +36,11 @@ steps:
 
     A list of managed objects visible in the Telephony Admin:
     
-        1.Edges - one or more virtual-edge-i-xxxxxxxxxx \n
-        2.EdgeGroup - PureCloud Voice \n
-        3.Site - PureCloud Voice - AWS
+        1. Edges - one or more virtual-edge-i-xxxxxxxxxx
+        
+        2. EdgeGroup - PureCloud Voice
+        
+        3. Site - PureCloud Voice - AWS
     
     If the org is BYOC capable, it will proceed to create location function.  Please take note that only BYOC enabled orgs can proceed. If the user wants to enable BYOC in their org, please contact user's sales representative or account manager.
 
