@@ -13,11 +13,11 @@ let locationInfo = null;
 let siteId = null;
 
 // Get client credentials from environment variables
-const CLIENT_ID = inputTemplate.client_id;
-const CLIENT_SECRET = inputTemplate.client_secret;
+const CLIENT_ID = process.env.GENESYS_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
 
 // Authenticate with genesys cloud
-client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
+client.loginClientCredentialsGrant(process.env.GENESYS_CLIENT_ID, process.env.GENESYS_CLIENT_SECRET)
     .then(() => {
         console.log('Authentication successful!');
         checkBYOC();
@@ -96,9 +96,9 @@ function getEdgeSite() {
 
 // This function will create a site using the location value and edge group value saved to a variable earlier
 function createSite(awsItem) {
-    // Format current date to make default edgeAutoUpdateConfig's start date and end date
     const today = new Date();
-    const dateConfig = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    let startTime = today.toISOString(today.setHours(10,0,0,0)).substring(0,23); // default value is 2AM
+    let endTime =  today.toISOString(today.setHours(13,0,0,0)).substring(0,23); // default value is 5AM
     const body = {
         name: inputTemplate.site.name, // Ex: My Site Name
         primarySites: [{
@@ -114,8 +114,8 @@ function createSite(awsItem) {
         edgeAutoUpdateConfig: {
             timeZone: inputTemplate.site.timeZone, // Ex: America/New_York
             rrule: 'FREQ=DAILY',
-            start: `${dateConfig}T02:00:00.000`,
-            end: `${dateConfig}T05:00:00.000`,
+            start: startTime,   // Start and end date time is represented as an ISO-8601 string without a timezone. 
+            end: endTime        // example: yyyy-MM-ddTHH:mm:ss.SSS
         },
         location: locationInfo,
         ntpSettings: {

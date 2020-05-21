@@ -1,31 +1,28 @@
 {
-    "client_id":"[Required] Genesys Cloud client id", 
-    "client_secret":"[Required] Genesys Cloud client secret",
-
     "location": {
-        "name":"[Required] Assign any location name",
-        "number":"[Required] Please make sure to follow the number format E.164 e.g: +12345678911", 
-        "street1":"[Required]",
-        "city":"[Required]",
-        "state":"",
-        "zipcode":"[Required]",
-        "country":"[Required] Alpha-2 code format",
-        "countryFullName":"[Required]"
-    },
-
-    "site": {
-        "name":"[Required] Assign any site name",
-        "timeZone":"[Required] ex: America/New_York"
-    },
-
-    "sipTrunk": {
-        "externalTrunkName" :"[Required] User's chosen trunk name",
-        "SipServers":"[Required] The Sip Servers or Termination URI is unique within user's Genesys Cloud Organization's region. The termination URI will be used by the 3rd party PBX or Carrier to direct SIP traffic to Genesys Cloud",
-        "realm":"Realm must match the username and password to be sent",
-        "password":"Password to send when trunk is challenged for the realm",
-        "address":"[Required] Specific overriding caller ID adddress to use as the outgoing origination address. May be a URI or raw phone number",
-        "callingName":"Specific overriding caller ID name to use as the outgoing origination address. May be a URI or raw phone number",
-        "userName":"User name to send when trunk is challenged for the realm",
-        "instance": "[Required] BYOC Cloud public SIP IP addresses"
-    }
-}
+           "name":"[Required] Assign any location name",
+           "number":"[Required] Please make sure to follow the number format E.164 e.g: +12345678911", 
+           "street1":"[Required]",
+           "city":"[Required]",
+           "state":"",
+           "zipcode":"[Required]",
+           "country":"[Required] Alpha-2 code format",
+           "countryFullName":"[Required]"
+       },
+   
+       "site": {
+           "name":"[Required] Assign any site name",
+           "timeZone":"[Required] ex: America/New_York"
+       },
+   
+       "sipTrunk": {
+           "externalTrunkName" :"[Required] User's chosen trunk name",
+           "sipServers":"[Required] The Sip Servers or Termination URI is unique within user's Genesys Cloud Organization's region. The termination URI will be used by the 3rd party PBX or Carrier to direct SIP traffic to Genesys Cloud",
+           "realm":"Realm must match the username and password to be sent",
+           "password":"Password to send when trunk is challenged for the realm",
+           "address":"[Required] Specific overriding caller ID adddress to use as the outgoing origination address. May be a URI or raw phone number",
+           "callingName":"Specific overriding caller ID name to use as the outgoing origination address. May be a URI or raw phone number",
+           "userName":"User name to send when trunk is challenged for the realm",
+           "instance": "[Required] BYOC Cloud public SIP IP addresses"
+       }
+   }
