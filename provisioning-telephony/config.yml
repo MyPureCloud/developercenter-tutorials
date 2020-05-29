@@ -35,10 +35,12 @@ steps:
     After onboarding enables the BYOC feature, managed telephony resources are created for the organization. These resource will be used to configure the BYOC feature. These resources are managed by Genesys and are used by both the BYOC and PCV feature.
 
     A list of managed objects visible in the Telephony Admin:
-
-    1.Edges - one or more virtual-edge-i-xxxxxxxxxx
-    2.EdgeGroup - PureCloud Voice
-    3.Site - PureCloud Voice - AWS
+    
+        1. Edges - one or more virtual-edge-i-xxxxxxxxxx
+        
+        2. EdgeGroup - PureCloud Voice
+        
+        3. Site - PureCloud Voice - AWS
     
     If the org is BYOC capable, it will proceed to create location function.  Please take note that only BYOC enabled orgs can proceed. If the user wants to enable BYOC in their org, please contact user's sales representative or account manager.
 
