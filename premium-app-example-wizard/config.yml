@@ -26,16 +26,16 @@ steps:
     * Groups
     * App Instances
 
-    We're going to store all that we need in a simple Javascript Object to centralize and make it easier to modify in the future. This information could also be loaded from an external resource instead of being harcoded into the web app. 
+    These are going to be stored in the config.js file for easy modification. This information could also be loaded from an external resource instead of being harcoded into the web app. 
 
     Objects created by the Installer are determined by the prefix on their name 
-    'PREMIUM_APP_'. A safer option could be to store the ids of the generated PureCloud objects into an external database or storage.
+    'PREMIUM_APP_'. This should be changed according to your specific Premium App.
 
 - title: Set up Client App and determine Language and Environment
   content: |
     It is recommended for PureCloud apps to use the Client App SDK. This allows certain integrations to be implemented for example: Displaying an alert to the PureCloud UI, implementing lifecycle events, popping user profiles, and popping PureCloud help pages.
 
-    We'll also determine the the environment (.com, .ie, .jp) and the language of the PureCloud user so the Premium App could use the correct authentication keys and language for the content.
+    It can also be used to determine the environment (.com, .ie, .jp) and the language of the PureCloud user so the Premium App could use the correct authentication keys and language for the content.
 
 - title: Authenticate through PureCloud
   content: |
@@ -129,8 +129,8 @@ languages:
     steps:
     - file: "javascript/wizard-app.js"
       highlight: "1-514"
-    - file: "javascript/wizard-app.js"
-      highlight: "11-70"
+    - file: "javascript/_config.js"
+      highlight: "36-95"
     - file: "javascript/wizard-app.js"
       highlight: "72-115"
     - file: "javascript/wizard-app.js"
