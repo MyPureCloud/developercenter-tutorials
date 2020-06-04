@@ -23,6 +23,7 @@ body.to_address_messenger_type = "sms"
 body.text_body = "Hello, this is a test notification"
 
 try:
+    # Send the SMS notification request
     response = conversations_api.post_conversations_messages_agentless(body)
     pprint(response)
 except ApiException as e:
