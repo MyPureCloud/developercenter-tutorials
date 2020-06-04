@@ -1,0 +1,125 @@
+---
+title: Premium Applications - Usage APIs
+description: This tutorial provides sample code of usage APIs.
+categories:
+- Usage
+steps:
+- title: Introduction
+  content: |
+    This tutorial provides code samples on how to use the Premium Applications - Usage APIs. These APIs allow Premium Application vendors to get the customer usage of their Premium Applications. For more information about Premium Applications - Usage APIs visit this [link](/appfoundry/premium-vendor-usage.html#individual_customer_subscription).
+- title: Variables
+  content: |
+    Each API call requires different set of variables. Below are the variables needed to run the Premium Applications - Usage APIs.
+
+    Header
+      * **apiKey** - To use Premium Applications - Usage APIs vendors need unique apiKey. For vendors Premium Applications metered Type already have apiKey, while Usage Types can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
+      * **contentType** - Default value is 'application/json'.
+    
+    URL
+      * **appId** - For this tutorial samplePremiumApp is our assumed appId. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: samplePremiumApp,secondSamplePremiumApp
+      * **region** - Genesys Cloud Region supplied in Overall Customer Count GET request above
+      * **orgID** - Individual customer orgId supplied in the Customer Usage per Customer within a Region    
+- title: Function Calls
+  content: |
+    The three function calls represents each Premium Applications - Usage APIs. These functions are http calls made by installing a npm request package. 
+- title: Overall Customer Count
+  content: |
+    The first API call returns customer counts by Genesys Cloud region. The sample payload return below, shows the number of organizations per region that uses samplePremiumApp.
+    ```{"language":"json"}
+      {
+          "regions": [
+              {
+                  "id": "ca-central-1",
+                  "organizationCounts": {
+                      "samplePremiumApp": 2
+                  }
+              },
+              {
+                  "id": "us-east-1",
+                  "organizationCounts": {
+                      "samplePremiumApp": 7
+                  }
+              },
+              {
+                  "id": "ap-northeast-1",
+                  "organizationCounts": {
+                      "samplePremiumApp": 0
+                  }
+              },
+              {
+                  "id": "eu-central-1",
+                  "organizationCounts": {
+                      "samplePremiumApp": 1
+                  }
+              }
+          ]
+      }
+    ```
+- title: Usage Per Customer With in Region
+  content: |
+    The second API call returns customer specific usage counts by Genesys Cloud region. In the below sample return, the assumed value of region variable is the first region we returned in the previous API call - 'ca-central-1'.
+    ```{"language":"json"}
+      {
+          "organizations": [
+              {
+                  "orgId": "1ad11d1a-111e-1d11-1d11-11f1e111c1ff",
+                  "orgName": "First Sample OrgName",
+                  "usageQuantities": {
+                      "samplePremiumApp": 825
+                  }
+              },
+              {
+                  "orgId": "2ad22d2a-222e-2d22-2d22-22f2e222c2ff",
+                  "orgName": "First Sample OrgName",
+                  "usageQuantities": {
+                      "samplePremiumApp": 15
+                  }
+              }
+          ]
+      }
+    ```   
+- title: Individual Customer Subscription
+  content: |
+    The third API call returns subscription information about a vendors Premium Application(s). The sample return below shows the assumed subscription information of 'First Sample OrgName'. Inputs to the URL are region, orgId and the appId.
+    ```{"language":"json"}
+      {
+          "orgId": "1ad11d1a-111e-1d11-1d11-11f1e111c1ff"",
+          "orgName": "First Sample OrgName",
+          "contractStartDate": "2018-10-01T00:00:00.000Z",
+          "contractEndDate": "2024-12-31T23:59:59.999Z",
+          "rampPeriodStartDate": "2018-09-28T00:00:00.000Z",
+          "rampPeriodEndDate": "2018-12-31T23:59:59.999Z",
+          "billingPeriodStartDate": "2020-05-01T00:00:00.000Z",
+          "billingPeriodEndDate": "2020-05-31T23:59:59.999Z",
+          "currency": "USD",
+          "subscriptionType": "PREPAY",
+          "usages": [
+              {
+                  "appId": "samplePremiumApp",
+                  "chargeName": "Sample Premium Application for PureCloud",
+                  "partNumber": "PC-170-NV-PCSAMPLE",
+                  "prepayQuantity": 1000,
+                  "prepayPrice": "60.080000",
+                  "usageQuantity": 825,
+                  "usagePrice": "6.700000"
+              }
+          ]
+      }
+    ```
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-62"
+    - file: "nodejs/index.js"
+      highlight: "1-7"
+    - file: "nodejs/index.js"
+      highlight: "9-14"
+    - file: "nodejs/index.js"
+      highlight: "16-30"
+    - file: "nodejs/index.js"
+      highlight: "32-46"
+    - file: "nodejs/index.js"
+      highlight: "48-62"
