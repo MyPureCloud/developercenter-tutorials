@@ -1,4 +1,4 @@
-// Get variables needed from environment variables
+// Get the needed environment variables
 require('dotenv').config();
 let apiKey = process.env.APIKEY;
 let contentType = 'application/json'
@@ -6,7 +6,7 @@ let appId = process.env.APPID;
 let region = process.env.REGION;
 let orgId = process.env.ORGID;
 
-// Function calls to different usage api
+// Function calls to the three usage api
 overallCustomerCount();
 usagePerCustomerWithinRegion();
 individualCustomerSubscription();
