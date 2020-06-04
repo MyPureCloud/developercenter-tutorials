@@ -12,11 +12,11 @@ steps:
     Each API call requires different set of variables. Below are the variables needed to run the Premium Applications - Usage APIs.
 
     Header
-      * **apiKey** - To use Premium Applications - Usage APIs vendors need unique apiKey. For vendors Premium Applications metered Type already have apiKey, while Usage Types can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
+      * **apiKey** - To use Premium Applications - Usage APIs, vendors need a unique apiKey. Vendors Premium Applications - Metered Type already have an apiKey; Vendors of Premium Applications - Usage Type can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
       * **contentType** - Default value is 'application/json'.
     
     URL
-      * **appId** - For this tutorial samplePremiumApp is our assumed appId. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: samplePremiumApp,secondSamplePremiumApp
+      * **appId** - For this tutorial, samplePremiumApp is our assumed appId. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: samplePremiumApp,secondSamplePremiumApp
       * **region** - Genesys Cloud Region supplied in Overall Customer Count GET request above
       * **orgID** - Individual customer orgId supplied in the Customer Usage per Customer within a Region    
 - title: Function Calls
@@ -55,21 +55,21 @@ steps:
           ]
       }
     ```
-- title: Usage Per Customer With in Region
+- title: Usage Per Customer Within Region
   content: |
     The second API call returns customer specific usage counts by Genesys Cloud region. In the below sample return, the assumed value of region variable is the first region we returned in the previous API call - 'ca-central-1'.
     ```{"language":"json"}
       {
           "organizations": [
               {
-                  "orgId": "1ad11d1a-111e-1d11-1d11-11f1e111c1ff",
+                  "orgId": "1aa11a1a-1111-1a11-1a11-11a1a111a1aa",
                   "orgName": "First Sample OrgName",
                   "usageQuantities": {
                       "samplePremiumApp": 825
                   }
               },
               {
-                  "orgId": "2ad22d2a-222e-2d22-2d22-22f2e222c2ff",
+                  "orgId": "2bb22b2b-2222-2b22-2b22-22b2b222b2bb",
                   "orgName": "First Sample OrgName",
                   "usageQuantities": {
                       "samplePremiumApp": 15
@@ -80,10 +80,10 @@ steps:
     ```   
 - title: Individual Customer Subscription
   content: |
-    The third API call returns subscription information about a vendors Premium Application(s). The sample return below shows the assumed subscription information of 'First Sample OrgName'. Inputs to the URL are region, orgId and the appId.
+    The third API call returns subscription information about a vendors' Premium Application(s). The sample return below shows the assumed subscription information of 'First Sample OrgName'. Inputs to the URL are region, orgId and the appId.
     ```{"language":"json"}
       {
-          "orgId": "1ad11d1a-111e-1d11-1d11-11f1e111c1ff"",
+          "orgId": "1aa11a1a-1111-1a11-1a11-11a1a111a1aa",
           "orgName": "First Sample OrgName",
           "contractStartDate": "2018-10-01T00:00:00.000Z",
           "contractEndDate": "2024-12-31T23:59:59.999Z",
