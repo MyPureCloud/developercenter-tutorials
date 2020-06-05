@@ -20,7 +20,7 @@ steps:
 
 - title: JSON Files and Variables
   content: |
-    This file is used as substitute to input text box. This is where the user enters all the necessary details. Each key value pair has a corresponding description. Ensure all values are entered where required, or left blank where entry is optional. Any phone number entries should use the E.164 format. 
+    This file is used as substitute to input text boxes. This is where the user enters all of the necessary details. Each key value pair has a corresponding description. Ensure all values are entered where required, or left blank where entry is optional. Any phone number entries should use the E.164 format. 
     
     Please refer to your carrier for the possible SIP Endpoints as a list of IP Addresses or CIDR. See the example below. 
 
@@ -48,7 +48,7 @@ steps:
 
 - title: Create Location
   content: |
-    Create a location in Genesys Cloud  by calling [postLocations()](/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function of the locations API and save the returned location data in a global variable.
+    Create a location in Genesys Cloud  by calling the [postLocations()](/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function of the locations API and save the returned location data in a global variable.
 
 - title: Create Site
   content: |
