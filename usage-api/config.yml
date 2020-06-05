@@ -1,23 +1,23 @@
 ---
 title: Premium Applications - Usage APIs
-description: This tutorial provides sample code of usage APIs.
+description: This tutorial provides sample code for Premium Applications - Usage APIs
 categories:
 - Usage
 steps:
 - title: Introduction
   content: |
-    This tutorial provides code sample on how to use the three Premium Applications - Usage APIs. These APIs allow Premium Application vendors to get the customer usage of their Premium Applications.
+    This tutorial provides sample code on how to use the three Premium Applications - Usage APIs. These APIs allow Premium Application vendors to get the customer usage of their Premium Applications.
     
-    For more information about Premium Applications - Usage APIs visit this [link](/appfoundry/premium-vendor-usage.html#individual_customer_subscription).
+    Read more about Premium Applications - Usage APIs in this [link](/appfoundry/premium-vendor-usage.html#individual_customer_subscription).
 - title: Variables
   content: |
     Each API call requires different set of variables. Below are the variables needed to run the Premium Applications - Usage APIs.
 
-    Header
+    Header Variables
       * **apiKey** - To use Premium Applications - Usage APIs, vendors need a unique apiKey. Vendors Premium Applications - Metered Type already have an apiKey; Vendors of Premium Applications - Usage Type can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
       * **contentType** - Default value is 'application/json'.
     
-    URL
+    URL Variables
       * **appId** - For this tutorial, samplePremiumApp is our assumed appId. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: samplePremiumApp,secondSamplePremiumApp
       * **region** - Genesys Cloud Regions are supplied in Overall Customer Count GET request.
       * **orgId** - Individual customer orgId supplied in the Customer Usage per Customer within a Region.   
