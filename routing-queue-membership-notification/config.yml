@@ -1,0 +1,61 @@
+---
+title: Routing Queue Membership Notifications
+description: Tutorial on how to subscribe to membership notifications of routing queues
+categories:
+- Notifications
+steps:
+- title: Introduction
+  content: |
+    This tutorial shows how to subscribe to membership notifications of routing queues and cache the membership of each queue in an org.
+- title: Client Credential Authentication
+  content: |
+    Authentication using Client Credentials
+- title: Retrieving routing queues for the org 
+  content: |
+    Using the GetRoutingQueuesRequest and QueueEntityListing objects to request a list of routing queues for the org.
+- title: Retrieving membership information for each queue and registering for membership notifications
+  content: |
+    Firstly create a list of NotificationListeners; each queue will have a notification listener.
+
+    Iterate over every queue in the org printing the queue name for debugging purposes.
+
+    Using the GetRoutingQueueUsersRequest and QueueMemberEntityListing objects to request a list of every member of the queue.
+
+    Iterate over every member in the queue printing their name for debugging purposes and adding their ID to a list.
+
+    Map the queue against the list of member IDs in the queue and add a listener to queue membership events.
+- title: Building the NotificationHandler to listen for queue membership events
+  content: |
+    Using the NotificationHandler Builder, build the NotificationHandler and add a listener for the list of queues
+- title: Writing a custom NotificationListener
+  content: |
+    Create a class implementing the NotificationListener<T> interface.
+    A list of mappings of topics to classes for T can be found here: https://github.com/MyPureCloud/platform-client-sdk-java/blob/master/notificationMappings.json
+    Since we are subscribing to the "v2.routing.queues.{id}.users" topic, the class is QueueUserEventTopicQueueMember.
+    The schema for "v2.routing.queues.{id}.users" can be found here: https://developer.mypurecloud.com/api/rest/v2/notifications/available_topics.html
+- title: Implementing the onEvent callback
+  content: |
+    Firstly cast the event body to a QueueUserEventTopicQueueMember object.
+    
+    Perform an operation depending on whether the user joined or left the queue.
+
+    The details of the action and updated queue details are traced at the end of the method in order to allow the user to validate the code is performing correctly.
+
+languages:
+  java:
+    displayName: Java
+    steps:
+    - file: "java/Main.java"
+      highlight: "0-129"
+    - file: "java/Main.java"
+      highlight: "24-36"
+    - file: "java/Main.java"
+      highlight: "38-42"
+    - file: "java/Main.java"
+      highlight: "44-70"
+    - file: "java/Main.java"
+      highlight: "72-77"
+    - file: "java/Main.java"
+      highlight: "87-120"
+    - file: "java/Main.java"
+      highlight: "99-121"
