@@ -68,3 +68,14 @@ languages:
       highlight: "12-15"
     - file: "nodejs/index.js"
       highlight: "16-32"
+  csharp:
+    displayName: C#
+    steps:
+    - file: "csharp/Program.cs"
+      highlight: "0-52"
+    - file: "csharp/Program.cs"
+      highlight: "24-28"
+    - file: "csharp/Program.cs"
+      highlight: "30-33"
+    - file: "csharp/Program.cs"
+      highlight: "38-49"
