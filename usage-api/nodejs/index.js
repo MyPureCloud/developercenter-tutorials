@@ -25,7 +25,7 @@ function overallCustomerCount() {
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log("Return for Overall Customer Count:\n" + response.body);
+        console.log("Return for overallCustomerCount() function:\n" + response.body);
     });
 }
 
@@ -41,7 +41,7 @@ function usagePerCustomerWithinRegion() {
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log("Return for Usage Per Customer Within Region:\n" + response.body);
+        console.log("Return for usagePerCustomerWithinRegion() function:\n" + response.body);
     });
 }
 
@@ -57,6 +57,6 @@ function individualCustomerSubscription() {
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log("Return for Individual Customer Subscription:\n" + response.body);
+        console.log("Return for individualCustomerSubscription() function:\n" + response.body);
     });
 }
