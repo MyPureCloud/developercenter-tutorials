@@ -1,17 +1,17 @@
-// Get the needed environment variables
+// Get variables needed from environment variables
 require('dotenv').config();
 let apiKey = process.env.APIKEY;
 let contentType = 'application/json'
-let appId = process.env.APPID;
-let region = process.env.REGION;
-let orgId = process.env.ORGID;
+let appId = encodeURIComponent(process.env.APPID);
+let region = encodeURIComponent(process.env.REGION);
+let orgId = encodeURIComponent(process.env.ORGID);
 
-// Function calls to the three usage api
+let request = require('request');
+
+// Function calls to different usage api
 overallCustomerCount();
 usagePerCustomerWithinRegion();
 individualCustomerSubscription();
-
-let request = require('request');
 
 // Function to get the overall customer count 
 function overallCustomerCount() {
@@ -25,7 +25,7 @@ function overallCustomerCount() {
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log(response.body);
+        console.log("Return for Overall Customer Count:\n" + response.body);
     });
 }
 
@@ -41,7 +41,7 @@ function usagePerCustomerWithinRegion() {
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log(response.body);
+        console.log("Return for Usage Per Customer Within Region:\n" + response.body);
     });
 }
 
@@ -57,6 +57,6 @@ function individualCustomerSubscription() {
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log(response.body);
+        console.log("Return for Individual Customer Subscription:\n" + response.body);
     });
 }

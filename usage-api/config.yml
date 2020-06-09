@@ -14,7 +14,7 @@ steps:
     Each API call requires different set of variables. Below are the variables needed to run the Premium Applications - Usage APIs.
 
     Header Variables
-      * **apiKey** - To use Premium Applications - Usage APIs, vendors need a unique apiKey. Vendors Premium Applications - Metered Type already have an apiKey; Vendors of Premium Applications - Usage Type can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
+      * **apiKey** - To use Premium Applications - Usage APIs, vendors need a unique apiKey. Vendors Premium Applications - Metered Type already have an apiKey, Vendors of Premium Applications - Usage Type can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
       * **contentType** - Default value is 'application/json'.
     
     URL Variables
@@ -33,25 +33,25 @@ steps:
         {
           "id": "ca-central-1",
           "organizationCounts": {
-              "samplePremiumApp": 2
+            "samplePremiumApp": 2
           }
         },
         {
           "id": "us-east-1",
           "organizationCounts": {
-              "samplePremiumApp": 7
+            "samplePremiumApp": 7
           }
         },
         {
           "id": "ap-northeast-1",
           "organizationCounts": {
-              "samplePremiumApp": 0
+            "samplePremiumApp": 0
           }
         },
         {
           "id": "eu-central-1",
           "organizationCounts": {
-              "samplePremiumApp": 1
+            "samplePremiumApp": 1
           }
         }
       ]
