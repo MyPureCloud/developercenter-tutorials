@@ -24,7 +24,7 @@ steps:
     
     Please refer to your carrier for the possible SIP Endpoints as a list of IP Addresses or CIDR. See the example below. 
 
-    Sample: ['54.172.60.0/30 ','54.244.51.0/30','54.171.127.192/30','35.156.191.128/30']
+    Sample: `['54.172.60.0/30','54.244.51.0/30','54.171.127.192/30','35.156.191.128/30']`
 
 - title: Authentication
   content: |
