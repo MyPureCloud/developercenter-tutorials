@@ -27,6 +27,7 @@
     content: |
       The first API call returns customer counts by Genesys Cloud region. The sample payload returned below shows the number of organizations per region that uses samplePremiumApp.
       ```{"language":"json"}
+      Return for Overall Customer Count:
       {
         "regions": [
           {
@@ -60,6 +61,7 @@
     content: |
       The second API call returns customer specific usage counts by Genesys Cloud region. In the below sample return, the assumed value of region variable is the first region returned in the previous API call - 'ca-central-1'.
       ```{"language":"json"}
+      Return for Usage Per Customer Within Region:
       {
         "organizations": [
           {
@@ -83,6 +85,7 @@
     content: |
       The third API call returns subscription information about a vendors' Premium Application(s). The sample return below shows the assumed subscription information of 'First Sample OrgName'. Inputs to the URL are region, orgId and the appId.
       ```{"language":"json"}
+      Return for Individual Customer Subscription:
       {
         "orgId": "1aa11a1a-1111-1a11-1a11-11a1a111a1aa",
         "orgName": "First Sample OrgName",
