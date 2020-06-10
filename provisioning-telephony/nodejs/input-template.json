@@ -23,6 +23,6 @@
            "address":"[Required] Specific overriding caller ID adddress to use as the outgoing origination address. May be a URI or raw phone number",
            "callingName":"Specific overriding caller ID name to use as the outgoing origination address. May be a URI or raw phone number",
            "userName":"User name to send when trunk is challenged for the realm",
-           "instance": "[Required] BYOC Cloud public SIP IP addresses"
+           "instance": "[Required] SIP Endpoints or CIDR"
        }
    }
