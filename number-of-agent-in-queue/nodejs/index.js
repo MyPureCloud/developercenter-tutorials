@@ -88,7 +88,7 @@ function postAnalyticsQueues() {
     ]
   }; // Object | query
 
-  // Count the 'on-queue' agents on the queue.
+  // Execute the analytics query. Count the 'on-queue' agents on the queue.
   routingApi.postAnalyticsQueuesObservationsQuery(body)
     .then((onQueueAgents) => {
       console.log(` Number of agents in ${queueName} : ${JSON.stringify(onQueueAgents.results[0].data[0].stats.count)}`)
