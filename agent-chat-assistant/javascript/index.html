@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat Listener Sample</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="./styles/style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/62.0.0/purecloud-platform-client-v2.min.js"></script>
+    <script type="module" src="./scripts/main.js"></script>
+  </head>
+  <body>
+    <div class="chat-area">
+      <section class="section">
+        <div class="container">
+          <div class="field">
+            <label class="label">Active Chats:</label>
+            <div class="control has-icons-left">
+              <div class="my-tab tabs is-centered is-boxed">
+                <ul id="customersList"></ul>            
+              </div>
+              <div id="tabcontents"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>    
+    <div class="agent-assistant">
+      <section class="section">
+        <div class="container">
+          <label class="label">Agent Assistant:</label>
+          <div class="field" id="agent-assist">
+          </div>
+        </div>
+      </section>      
+    </div>
+  </body>
+</html>

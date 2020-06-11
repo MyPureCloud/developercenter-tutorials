@@ -1,12 +1,12 @@
 import time
-import PureCloudPlatformClientV2
+import PureCloudPlatformClientV2, os
 from PureCloudPlatformClientV2.rest import ApiException
 from pprint import pprint
 
-# Configure OAuth2 access token for authorization: PureCloud Auth
-PureCloudPlatformClientV2.configuration.access_token = ''
+# OAuth when using Client Credentials
+apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
 
-api_instance = PureCloudPlatformClientV2.UsersApi()
+api_instance = PureCloudPlatformClientV2.UsersApi(apiClient)
 newuser = PureCloudPlatformClientV2.CreateUser() 
 newuser.name = "Tutorial User"
 newuser.email = "tutorial35@example.com"

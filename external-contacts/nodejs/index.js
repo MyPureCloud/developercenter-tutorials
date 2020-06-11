@@ -39,7 +39,7 @@ client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
 		};
 
 		// Create new external organization
-		return externalContactsApi.postExternalcontactsOrganizations({ body: organization });
+		return externalContactsApi.postExternalcontactsOrganizations(organization);
 	})
 	.then((organization) => {
 		console.log('Created organization '+ organization.id);
@@ -71,7 +71,7 @@ client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
 			};
 
 			// Create contact and collect promise
-			let contactPromise = externalContactsApi.postExternalcontactsContacts({ body: contact })
+			let contactPromise = externalContactsApi.postExternalcontactsContacts(contact)
 				.then((data) => console.log(`  ${data.firstName} ${data.lastName} (${data.id})`));
 			promises.push(contactPromise);
 		}

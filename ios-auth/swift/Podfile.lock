@@ -1,0 +1,22 @@
+PODS:
+  - PureCloudPlatformClientV2 (2.0.4)
+
+DEPENDENCIES:
+  - PureCloudPlatformClientV2 (from `https://github.com/MyPureCloud/platform-client-sdk-ios.git`, tag `2.0.4`)
+
+EXTERNAL SOURCES:
+  PureCloudPlatformClientV2:
+    :git: https://github.com/MyPureCloud/platform-client-sdk-ios.git
+    :tag: 2.0.4
+
+CHECKOUT OPTIONS:
+  PureCloudPlatformClientV2:
+    :git: https://github.com/MyPureCloud/platform-client-sdk-ios.git
+    :tag: 2.0.4
+
+SPEC CHECKSUMS:
+  PureCloudPlatformClientV2: 3ec27396471d166b97a8e93d0fa1a08ba8af1455
+
+PODFILE CHECKSUM: 4a4a155c22916f9b44dc8690a2edb8980c2709f5
+
+COCOAPODS: 1.7.5
