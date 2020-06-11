@@ -1,0 +1,6 @@
+framework module Pods_iOS_Auth_Tutorial {
+  umbrella header "Pods-iOS Auth Tutorial-umbrella.h"
+
+  export *
+  module * { export * }
+}

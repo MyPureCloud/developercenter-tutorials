@@ -36,10 +36,10 @@ languages:
     displayName: Python
     steps:
     - file: "python/create-contact-list.py"
-      highlight: "0-64"
+      highlight: "0-40"
     - file: "python/create-contact-list.py"
-      highlight: "13-38"
+      highlight: "10-11"
     - file: "python/create-contact-list.py"
-      highlight: "40-55"
+      highlight: "16-31"
     - file: "python/create-contact-list.py"
-      highlight: "57-64"
+      highlight: "33-40"

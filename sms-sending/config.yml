@@ -1,0 +1,45 @@
+---
+title: Auto Send SMS
+description: Auto send SMS after a call gets disconnected using Platform API.
+categories:
+- Architect
+steps:
+- title: Introduction
+  content: |
+    The main objective of this tutorial is to showcase how to create an interaction, and send SMS through a queue with Platform API. The given sample code will send a message after an agent drops off a call. This tutorial will also cover how to create a notification channel, subscribe to a topic and listen to a web socket.
+- title: Authenticate with PureCloud
+  content: |
+    First, authenticate the application with pureCloud.
+- title: Create a Notification Channel 
+  content: |
+    Create a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{queueID}.conversations.calls"}`. This topic will listen to a queues incoming and outgoing calls. After setting up the notification channel, create a web socket object using the notification channel URI.
+- title: Recieving Notification
+  content: |
+    Every time a call connects to the queue a notification will be sent to the web socket. In this sample code, _if statements_ is used to filter through the messages the websocket is recieving. To identify if the caller is using a mobile number, an IVR is created that prompt the user to identify if he is using a mobile number. The customers input will be in the participant attribute. This is one of many ways to check if a caller is using a mobile number. 
+    An attribute is also added to the customers information after a message is sent, this is done later on the codes. This will be filtered too, to avoid sending multiple SMS to the customer.
+- title: Create Conversation
+  content: |
+    Create a new conversation and get the conversation ID and communication ID.
+- title: Send SMS
+  content: |
+    Send the SMS message and update the customer's attribute on the call conversation.
+
+languages: 
+  nodejs:
+    displayName: Javascript
+    steps:
+    - file: "javascript/index.html"
+      highlight: "0-142"
+    - file: "javascript/index.html"
+      highlight: "40-42"
+    - file: "javascript/index.html"
+      highlight: "44-62"
+    - file: "javascript/index.html"
+      highlight: "67-98"
+    - file: "javascript/index.html"
+      highlight: "102-118"
+    - file: "javascript/index.html"
+      highlight: "120-135"
+    
+
+   

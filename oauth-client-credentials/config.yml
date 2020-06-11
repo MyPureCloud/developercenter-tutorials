@@ -63,3 +63,12 @@ languages:
       highlight: "7-22"
     - file: "python/script.py"
       highlight: "31-52"
+  go:
+    displayName: Go
+    steps: 
+    - file: "go/main.go"
+      highlight: "0-150"
+    - file: "go/main.go"
+      highlight: "24-59"
+    - file: "go/main.go"
+      highlight: "61-95"
