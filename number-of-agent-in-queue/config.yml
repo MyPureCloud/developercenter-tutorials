@@ -50,7 +50,7 @@ languages:
     - file: "nodejs/index.js"
       highlight: "0-108"
     - file: "nodejs/index.js"
-      highlight: "102-10"
+      highlight: "102-108"
     - file: "nodejs/index.js"
       highlight: "12-13"
     - file: "nodejs/index.js"
