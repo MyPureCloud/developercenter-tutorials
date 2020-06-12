@@ -60,11 +60,13 @@ function listQueues(queueName) {
 // Check for the number of entities returned and Search for the routing id of the queue
 function checkEntities(routingQueuesData) {
 
-  return (routingQueuesData.entities).length < 1 ? console.log("Queue not found.") :
-    (routingQueuesData.entities).length > 1 ? console.log("Found more than one queue with the name. Getting the first one.")
-
-    :
+  if ((routingQueuesData.entities).length < 1) {
+    console.log("Queue not found.")
+  } else if ((routingQueuesData.entities).length > 1) {
+    console.log("Found more than one queue with the name. Getting the first one.")
+  } else {
     queueId = routingQueuesData.entities[0].id, console.log("queueId: " + queueId), postAnalyticsQueues()
+  }
 
 }
 
