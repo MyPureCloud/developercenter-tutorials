@@ -1,12 +1,6 @@
 export default {
-    clientIDs: {        
-        'mypurecloud.com': 'fd2ba742-446f-46c5-bbbc-1cad2f34ac3a',
-        'mypurecloud.ie': '939ab4dd-109f-4120-ba9f-051b973b9ecc',
-        'mypurecloud.de': 'aa8efb84-a77f-4c43-8b37-ac0566d9f73e',
-        'mypurecloud.com.au': 'c8a4d721-3fbb-4f50-b3e0-aa49bf86ac87',
-        'mypurecloud.jp': '28dbeebd-8128-4fe0-8f42-f2eebb767a71',
-        'usw2.pure.cloud': '2075921c-a285-4523-91df-7984f1268677'
-    },
+    clientID: 'fd2ba742-446f-46c5-bbbc-1cad2f34ac3a',
+
     // 'wizardUriBase': 'http://localhost:8080/wizard/',
     'wizardUriBase': 'https://mypurecloud.github.io/purecloud-premium-app/wizard/',
 

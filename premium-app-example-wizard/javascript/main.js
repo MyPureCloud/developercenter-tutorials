@@ -21,7 +21,28 @@ let pcEnvironment = localStorage.getItem(appName + ':environment') ||
                     config.defaultPcEnvironment;
 let clientApp = null;
 let userMe = null;
+let integrationId = '';
 
+/**
+ * Get ID of the integration so the description can be edited containing
+ * the installed data. Currently gets the first one from the result.
+ * Does not support multiple integration instances yet.
+ * @returns {Promise} id of the premium app integration instance
+ */
+function getIntegrationId(){
+    return new Promise((resolve, reject) => {
+        integrationsApi.getIntegrationsClientapps({pageSize: 100})
+        .then((data) => {
+            let instances = data.entities;
+            let pa_instance = instances.find(instance => instance.integrationType.id == config.appName);
+            if(pa_instance){
+                resolve(pa_instance.id);
+            }else{
+                reject('Integration ID not found.')
+            }
+        })
+    });
+}   
 
 /**
  * Get query parameters for language and purecloud region
@@ -45,12 +66,13 @@ function queryParamsConfig(){
 
 /**
  * Authenticate with PureCloud
+ * @returns {Promise} login info
  */
 function authenticatePureCloud(){
  client.setEnvironment(pcEnvironment);
     client.setPersistSettings(true, appName);
     return client.loginImplicitGrant(
-                config.clientIDs[pcEnvironment], 
+                config.clientID, 
                 config.wizardUriBase + 'index.html'
             );
 }
@@ -104,10 +126,17 @@ function setup(){
     .then((user) => {
         userMe = user;
 
+        view.showUserName(user);
+
+        return getIntegrationId();
+    })
+    .then((id) => {
+        integrationId = id;
+
         return setPageLanguage();
     })  
     .then(() => {
-        wizard.setup(client, userMe);
+        wizard.setup(client, userMe, integrationId);
 
         return runPageScript();
     })  
@@ -157,7 +186,7 @@ function runPageScript(){
                 // Button Handler
                 let elNextBtn = document.getElementById('next');
                 elNextBtn.addEventListener('click', () => {
-                    window.location.href = './install.html';
+                    window.location.href = './custom-setup.html';
                 });
 
                 validateProductAvailability()
@@ -179,6 +208,16 @@ function runPageScript(){
                         resolve();
                     }
                 });
+                break;
+            case 'custom-setup.html':
+                // Button Handler
+                let elSetupBtn = document.getElementById('next');
+                elSetupBtn.addEventListener('click', () => {
+                    window.location.href = './install.html';
+                });
+
+                resolve();
+                view.showContent();
                 break;
             case 'install.html':
                 // Button Handler

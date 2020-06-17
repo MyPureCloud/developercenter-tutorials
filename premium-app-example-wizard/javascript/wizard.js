@@ -25,9 +25,13 @@ const prefix = config.prefix;
 // PureCloud
 const platformClient = require('platformClient');
 let client = null;
+const integrationsApi = new platformClient.IntegrationsApi();
 
-let userMe = null;
-let installedData = {};
+
+// Global data
+let userMe = null; // PureCloud user object
+let integrationId = ''; // Integration instance ID
+let installedData = {}; // Everything that's installed after
 
 
 /**
@@ -47,16 +51,41 @@ function getInstalledObjects(){
     return Promise.all(promiseArr);
 }
 
+/**
+ * Run against the global installedData so it will just contain id and
+ * name of the installed PureCLoud objects
+ * @returns {Object} SImplified object data of installed items
+ */
+function simplifyInstalledData(){
+    let result = {};
+    Object.keys(installedData).forEach(modKey => {
+        let modItems = installedData[modKey];
+        result[modKey] = {};
+
+        Object.keys(modItems).forEach(itemName => {
+            let itemVal = modItems[itemName];
+            result[modKey][itemName] = {
+                id: itemVal.id,
+                name: itemVal.name,
+            }
+        })
+    });
+    
+    return result;
+}
+
 export default {
     /**
      * Setup the wizard with references
      * @param {Object} pcClient PureCloud API Client
      * @param {Object} user PureCloud user object
+     * @param {String} instanceId ID of the working integration instance 
      */
-    setup(pcClient, user){
+    setup(pcClient, user, instanceId){
         client = pcClient;
         userMe = user;
-
+        integrationId = instanceId;
+        
         // Use only modules in provisioning info
         modules = modules.filter((module) => {
             return Object.keys(config.provisioningInfo)
@@ -150,6 +179,20 @@ export default {
             });
 
             return Promise.all(finalFunctionPromises);
+        })
+        // Store the installedData in the integration's description
+        .then(() => {
+            console.log(installedData)
+            return integrationsApi.getIntegrationConfigCurrent(integrationId)
+            .then((instance) => {
+                let body = instance;
+                let simplifiedData = simplifyInstalledData();
+                
+                body.notes = JSON.stringify(simplifiedData);
+
+                return integrationsApi.putIntegrationConfigCurrent(
+                            integrationId, { body: body });
+            })
         })
         .catch((e) => console.error(e));
     },

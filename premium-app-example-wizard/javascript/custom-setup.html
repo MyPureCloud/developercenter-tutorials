@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Premium App Wizard</title>
+
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' async type='text/css'>
+    <link rel="stylesheet" href="./styles/style.css">
+
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/69.2.1/purecloud-platform-client-v2.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/client-apps/1.3.0/purecloud-client-app-sdk.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+</head>
+<body>
+    <div id="background"></div>
+    <noscript>
+        For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank">instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+
+    <header>
+        <p>Premium App /&nbsp; Home</p>
+    </header>
+
+    <div class="content">
+        <div class="title">
+            <span class="txt-greeting">
+            Hi 
+            </span>
+            <span id="username"></span>!
+            <div class="txt-greeting-2">
+                welcome to the Premium App Example
+            </div>
+        </div>
+
+        <ul class="progress-bar">
+            <li class="active">
+                <span class="txt-start">Start</span>
+            </li>
+            <li class="active current">
+                <span class="txt-setup">Custom Setup</span>
+            </li>
+            <li class="">
+                <span class="txt-install">Install</span>
+            </li>
+            <li class="">
+                <span class="txt-summary">Summary</span>
+            </li>
+        </ul>
+
+        <main>
+            <div>
+                <p>
+                    Put your custom provisioning here.
+                    <br><br>
+                    Update the ./docs/wizard/scripts/main.js to call your custom provisioning functions.
+                </p>
+                <button id="next" class="btn-info right">
+                    <span class="txt-start">Start</span> <i class="button-icon fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+    <footer>
+            <img src="./assets/img/logo.png" alt="Logo">
+    </footer>
+
+    <!-- MODAL-->
+    <div id="loading-modal">
+        <div class="overlay"></div>
+        <div class="modal">
+            <img class="logo" src='./assets/img/loading.svg' alt="" srcset="">
+            <div class="modal-message"></div>
+        </div>
+    </div>
+    
+    <script src="./scripts/main.js" type="module"></script>
+</body>
+</html>
