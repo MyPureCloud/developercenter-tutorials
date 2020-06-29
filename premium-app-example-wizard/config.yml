@@ -6,14 +6,14 @@ categories:
 steps:
 - title: Introduction
   content: |
-    The wizard is a simple web app built to provision additional items in PureCloud for use by the Premium App. This tutorial explores the sample Premium App Wizard installer and how partners can leverage it for their own Premium Apps. 
+    The wizard is a simple web app built to provision additional items in Genesys Cloud for use by the Premium App. This tutorial explores the sample Premium App Wizard installer and how partners can leverage it for their own Premium Apps. 
 
-    The four most provisioned PureCloud items are:
+    The four most provisioned Genesys Cloud items are:
 
     * Roles that contain access to the Premium App.
     * Groups that can further filter acccess to the app.
     * OAuth Client that's normally passed to the app backend.
-    * App Instances for additional widgets in the PureCloud UI.
+    * App Instances for additional widgets in the Genesys Cloud UI.
 
     The source for the project is at: https://github.com/MyPureCloud/purecloud-premium-app
 
@@ -41,7 +41,7 @@ steps:
 
 - title: Config File - Prefix
   content: |
-    The prefix is appended to all the wizard-provisioned PureCloud items. This provides a way to immediately identify them and is currently how the wizard tracks if the application is installed.
+    The prefix is appended to all the wizard-provisioned Genesys Cloud items. This provides a way to immediately identify them and is currently how the wizard tracks if the application is installed.
 
 - title: Config File - Provisioning Info
   content: |
@@ -49,11 +49,11 @@ steps:
 
 - title: Validate Product Availability
   content: |
-    The first step is to check whether the PureCloud org has the product available. It does this by checking the if the appName (from the config file) is included in the available products for the org.
+    The first step is to check whether the Genesys Cloud org has the product available. It does this by checking the if the appName (from the config file) is included in the available products for the org.
 
 - title: Check Existing Items
   content: |
-    The wizard next checks if the app is currently installed. This is determined by checking if any PureCloud items contain the unique prefix defined in the config file. If there are, the wizard will redirect to the premium app URL, and if not, it will continue on with the provisioning process.
+    The wizard next checks if the app is currently installed. This is determined by checking if any Genesys Cloud items contain the unique prefix defined in the config file. If there are, the wizard will redirect to the premium app URL, and if not, it will continue on with the provisioning process.
 
 - title: Custom Setup Page
   content: |
@@ -61,7 +61,7 @@ steps:
 
 - title: Create Items
   content: |
-    The next step is to create the PureCloud objects defined in the provisioningInfo.
+    The next step is to create the Genesys Cloud objects defined in the provisioningInfo.
 
     There's no need to actually modify the code contained in this file.
 

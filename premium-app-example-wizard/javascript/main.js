@@ -2,7 +2,7 @@ import config from '../config/config.js';
 import view from './view.js';
 import wizard from './wizard.js';
 
-// PureCloud
+// Genesys Cloud
 const platformClient = require('platformClient');
 const client = platformClient.ApiClient.instance;
 const ClientApp = window.purecloud.apps.ClientApp;
@@ -45,7 +45,7 @@ function getIntegrationId(){
 }   
 
 /**
- * Get query parameters for language and purecloud region
+ * Get query parameters for language and Genesys Cloud region
  */
 function queryParamsConfig(){
     // Get Query Parameters
@@ -65,7 +65,7 @@ function queryParamsConfig(){
 }
 
 /**
- * Authenticate with PureCloud
+ * Authenticate with Genesys Cloud
  * @returns {Promise} login info
  */
 function authenticatePureCloud(){
@@ -88,7 +88,7 @@ function getUserDetails(){
 }
 
 /**
- * Checks if the PureCloud org has the premium app product enabled
+ * Checks if the Genesys Cloud org has the premium app product enabled
  * @returns {Promise}
  */
 function validateProductAvailability(){      

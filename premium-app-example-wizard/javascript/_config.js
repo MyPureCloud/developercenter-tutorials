@@ -8,7 +8,7 @@ export default {
     // 'premiumAppURL': 'http://localhost:8080/premium-app-sample/index.html',
     'premiumAppURL': 'https://mypurecloud.github.io/purecloud-premium-app/premium-app-sample/index.html',
 
-    // PureCloud assigned name for the premium app
+    // Genesys Cloud assigned name for the premium app
     // This should match the integration type name of the Premium App
     'appName': 'premium-app-example',
 
@@ -27,10 +27,10 @@ export default {
     // Permissions required for running the Wizard App
     'setupPermissionsRequired': ['admin'],
 
-    // To be added to names of PureCloud objects created by the wizard
+    // To be added to names of Genesys Cloud objects created by the wizard
     'prefix': 'PREMIUM_EXAMPLE_',
 
-    // These are the PureCloud items that will be added and provisioned by the wizard
+    // These are the Genesys Cloud items that will be added and provisioned by the wizard
     'provisioningInfo': {
         'role': [
             {
@@ -75,7 +75,7 @@ export default {
                  * NOTE: Finally functions must return a Promise.
                  * For Client Credentials, normally it means
                  * passing the details to the backend.
-                 * @param {Object} installedData the PureCloud resource created
+                 * @param {Object} installedData the Genesys Cloud resource created
                  * @returns {Promise}    
                  */
                 'finally': function(installedData){

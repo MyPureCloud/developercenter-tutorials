@@ -22,14 +22,14 @@ let modules = [
 const jobOrder = config.provisioningInfo;
 const prefix = config.prefix;
 
-// PureCloud
+// Genesys Cloud
 const platformClient = require('platformClient');
 let client = null;
 const integrationsApi = new platformClient.IntegrationsApi();
 
 
 // Global data
-let userMe = null; // PureCloud user object
+let userMe = null; // Genesys Cloud user object
 let integrationId = ''; // Integration instance ID
 let installedData = {}; // Everything that's installed after
 
@@ -53,7 +53,7 @@ function getInstalledObjects(){
 
 /**
  * Run against the global installedData so it will just contain id and
- * name of the installed PureCLoud objects
+ * name of the installed Genesys Cloud objects
  * @returns {Object} SImplified object data of installed items
  */
 function simplifyInstalledData(){
@@ -77,8 +77,8 @@ function simplifyInstalledData(){
 export default {
     /**
      * Setup the wizard with references
-     * @param {Object} pcClient PureCloud API Client
-     * @param {Object} user PureCloud user object
+     * @param {Object} pcClient Genesys Cloud API Client
+     * @param {Object} user Genesys Cloud user object
      * @param {String} instanceId ID of the working integration instance 
      */
     setup(pcClient, user, instanceId){
@@ -107,7 +107,7 @@ export default {
             console.log(installed);
             installed.forEach(item => {
                 if(item.total && item.total > 0){
-                    // If it's  a purecloud search reslts
+                    // If it's  a Genesys Cloud search reslts
                     exists = true;
                 }else{
                     // if it's just an array
