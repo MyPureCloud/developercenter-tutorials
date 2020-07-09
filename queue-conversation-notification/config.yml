@@ -7,7 +7,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps how to integrate with PureCloud Client App SDK to get notifications on all conversations within a queue. The goal is to step through the cases when handling conversation notification on the API and will skip over authentication.
+    This tutorial walks through the steps how to integrate with Genesys Cloud Client App SDK to get notifications on all conversations within a queue. The goal is to step through the cases when handling conversation notification on the API and will skip over authentication.
 
     The main topics that will be covered in the tutorial are the following:
 
@@ -25,7 +25,7 @@ steps:
 
 - title: Subscribe to Queue
   content: |
-    In order to subscribe to a queue, we need to call the postNotificationsChannelSubscriptions() method of the Notifications API of the JavaScript PureCloud SDK passing the Channel ID variable from the postNotificationsChannels() method call.
+    In order to subscribe to a queue, we need to call the postNotificationsChannelSubscriptions() method of the Notifications API of the JavaScript Genesys Cloud SDK passing the Channel ID variable from the postNotificationsChannels() method call.
 
     The Topic ID used in this tutorial the following where the queue variable stores the queueId.
 
