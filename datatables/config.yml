@@ -1,0 +1,50 @@
+---
+title: Creating a Data Table with CSV
+description: Overview of creating a Data Table from a CSV file
+categories:
+- Architect
+steps:
+- title: Introduction
+  content: |
+    Data tables allow organizations to store data locally and ensure that Architect can access it within an interaction. They can be used to access data sets larger than allowed by a switch statement. 
+    
+    This tutorial demonstrates how to create a data table and import information from a CSV.
+
+    NOTE: Though its contents can be appended to, and modified, after creation, it's not a dedicated database solution. Data tables are not recommended for use where fast and frequent data updating is required.
+
+    For mor information on data tables see the [Resource Center](https://help.mypurecloud.com/articles/work-with-data-tables/)
+
+- title: Authenticate with PureCloud
+  content: |
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+
+- title: Define the data table schema
+  content: |
+    This object is equivalent to the JSON that will be passed on to the actual request. 
+    
+    The CSV must contain a 'key' column which is the unique key id for the table and it should be of type 'string'. Its display name could be changed however through its 'title' property.  For the other columns, the type should be defined and a default value could be optionally provided.
+
+- title: Create Data Table
+  content: |
+    Using the specified schema, an empty data table could now be created. 
+
+- title: Import data from the CSV
+  content: |
+    In this step, the CSV contents will be parsed and type-converted through a helper function. The values should match the data type for that property as defined in the schema.
+
+    The rows will be iterated over and added to the data table.
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "1-154"
+    - file: "nodejs/index.js"
+      highlight: "136-139"
+    - file: "nodejs/index.js"
+      highlight: "11-49"
+    - file: "nodejs/index.js"
+      highlight: "51-63"
+    - file: "nodejs/index.js"
+      highlight: "82-107"
