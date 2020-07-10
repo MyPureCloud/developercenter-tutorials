@@ -7,7 +7,7 @@ steps:
 - title: Introduction
   content: |
     This tutorial walks through the steps to download recordings in bulk within a given date interval.
-    For this tutorial, PureCloud SDK will be used.
+    For this tutorial, Genesys Cloud SDK will be used.
 - title: Input
   content: |
     For this tutorial, the user will be asked to input the credentials through a simple console input.
@@ -17,7 +17,7 @@ steps:
   content: |
     Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
 
-    To obtain a token, separate function is created to request token from PureCloud.
+    To obtain a token, separate function is created to request token from Genesys Cloud.
 - title: Obtain an Access Token
   content: |
     Start by making a POST call to https://login.mypurecloud.com/oauth/token to request a token.
@@ -43,7 +43,22 @@ steps:
 
     Here, a function is created to get all conversations with the date interval as the search criteria.
 
-    The function should return the Conversation ID of the conversation which will be used in requesting the batch download of the recordings
+    The function should return the Conversation ID of the conversation which will be used in requesting the batch download of the recordings.
+
+    * The postAnalyticsConversationsDetailsQuery function accepts a search interval that does not exceed 7 days.
+    * The postAnalyticsConversationsDetailsQuery function has a default to return 25 conversations. Use the `paging` property to customize the `pageSize` and the `pageNumber`.
+      * pageSize - How many results per page
+      * pageNumber - How many pages in
+
+    ```{"language":"json"}
+    {
+      "interval": "2019-09-03T16:00:00.000Z/2019-09-10T16:00:00.000Z",
+      "paging": {
+        "pageSize": 300,
+        "pageNumber": 1
+      }
+    }
+    ```
 - title: Request Batch Recordings Download
   content: |
     Create a function that will get all recordings of the conversations.
