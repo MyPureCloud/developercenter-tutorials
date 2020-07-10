@@ -14,17 +14,17 @@
 		const contactListId = 'f19465cf-5bc6-4871-b59f-5307575ddddf';
 		const campaignId = '7fc6b00a-f2f5-44d2-9fc5-169f339f6c4b';
 
-		// Set purecloud objects
+		// Set Genesys Cloud objects
 		const platformClient = require('platformClient');
 		const client = platformClient.ApiClient.instance;
 		const outboundApi = new platformClient.OutboundApi();
 
-		// Set PureCloud settings
+		// Set Genesys Cloud settings
 		client.setEnvironment('mypurecloud.com');
 		client.setPersistSettings(true, 'test_app');
 
 		$(document).ready(function() {
-			// Authenticate with PureCloud
+			// Authenticate with Genesys Cloud
 			client.loginImplicitGrant(clientId, redirectUri)
 				.then(() => {
 					const contactData = [
