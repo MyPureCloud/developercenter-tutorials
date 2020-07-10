@@ -1,13 +1,13 @@
 ---
 title: Agentless SMS Notifications
-description: Sending outbound sms notifications from Purecloud without needing a user context
+description: Sending outbound sms notifications from Genesys Cloud without needing a user context
 categories:
 - Messaging
 - SMS
 steps:
 - title: Introduction
   content: |
-    This tutorial will explain how to use Purecloud public api to send agentless outbound sms notifications and invoke them from another system.
+    This tutorial will explain how to use Genesys Cloud public api to send agentless outbound sms notifications and invoke them from another system.
 
 - title: Create or use an existing OAuth client.
   content: |
@@ -54,7 +54,7 @@ languages:
       highlight: "0-15"
     - file: "java/src/com/genesys/Main.java"
       highlight: "20-27"
-      note: You need to make sure to build the basePath for the correct Purecloud region you are working in. See https://developer.mypurecloud.com/api/rest/
+      note: You need to make sure to build the basePath for the correct Genesys Cloud region you are working in. See https://developer.mypurecloud.com/api/rest/
     - file: "java/src/com/genesys/Main.java"
       highlight: "29-43"
   nodejs:

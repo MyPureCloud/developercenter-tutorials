@@ -10,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             //Define your OAuth client credentials
-            final String clientId = System.getenv("PURECLOUD_CLIENT_ID");
-            final String clientSecret = System.getenv("PURECLOUD_CLIENT_SECRET");
+            final String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
+            final String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
             
             // Define APIs
             ApiClient oAuthApiClient;
@@ -19,7 +19,7 @@ public class Main {
             
             //Generate the OAuth access token
             try {
-                //Make sure to specify the correct base path for your Purecloud region. see https://developer.mypurecloud.com/api/rest/
+                //Make sure to specify the correct base path for your Genesys Cloud region. see https://developer.mypurecloud.com/api/rest/
                 oAuthApiClient = ApiClient.Builder.standard().withBasePath("https://api.mypurecloud.com").build();
                 oAuthApiClient.authorizeClientCredentials(clientId, clientSecret);
                 
