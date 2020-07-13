@@ -1,19 +1,19 @@
 const platformClient = require('purecloud-platform-client-v2');
 
 // Get client ID and secret from environment vars
-const PURECLOUD_CLIENT_ID = process.env.PURECLOUD_CLIENT_ID;
-const PURECLOUD_CLIENT_SECRET = process.env.PURECLOUD_CLIENT_SECRET;
+const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
 
-// Set purecloud objects
+// Set Genesys Cloud objects
 const client = platformClient.ApiClient.instance;
 const conversationsApi = new platformClient.ConversationsApi();
 
-// Set PureCloud settings
+// Set Genesys Cloud settings
 client.setEnvironment('mypurecloud.com');
 client.setPersistSettings(true, 'test_app');
 
-// Authenticate with PureCloud
-client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
+// Authenticate with Genesys Cloud
+client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
 	.then(() => {
 		console.log('Logged in');
 

@@ -1,7 +1,7 @@
 require 'purecloudplatformclientv2'
 
-secret = ENV['purecloud_secret']
-id = ENV['purecloud_client_id']
+secret = ENV['genesys_cloud_secret']
+id = ENV['genesys_cloud_client_id']
 
 PureCloud.authenticate_with_client_credentials id, secret, "inindca.com"
 
