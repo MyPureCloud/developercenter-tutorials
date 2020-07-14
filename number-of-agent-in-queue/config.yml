@@ -1,5 +1,5 @@
 ---
-title: Get Number of On-Queue Agents using PureCloud SDK
+title: Get Number of On-Queue Agents using Genesys Cloud SDK
 description: This tutorial walks through the steps of implementing a function to get the number of On-Queue Agents on a specific queue.
 categories:
 - Routing
@@ -12,7 +12,7 @@ steps:
 
     Go here for more information about [Presences and Routing Status](/api/rest/v2/presence/understanding_presence.html):
 
-    For this tutorial, we are going to use the PureCloud SDK.
+    For this tutorial, we are going to use the Genesys Cloud SDK.
 
 - title: Authentication
   content: |
@@ -20,7 +20,7 @@ steps:
 
 - title: Create instance of Routing API
   content: |
-    Configure the token to be used by the PureCloud SDK. This token will be sent along every API call automatically.
+    Configure the token to be used by the Genesys Cloud SDK. This token will be sent along every API call automatically.
 
     Create an instance of the Routing API which will be used to make the API calls.
 

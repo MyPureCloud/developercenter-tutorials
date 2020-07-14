@@ -100,7 +100,7 @@
         "usages": [
           {
             "appId": "samplePremiumApp",
-            "chargeName": "Sample Premium Application for PureCloud",
+            "chargeName": "Sample Premium Application for Genesys Cloud",
             "partNumber": "PC-170-NV-PCSAMPLE",
             "prepayQuantity": 1000,
             "prepayPrice": "60.080000",
