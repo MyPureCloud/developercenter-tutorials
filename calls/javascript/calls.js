@@ -4,14 +4,14 @@
 const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
 const redirectUri = window.location.href;
 
-// Set purecloud objects
+// Set Genesys Cloud objects
 const platformClient = require('platformClient');
 const client = platformClient.ApiClient.instance;
 const conversationsApi = new platformClient.ConversationsApi();
 const notificationsApi = new platformClient.NotificationsApi();
 const usersApi = new platformClient.UsersApi();
 
-// Set PureCloud settings
+// Set Genesys Cloud settings
 client.setEnvironment('mypurecloud.com');
 client.setPersistSettings(true, 'test_app');
 
@@ -37,7 +37,7 @@ Handlebars.registerHelper('isConsult', (participants, options) => {
 
 // jQuery calls this when the DOM is available
 $(document).ready(() => {
-	// Authenticate with PureCloud
+	// Authenticate with Genesys Cloud
 	client.loginImplicitGrant(clientId, redirectUri)
 		.then(() => {
 			console.log('Logged in');
@@ -87,7 +87,7 @@ $(document).ready(() => {
 		.catch((err) => console.error(err));
 });
 
-// Handle incoming PureCloud notification from WebSocket
+// Handle incoming Genesys Cloud notification from WebSocket
 function handleNotification(message) {
 	// Parse notification string to a JSON object
 	const notification = JSON.parse(message.data);

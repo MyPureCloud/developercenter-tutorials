@@ -3,21 +3,21 @@ const CSV = require('csv-string');
 const fs = require('fs');
 
 // Get client credentials from environment variables
-const PURECLOUD_CLIENT_ID = process.env.PURECLOUD_CLIENT_ID;
-const PURECLOUD_CLIENT_SECRET = process.env.PURECLOUD_CLIENT_SECRET;
+const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
 
-// Set purecloud objects
+// Set Genesys Cloud objects
 const client = platformClient.ApiClient.instance;
 const externalContactsApi = new platformClient.ExternalContactsApi();
 
-// Set PureCloud settings
+// Set Genesys Cloud settings
 client.setEnvironment('mypurecloud.com');
 // client.setDebugLog(console.log, 100);
 
-// Authenticate with PureCloud
-client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
+// Authenticate with Genesys Cloud
+client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
 	.then(() => {
-		console.log('Authenticated with PureCloud');
+		console.log('Authenticated with Genesys Cloud');
 
 		const organization = {
 			name: 'Developer Tutorial Company',
@@ -34,7 +34,7 @@ client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
 				'https://developer.mypurecloud.com'
 			],
 			twitterId: {
-				screenName: 'PureCloud_dev'
+				screenName: 'GenesysCloudDev'
 			}
 		};
 

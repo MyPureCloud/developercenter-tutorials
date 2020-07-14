@@ -21,8 +21,8 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            String clientId = System.getenv("PURECLOUD_CLIENT_ID");
-            String clientSecret = System.getenv("PURECLOUD_CLIENT_SECRET");
+            String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
+            String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
 
             // Set Region
             PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
