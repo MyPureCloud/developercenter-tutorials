@@ -1,0 +1,231 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/83.0.0/purecloud-platform-client-v2.min.js"></script>
+    
+    <style>
+        .download-link {
+            min-width: 350px !important;
+            max-width: 350px !important;
+        }
+        .other-rows {
+            min-width: 300px !important;
+            max-width: 300px !important;
+        }
+    </style>
+</head>
+    
+<body>
+    <div class="row row-no-gutters" style="margin: 25px">
+        <div class="col-sm-5">
+            <h5><label>Choose source of voicemail you want to generate</label></h5>
+            <select name="source" id="source" class="browser-default custom-select custom-select-lg"
+                onchange="identifySelect(this)">
+                <option></option>
+                <option id="me">Me</option>
+                <option id="queue">Queue</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="divQueue" class="row row-no-gutters" style="margin: 25px; display:none">
+        <div class="col-sm-5">
+            <h5><label>Select Queue</label></h5>
+            <select name="queueName" id="queueName" class="browser-default custom-select custom-select-lg"
+                onchange="getQueueVoicemails(this)">
+            </select>
+        </div>
+    </div>
+
+    <div class="row row-no-gutters" style="margin: 25px;">
+        <div id="divListContainer" style="margin: 25px;">
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item download-link"><b>Download Link</b></li>
+                <li class="list-group-item other-rows"><b>Duration</b></li>
+                <li class="list-group-item other-rows"><b>ANI</b></li>
+                <li class="list-group-item other-rows"><b>Date and Time</b></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    const clientId = process.env.GENESYS_CLOUD_CLIENT_ID;
+    const redirectUri = window.location.href;
+
+    // Set Genesys Cloud objects
+    const platformClient = require('platformClient');
+    const client = platformClient.ApiClient.instance;
+    const voicemailApi = new platformClient.VoicemailApi();
+    const routingApi = new platformClient.RoutingApi();
+
+    let voicemailDetails = "";
+
+    // Set Genesys Cloud settings
+    client.setEnvironment('mypurecloud.com');
+    client.setPersistSettings(true, 'test_app');
+
+    // Accessing Genesys Cloud objects
+    $(document).ready(() => {
+        client.loginImplicitGrant(clientId, redirectUri)
+            .then(() => {
+                console.log('Logged in');
+            })
+    });
+
+    // Identify user's selected source of voicemail
+    function identifySelect(id) {
+        let selection = id[id.selectedIndex].id;
+        return selection == "queue" ? getQueueList() :
+            getMeVoicemails();
+    }
+    
+    // Display queues available associated in user credentials
+    function getQueueList() {
+        $("#divQueue").show();
+        let opts = {
+            'joined': true, // Boolean | Joined
+            'pageSize': 100, // Number | Page size
+            'pageNumber': 1, // Number | Page number
+            'sortBy': "name", // String | Sort by
+            'sortOrder': "asc" // String | Sort order
+        };
+
+        routingApi.getRoutingQueuesMe(opts)
+            .then((queueData) => {
+                console.log(`getRoutingQueuesMe success! data: ${JSON.stringify(queueData, null, 2)}`);
+                let queueDetails = queueData.entities;
+                queueDetails.forEach(data => createQueueList(data.id, data.name));
+            })
+            .catch((err) => {
+                console.log('There was a failure calling getRoutingQueuesMe');
+                console.error(err);
+            });
+    }
+
+    // Get all voicemail details associated with current user 
+    function getMeVoicemails() {
+        let opts = {
+            'pageSize': 100, // Number | Page size
+            'pageNumber': 1 // Number | Page number
+        };
+
+        voicemailApi.getVoicemailMeMessages(opts)
+            .then((voicemailData) => {
+                console.log(`getVoicemailMeMessages success! data: ${JSON.stringify(voicemailData, null, 2)}`);
+                getMessageId(voicemailData);
+            })
+            .catch((err) => {
+                console.log('There was a failure calling getVoicemailMeMessages');
+                console.error(err);
+            });
+    }
+    
+    // Get voicemail details for the selected queue
+    function getQueueVoicemails(id) {
+        let queueId = id[id.selectedIndex].id;; // String | Queue ID
+        let opts = {
+            'pageSize': 100, // Number | Page size
+            'pageNumber': 1 // Number | Page number
+        };
+
+        voicemailApi.getVoicemailQueueMessages(queueId, opts)
+            .then((queueData) => {
+                console.log(`getVoicemailQueueMessages success! data: ${JSON.stringify(queueData, null, 2)}`);
+                voicemailDetails = queueData.entities;
+                voicemailDetails.forEach(data => getVoiceMailMedia(data.id, data.createdDate, data.callerAddress,
+                    data.audioRecordingDurationSeconds));
+            })
+            .catch((err) => {
+                console.log('There was a failure calling getVoicemailQueueMessages');
+                console.error(err);
+            });
+    }
+
+    // Get ID needed to retreive voicemail as well as other details that needs to be passed on and displayed
+    function getMessageId(voicemailData) {
+        voicemailDetails = voicemailData.entities;
+        voicemailDetails.forEach(data => getVoiceMailMedia(data.id, data.createdDate, data.callerAddress, data
+            .audioRecordingDurationSeconds));
+    }
+
+    // Using the messageId, get the voicemail media and download it as your desired media format
+    function getVoiceMailMedia(id, date, ani, duration) {
+        console.log("getVoiceMailMedia function " + id, date, ani, duration);
+        let messageId = id; // String | Message ID
+        let opts = {
+            'formatId': "WAV" // String | The desired media format.
+        };
+
+        voicemailApi.getVoicemailMessageMedia(messageId, opts)
+            .then((voiceMailMedia) => {
+                console.log(`getVoicemailMessageMedia success! data: ${JSON.stringify(voiceMailMedia, null, 2)}`);
+                let mediaFile = voiceMailMedia.mediaFileUri;
+                createList(mediaFile, messageId, date, ani, duration);
+            })
+            .catch((err) => {
+                console.log('There was a failure calling getVoicemailMessageMedia');
+                console.error(err);
+            });
+    }
+
+    // Create the list that will be displayed, in this case Download Link, Duration, ANI and Date and Time
+    function createList(mediaFile, messageId, date, ani, duration) {
+        divList = document.getElementById("divListContainer");
+
+        let selectList = document.createElement('ul');
+        selectList.classList.add("list-group");
+        selectList.classList.add("list-group-horizontal");
+        
+        let link = document.createElement('li');
+        link.classList.add("list-group-item");
+        link.classList.add("download-link");
+        link.innerHTML = mediaFile;
+        link.innerHTML = "<a href='" + mediaFile + "'> '" + messageId + "' </a>"; 
+        selectList.appendChild(link);
+
+        let secs = document.createElement('li');
+        secs.classList.add("list-group-item");
+        secs.classList.add("other-rows");
+        secs.innerHTML = duration + " seconds";
+        selectList.appendChild(secs);
+
+        let contact = document.createElement('li');
+        contact.classList.add("list-group-item");
+        contact.classList.add("other-rows");
+        let trimAni = ani.replace("tel:", "");
+        contact.innerHTML = trimAni;
+        selectList.appendChild(contact);
+
+        let datetime = document.createElement('li');
+        datetime.classList.add("list-group-item");
+        datetime.classList.add("other-rows");
+        let trimDate = date.replace("T", "  ");
+        trimDate = trimDate.slice(0, 20);
+        datetime.innerHTML = trimDate;
+        selectList.appendChild(datetime);
+
+        divList.appendChild(selectList);
+        document.body.appendChild(divList)
+    }
+
+    // Generate the dynamic queue list. Fetch all the available queues associated to the user and display it in select list.
+    function createQueueList(id, name) {
+        let queueSelect = document.getElementById("queueName");
+        let queueOption = document.createElement("option");
+        queueOption.text = name;
+        queueOption.id = id;
+        queueSelect.add(queueOption);
+    }
+</script>
