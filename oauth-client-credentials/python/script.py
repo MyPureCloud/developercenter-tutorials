@@ -1,8 +1,8 @@
 import base64, requests, sys
 
-print("-----------------------------------------------")
-print("- PureCloud Python Client Credentials Example -")
-print("-----------------------------------------------")
+print("---------------------------------------------------")
+print("- Genesys Cloud Python Client Credentials Example -")
+print("---------------------------------------------------")
 
 client_id = "CLIENT_ID"
 client_secret = "CLIENT_SECRET"
