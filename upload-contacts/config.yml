@@ -10,7 +10,7 @@ steps:
 
 - title: Session Initialization
   content: |
-    First, authorize with PureCloud and get the list of contact lists. This example adds each list to a dropdown in the UI to allow the user to choose the list without knowing the ID.
+    First, authorize with Genesys Cloud and get the list of contact lists. This example adds each list to a dropdown in the UI to allow the user to choose the list without knowing the ID.
 
 - title: File Selection UI
   content: |
@@ -18,9 +18,9 @@ steps:
 
 - title: The Upload Request
   content: |
-    To upload contacts to PureCloud, the POST request is constructed by building the form data body and configuring the request. This primarially consists of the form data body and the auth token in the header. For full documentation on the upload request, see the Dev Center article [Upload Contact Lists](https://developer.mypurecloud.com/api/rest/v2/outbound/uploadcontactlists.html).
+    To upload contacts to Genesys Cloud, the POST request is constructed by building the form data body and configuring the request. This primarially consists of the form data body and the auth token in the header. For full documentation on the upload request, see the Dev Center article [Upload Contact Lists](https://developer.mypurecloud.com/api/rest/v2/outbound/uploadcontactlists.html).
 
-    After constructing the request, the user-selected file is posted to the PureCloud upload service. This request may take some time to complete when uploading large contact lists.
+    After constructing the request, the user-selected file is posted to the Genesys Cloud upload service. This request may take some time to complete when uploading large contact lists.
 
 languages:
   javascript:
