@@ -2,9 +2,9 @@ import base64, json, requests, os
 import PureCloudPlatformClientV2
 from PureCloudPlatformClientV2.rest import ApiException
 
-print('-------------------------------------------------------------')
+print('-----------------------------------------------------------------')
 print('- Python3 Get Number of On-Queue Agents using Genesys Cloud SDK -')
-print('-------------------------------------------------------------')
+print('-----------------------------------------------------------------')
 	
 # Authenticate with genesys cloud
 apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
