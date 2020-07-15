@@ -7,7 +7,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps on how to implement BYOC Cloud in Genesys Cloud using [Purecloud Platform API](/rest/client-libraries/index.html). In order for BYOC Cloud to work with a third-party carrier, the carrier must:
+    This tutorial walks through the steps on how to implement BYOC Cloud in Genesys Cloud using [Genesys Cloud Platform API](/rest/client-libraries/index.html). In order for BYOC Cloud to work with a third-party carrier, the carrier must:
     
     * Be SIP-compliant
     * Support the UDP or TCP trunk transport protocol
@@ -52,7 +52,7 @@ steps:
 
 - title: Create Site
   content: |
-    To create a new site, there are a few pieces of information required before making an API call. First, is the location information saved in a global variable from an earlier step. Second, is the default Edge group which is found in PureCloud Admin > Telephony > Edge Groups. Third, is the Edge software update schedule and in this tutorial is set to the default schedule window of 2AM to 5AM. Read more about scheduling automatic updates for the Edge software [here](https://help.mypurecloud.com/articles/schedule-automatic-updates-edge-software/).
+    To create a new site, there are a few pieces of information required before making an API call. First, is the location information saved in a global variable from an earlier step. Second, is the default Edge group which is found in Genesys Cloud Admin > Telephony > Edge Groups. Third, is the Edge software update schedule and in this tutorial is set to the default schedule window of 2AM to 5AM. Read more about scheduling automatic updates for the Edge software [here](https://help.mypurecloud.com/articles/schedule-automatic-updates-edge-software/).
 
     Get the default edge group by calling [getTelephonyProvidersEdgesSites()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and look for "PureCloud Voice – AWS". Save the returned data and proceed to creating a new site with [postTelephonyProvidersEdgesSites()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function. Both functions are under telephony providers edge API.
 
