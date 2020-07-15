@@ -68,3 +68,25 @@ languages:
       highlight: "12-15"
     - file: "nodejs/index.js"
       highlight: "16-32"
+  csharp:
+    displayName: C#
+    steps:
+    - file: "csharp/Program.cs"
+      highlight: "0-52"
+    - file: "csharp/Program.cs"
+      highlight: "24-28"
+    - file: "csharp/Program.cs"
+      highlight: "30-33"
+    - file: "csharp/Program.cs"
+      highlight: "38-49"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/agentless-sms-notifications.py"
+      highlight: "0-30"
+    - file: "python/agentless-sms-notifications.py"
+      highlight: "10-13"
+    - file: "python/agentless-sms-notifications.py"
+      highlight: "10-13"
+    - file: "python/agentless-sms-notifications.py"
+      highlight: "15-30"

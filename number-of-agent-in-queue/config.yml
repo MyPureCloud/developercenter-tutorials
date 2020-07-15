@@ -8,24 +8,15 @@ steps:
   content: |
     This tutorial walks through the steps of implementing a function to get the number of On-Queue Agents on a specific queue.
 
-    There are 5 tpes of Routing Status: IDLE, INTERACTING, COMMUNINCATING, OFF_QUEUE, and NOT_RESPONDING. To determine if an agent is On-Queue, he/she should have a routing status of either IDLE or INTERACTING.
+    There are 5 types of Routing Status: IDLE, INTERACTING, COMMUNINCATING, OFF_QUEUE, and NOT_RESPONDING. To determine if an agent is On-Queue, he/she should have a routing status of either IDLE or INTERACTING.
 
-    Go here for more information about [Presences and Routing Status](https://developer.mypurecloud.com/api/rest/v2/presence/understanding_presence.html):
+    Go here for more information about [Presences and Routing Status](/api/rest/v2/presence/understanding_presence.html):
 
-    For this tutorial, we are going to use the Python PureCloud SDK.
+    For this tutorial, we are going to use the PureCloud SDK.
 
-- title: Obtain an Access Token
+- title: Authentication
   content: |
-    Start by making a POST call to https://login.mypurecloud.com/oauth/token with the following settings:
-
-    * Authentication- Basic
-    * User - Client ID
-    * Password-  Client secret
-
-    To use basic authentication, set the authentication header to ```Basic <base64EncodedUserPass>```, where base64EncodedUserPass is a base64-encoded string containing the username and password separated by a colon:
-    base64.b64encode(bytes(client_id + ':' + client_secret, 'ISO-8859-1')).decode('ascii')
-
-    Note: Base64 encoding differs between Python 2 and Python 3. This implementation is for Python 3.
+    Authenticate with Genesys Cloud using Client Credentials. More information about authentication could be found in the [Authorization Documentation](/api/rest/authorization/)
 
 - title: Create instance of Routing API
   content: |
@@ -46,10 +37,21 @@ languages:
     displayName: Python
     steps:
     - file: "python/script.py"
-      highlight: "0-51"
+      highlight: "0-68"
     - file: "python/script.py"
       highlight: "9-10"
     - file: "python/script.py"
       highlight: "12-13"
     - file: "python/script.py"
-      highlight: "14-50"
+      highlight: "16-63"
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-110"
+    - file: "nodejs/index.js"
+      highlight: "105-110"
+    - file: "nodejs/index.js"
+      highlight: "12-13"
+    - file: "nodejs/index.js"
+      highlight: "39-102"
