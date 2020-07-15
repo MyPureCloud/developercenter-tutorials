@@ -6,7 +6,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial will walk through creating and then updating a PureCloud user
+    This tutorial will walk through creating and then updating a Genesys Cloud user
 
 - title: Create new user
   content: |
