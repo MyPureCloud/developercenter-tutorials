@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-	environment := os.Getenv("PURECLOUD_ENVIRONMENT") // expected format: mypurecloud.com
-	clientID := os.Getenv("PURECLOUD_CLIENT_ID")
-	clientSecret := os.Getenv("PURECLOUD_CLIENT_SECRET")
+	environment := os.Getenv("GENESYS_CLOUD_ENVIRONMENT") // expected format: mypurecloud.com
+	clientID := os.Getenv("GENESYS_CLOUD_CLIENT_ID")
+	clientSecret := os.Getenv("GENESYS_CLOUD_CLIENT_SECRET")
 
 	// Configure SDK
 	config := platformclientv2.GetDefaultConfiguration()
