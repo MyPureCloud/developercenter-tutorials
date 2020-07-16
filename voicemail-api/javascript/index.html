@@ -165,7 +165,7 @@
         console.log("getVoiceMailMedia function " + id, date, ani, duration);
         let messageId = id; // String | Message ID
         let opts = {
-            'formatId': "WAV" // String | The desired media format.
+            'formatId': "WAV" // String | The desired media format. Other Available formats are: WAV, WEBM, WAV_ULAW, OGG_VORBIS, OGG_OPUS, MP3, NONE.
         };
 
         voicemailApi.getVoicemailMessageMedia(messageId, opts)
