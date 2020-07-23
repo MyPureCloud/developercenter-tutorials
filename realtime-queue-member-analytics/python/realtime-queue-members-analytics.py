@@ -80,7 +80,7 @@ def display_queue_observation():
                 }
             ]
         }
-    query.metrics = ["oUserRoutingStatuses"]
+    query.metrics = ["oUserRoutingStatuses","oUserPresences","oUserPresences","oOffQueueUsers"]
 
     try:
         # Query for queue observations

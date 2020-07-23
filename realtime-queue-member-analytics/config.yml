@@ -1,13 +1,14 @@
 ---
 title: Realtime Queue Members Analytics
-description: Use Notification API to collect queue member status 
+description: Use Notification API with Analytics API 
 categories:
 - Analytics
 - Notification
 steps:
 - title: Introduction
   content: |
-    This tutorial covers how to get realtime routing status of queue members using Genesys Cloud Analytics and Notifications API.
+    This tutorial covers how to use Analytics API with Notification API. With the use of Notification API it is possible to get realtime analytics. 
+    This sample code demonstrate how to get the number of active agents in a particular presence or routing status. For more information about queue query [visit this website](/api/rest/v2/analytics/queue.html). 
 
 - title: Authentication
   content: |
@@ -15,13 +16,14 @@ steps:
 
 - title: Create a Notification Channel
   content: |
-    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, then estalish a persistent connection using a websocket. 
-    Each time a conversation connects to the queue, the recieved notification payload will be parsed to JSON, and then with if statements check if a participant is a customer.
+    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, estalish a persistent connection using a websocket.
+    
+    Each time a conversation is recieved on the queue, the recieved notification payload will be parsed to JSON. It is then checked if one of the participants array has a key value pair of `"purpose":"customer"`. When the value matched, a function is called to display what changed on the queue.
 
 - title: Display Queue Member 
   content: |
-    When a conversation notification is recieved throught the, call a function that will display the routing status of member on the queue by calling POST /api/v2/analytics/queues/observations/query.
-    To learn more about Analytics Api you may visit this link (here)[/api/rest/v2/analytics/].
+    When this function is called, the Analytics API(`POST /api/v2/analytics/queues/observations/query`) will display the routing status and presence of the members of the queue. 
+    To learn more about Analytics Api you may visit this link [here](/api/rest/v2/analytics/). 
 
 languages: 
   python:
