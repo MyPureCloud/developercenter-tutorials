@@ -1,0 +1,37 @@
+---
+title: Realtime Queue Members Analytics
+description: Use Notification API to collect queue member status 
+categories:
+- Analytics
+- Notification
+steps:
+- title: Introduction
+  content: |
+    This tutorial covers how to get realtime routing status of queue members using Genesys Cloud Analytics and Notifications API.
+
+- title: Authentication
+  content: |
+    Authenticate with Genesys Cloud using OAuth Client credential grant. 
+
+- title: Create a Notification Channel
+  content: |
+    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, then estalish a persistent connection using a websocket. 
+    Each time a conversation connects to the queue, the recieved notification payload will be parsed to JSON, and then with if statements check if a participant is a customer.
+
+- title: Display Queue Member 
+  content: |
+    When a conversation notification is recieved throught the, call a function that will display the routing status of member on the queue by calling POST /api/v2/analytics/queues/observations/query.
+    To learn more about Analytics Api you may visit this link (here)[/api/rest/v2/analytics/].
+
+languages: 
+  python:
+    displayName: Python
+    steps:
+    - file: "python/realtime-queue-members-analytics.py"
+      highlight: "0-94"
+    - file: "python/realtime-queue-members-analytics.py"
+      highlight: "17-20"
+    - file: "python/realtime-queue-members-analytics.py"
+      highlight: "28-65"
+    - file: "python/realtime-queue-members-analytics.py"
+      highlight: "67-94"

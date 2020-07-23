@@ -14,12 +14,12 @@ print("-------------------------------------------------------------")
 print("- Realtime Queues Member Analytics -")
 print("-------------------------------------------------------------")
 
-# outhenticate with Genesys Cloud
+# Outhenticate with Genesys Cloud
 apiClient = PureCloudPlatformClientV2.api_client.ApiClient() \
-            .get_client_credentials_token(os.environ['LIENT_ID'], 
+            .get_client_credentials_token(os.environ['CLIENT_ID'], 
             os.environ['CLIENT_SECRET'])
 
-# create an instance of the API class
+# Create an instance of the API class
 api_instance = PureCloudPlatformClientV2.AnalyticsApi(apiClient)
 notifications_api = PureCloudPlatformClientV2.NotificationsApi(apiClient)
 
@@ -59,8 +59,8 @@ async def listen_to_Websocket():
                 print("Unexpected notification:")
                 pprint(message)
             else:
-                # on incoming calls from customer call diplay display_queue_observation function
-                purpose = message['eventBody']['participants'][0]['purpose']
+                # on incoming calls from customer call display display_queue_observation function
+                purpose = ([x for x in message['eventBody']['participants'] if x['purpose'] == 'customer'])[0]['purpose']
                 if purpose == 'customer':
                     display_queue_observation()
 
