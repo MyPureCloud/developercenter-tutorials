@@ -24,6 +24,7 @@ steps:
 - title: Display Queue Member 
   content: |
     When this function is called, the Analytics API(`POST /api/v2/analytics/queues/observations/query`) will display the routing status and presence of the members of the queue. 
+    
     To learn more about Analytics Api you may visit this link [here](/api/rest/v2/analytics/). 
 
 languages: 
