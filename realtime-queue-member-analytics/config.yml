@@ -7,7 +7,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial covers how to use Analytics API with Notification API. With the use of Notification API it is possible to get realtime analytics. 
+    This tutorial covers how to use Analytics API with Notification API. With the use of Notification API it is possible to get realtime analytics value. 
     
     This sample code demonstrate how to get the number of active agents in a particular presence or routing status. For more information about queue query [visit this website](/api/rest/v2/analytics/queue.html). 
 
@@ -19,13 +19,13 @@ steps:
   content: |
     Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, estalish a persistent connection using a websocket.
     
-    Each time a conversation is recieved on the queue, the recieved notification payload will be parsed to JSON. It is then checked if one of the participants array has a key value pair of `"purpose":"customer"`. If a value matches a function to display what changed on the queue routing status and presence.
+    Each time a conversation is recieved on the queue, the recieved notification payload will be parsed to JSON. It is then checked if one of the participants array has a key value pair of `"purpose":"customer"`. If a value matches, a function to display what changed on the queue routing status and presence will be called.
 
-- title: Display Queue Member 
+- title: Display Analytics
   content: |
     When this function is called, the Analytics API(`POST /api/v2/analytics/queues/observations/query`) will display the routing status and presence of the members of the queue. 
     
-    To learn more about Analytics Api you may visit this link [here](/api/rest/v2/analytics/). 
+    To learn more about Analytics API you may visit this link [here](/api/rest/v2/analytics/). 
 
 languages: 
   python:
