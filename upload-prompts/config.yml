@@ -8,9 +8,9 @@ steps:
   content: |
     Programmatically uploading prompts is done in three steps: 1) creating the prompt object, 2) creating the prompt's resource, and 3) uploading the prompt's media file.
 
-- title: Authenticate with PureCloud
+- title: Authenticate with Genesys Cloud
   content: |
-    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
 
 - title: Create a Prompt Object
   content: |

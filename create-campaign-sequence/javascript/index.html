@@ -28,22 +28,22 @@
 </html>
 
 <script>
-// Variable that will be used for storing objects (campaign list) from PureCloud
+// Variable that will be used for storing objects (campaign list) from Genesys Cloud
 let campaignLists = null;
 // This client ID expects the redirect URL to be http://localhost:8080/
 const clientId = '83d37bf5-e050-47bf-9937-0314b259c9c4';
 const redirectUri = window.location.href;
 
-// Set purecloud objects
+// Set Genesys Cloud objects
 const platformClient = require('platformClient');
 const client = platformClient.ApiClient.instance;
 const outboundApi = new platformClient.OutboundApi();
 
-// Set PureCloud settings
+// Set Genesys Cloud settings
 client.setEnvironment('mypurecloud.com');
 client.setPersistSettings(true, 'test_app');
 
-// Accessing purecloud objects
+// Accessing Genesys Cloud objects
 $(document).ready(() => {
     client.loginImplicitGrant(clientId, redirectUri)
         .then(() => {
@@ -123,7 +123,7 @@ function submit () {
         return campaignList.options[campaignList.selectedIndex].value;
     });
 
-    // Create an object in acceptable format for PureCloud API to store all the user input
+    // Create an object in acceptable format for Genesys Cloud API to store all the user input
     let body = {
         name: (document.getElementById('sequenceName').value),
         version: 0,

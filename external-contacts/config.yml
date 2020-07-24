@@ -12,9 +12,9 @@ steps:
 
     For more information on external contacts see the [Resource Center](https://help.mypurecloud.com/articles/about-external-contacts/)
 
-- title: Authenticate with PureCloud
+- title: Authenticate with Genesys Cloud
   content: |
-    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
 
 - title: Create an Organization
   content: |

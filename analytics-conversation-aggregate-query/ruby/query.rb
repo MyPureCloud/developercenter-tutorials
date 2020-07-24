@@ -1,8 +1,8 @@
 require 'purecloudplatformclientv2'
 require 'json'
 
-secret = ENV['PURECLOUD_SECRET']
-id = ENV['PURECLOUD_CLIENT_ID']
+secret = ENV['GENESYS_CLOUD_SECRET']
+id = ENV['GENESYS_CLOUD_CLIENT_ID']
 
 PureCloud.authenticate_with_client_credentials id, secret, "mypurecloud.com"
 #PureCloud.configure.debugging = true

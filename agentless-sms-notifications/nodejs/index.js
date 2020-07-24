@@ -1,4 +1,4 @@
-// Set purecloud objects
+// Set Genesys Cloud objects
 const platformClient = require('purecloud-platform-client-v2');
 const client = platformClient.ApiClient.instance;
 
@@ -9,7 +9,7 @@ let ConversationsApi = new platformClient.ConversationsApi();
 const CLIENT_ID = '-- client id here --';
 const CLIENT_SECRET = '-- client secret here --';
 
-// Authenticate with PureCloud
+// Authenticate with Genesys Cloud
 client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
     .then(() => {
 

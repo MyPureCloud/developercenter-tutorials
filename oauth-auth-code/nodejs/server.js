@@ -15,7 +15,7 @@ var authvalidation = function(req, res, next) {
     //if we don't have a session then redirect them to the login page
     if((req.cookies && !(req.cookies.session && sessionMap[req.cookies.session])) &&
             req.url.indexOf("oauth") == -1){
-        //redirect the user to authorize with purecloud
+        //redirect the user to authorize with Genesys Cloud
         var redirectUri = "https://login.mypurecloud.com/oauth/authorize?" +
                     "response_type=code" +
                     "&client_id=" + client_id +
@@ -74,7 +74,7 @@ app.get("/oauth2/callback", function(req,res){
 
         var sessionId = uuidv4();
 
-        //store the session id as a key in the session map, the value is the bearer token for purecloud.
+        //store the session id as a key in the session map, the value is the bearer token for Genesys Cloud.
         //we want to keep that secure so won't send that back to the client
         sessionMap[sessionId] = tokenResponse.access_token;
 

@@ -1,5 +1,5 @@
-$secret = $Env:purecloud_secret;
-$id = $Env:purecloud_client_id;
+$secret = $Env:genesys_cloud_secret;
+$id = $Env:genesys_cloud_client_id;
 
 $auth  = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("${id}:${secret}"))
 

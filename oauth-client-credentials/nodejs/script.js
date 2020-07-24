@@ -17,8 +17,8 @@ function handleTokenCallback(body){
     });
 }
 
-secret = process.env.purecloud_secret;
-id = process.env.purecloud_client_id;
+secret = process.env.genesys_cloud_secret;
+id = process.env.genesys_cloud_client_id;
 
 request.post({url:'https://login.mypurecloud.com/oauth/token', form: {grant_type:'client_credentials'}}, function(err,httpResponse,body){
     if(err == null){

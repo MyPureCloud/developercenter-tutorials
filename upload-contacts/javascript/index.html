@@ -16,12 +16,12 @@
 		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
 		const redirectUri = window.location.href;
 
-		// Set purecloud objects
+		// Set Genesys Cloud objects
 		const platformClient = require('platformClient');
 		const client = platformClient.ApiClient.instance;
 		const outboundApi = new platformClient.OutboundApi();
 
-		// Set PureCloud settings
+		// Set Genesys Cloud settings
 		client.setEnvironment('mypurecloud.com');
 		client.setPersistSettings(true, 'test_app');
 
@@ -31,7 +31,7 @@
 				uploadContacts(event.target.files[0]);
 			});
 
-			// Authenticate with PureCloud
+			// Authenticate with Genesys Cloud
 			client.loginImplicitGrant(clientId, redirectUri)
 				.then(() => {
 					console.log('Logged in');
