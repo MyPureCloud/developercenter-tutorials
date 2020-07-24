@@ -7,7 +7,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial covers how to use Analytics API with Notification API. This sample code demonstrate how to get the number of active agents in a particular presence or routing status. For more information about queue query [visit this website](/api/rest/v2/analytics/queue.html). 
+    This tutorial covers how to use Analytics API with Notification API. This sample code uses Analytics API queue query which get the number of active agents, routing status and user presence with Notification API to monitor for any incoming conversation on the queue. For more information about queue query [visit this website](/api/rest/v2/analytics/queue.html). 
 
 - title: Authentication
   content: |
