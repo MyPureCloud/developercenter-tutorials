@@ -57,5 +57,5 @@ languages:
       highlight: "28-65"
     - file: "python/index.py"
       highlight: "67-93"
-    - file: "python/response.js"
+    - file: "python/response.json"
       highlight: "0-128"
