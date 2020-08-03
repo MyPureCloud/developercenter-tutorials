@@ -1,0 +1,128 @@
+{
+    "results": [
+    {
+        "group": {
+            "queueId": "1d1af111-b11c-11f1-b111-1cf1c11111fc"
+        },
+        "data": [
+        {
+            "metric": "oUserRoutingStatuses",
+            "qualifier": "INTERACTING",
+            "stats": {
+                "count": 2
+            }
+        },
+        {
+            "metric": "oUserRoutingStatuses",
+            "qualifier": "IDLE",
+            "stats": {
+                "count": 1
+            }
+        },
+        {
+            "metric": "oUserRoutingStatuses",
+            "qualifier": "OFF_QUEUE",
+            "stats": {
+                "count": 3
+            }
+        }
+        ]
+    },
+    {
+        "group": {
+            "queueId": "1d1af111-b11c-11f1-b111-1cf1c11111fc",
+            "mediaType": "voice"
+        },
+        "data": [
+        {
+            "metric": "oInteracting",
+            "stats": {
+                "count": 1
+            },
+            "truncated": false,
+            "observations": [
+            {
+                "observationDate": "2020-08-03T04:28:15.134Z",
+                "conversationId": "035eb4ec-c974-45d0-bbb7-1f2b1c518da5",
+                "sessionId": "3df49a2d-9d2c-460e-bd10-7caf9fb311fb",
+                "routingPriority": 0,
+                "participantName": "Makati, Philippines",
+                "userId": "be63a764-8ff0-4a64-816f-66cb8a01da7e",
+                "direction": "inbound",
+                "ani": "tel:+63288643000",
+                "dnis": "tel:+16145059852"
+            }
+            ]
+        }
+        ]
+    },
+    {
+        "group": {
+            "queueId": "1d1af111-b11c-11f1-b111-1cf1c11111fc",
+            "mediaType": "chat"
+        },
+        "data": [
+        {
+            "metric": "oInteracting",
+            "stats": {
+                "count": 1
+            },
+            "truncated": false,
+            "observations": [
+            {
+                "observationDate": "2020-08-03T04:27:36.780Z",
+                "conversationId": "cb354713-2865-48cb-b97c-4f66483b9c7e",
+                "sessionId": "8fb331d6-924c-4da5-aa5e-fe0915e15d1e",
+                "routingPriority": 2,
+                "participantName": "russ try",
+                "userId": "da93acf7-0350-48d9-8085-ddf557069a70",
+                "direction": "inbound"
+            }
+            ]
+        }
+        ]
+    },
+    {
+        "group": {
+            "queueId": "1d1af111-b11c-11f1-b111-1cf1c11111fc",
+            "mediaType": "message"
+        },
+        "data": [
+        {
+            "metric": "oInteracting",
+            "stats": {
+                "count": 0
+            }
+        }
+        ]
+    },
+    {
+        "group": {
+            "queueId": "1d1af111-b11c-11f1-b111-1cf1c11111fc",
+            "mediaType": "email"
+        },
+        "data": [
+        {
+            "metric": "oInteracting",
+            "stats": {
+                "count": 0
+            }
+        }
+        ]
+    },
+    {
+        "group": {
+            "queueId": "1d1af111-b11c-11f1-b111-1cf1c11111fc",
+            "mediaType": "callback"
+        },
+        "data": [
+        {
+            "metric": "oInteracting",
+            "stats": {
+                "count": 0
+            }
+        }
+        ]
+    }
+    ]
+}

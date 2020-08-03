@@ -59,29 +59,31 @@ async def listen_to_Websocket():
                 print("Unexpected notification:")
                 pprint(message)
             else:
-                # on incoming calls from customer call display display_queue_observation function
+                # filter each incoming interactions 
                 purpose = ([x for x in message['eventBody']['participants'] if x['purpose'] == 'customer'])[0]['purpose']
                 if purpose == 'customer':
                     display_queue_observation()
 
 def display_queue_observation():
     query = PureCloudPlatformClientV2.QueueObservationQuery() # QueueObservationQuery | query
-    query.filter = {
-        "type": "OR",
+    query = {
+        "filter": {
+            "type": "AND",
             "clauses": [
                 {
                     "type": "or",
-                        "predicates":[
-                            {
-                                "dimension" : "queueId",
-                                "value": QUEUE_ID
-                            }
-                        ]
+                            "predicates":[
+                                {
+                                    "dimension" : "queueId",
+                                    "value": QUEUE_ID
+                                }
+                            ]
                 }
             ]
+            },
+        "detailMetrics": ["oInteracting"],
+        "metrics":["oUserRoutingStatuses"]
         }
-    query.metrics = ["oUserRoutingStatuses","oUserPresences","oUserPresences","oOffQueueUsers"]
-
     try:
         # Query for queue observations
         api_response = api_instance.post_analytics_queues_observations_query(query)

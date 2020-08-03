@@ -1,0 +1,61 @@
+---
+title: Real-Time Queue Observation Query
+description: Use Notification API with Analytics API to retrieve real-time observation metrics
+categories:
+- Analytics
+- Notification
+steps:
+- title: Introduction
+  content: |
+    In Genesys Cloud Analytics API, there are three different perspectives of data offered: detail records, aggregate metrics and instantaneous observations.
+    This tutorial will cover how to get instantaneous observations metrics. For more information about analytics perspective visit this [page](/api/rest/v2/analytics/overview.html) for more details.
+    
+    Instantaneous observations are metrics that are pertinent right now. No time interval, no lagging indicators (e.g. averages), no coarser views of the world. The data is of what is happening now. 
+    This tutorial will cover how to get observation analytics data in real-time, but subscribing to Genesys Cloud's Notification API. 
+
+- title: Authentication
+  content: |
+    First step is to authenticate with Genesys Cloud using OAuth Client credential grant. 
+
+- title: Create a Notification Channel
+  content: |
+    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, and establish a persistent connection using a websocket.
+    
+    Each time a conversation is received on the queue, the received notification payload will be parsed to a JSON data. 
+    It is then checked if one of the participants array has a key value pair of `"purpose":"customer"`. 
+    If a value matches, a function will be called to send the query to the queue/s. 
+
+- title: Analytics Queue Observation Query
+  content: |
+    The queue obsrvation query is used to retrieve current real-time data on a Genesys Cloud queue. The request payload has three parts:
+      
+    filter - Filters the observation data by providing boolean logical predicates. In this example, two queue id's are being observed.
+    
+    metrics - Retrieve the named metrics provided in the query. If omitted, all metrics available will be returned. The data observed for this 
+    tutorial `oUserRoutingStatuses`, this allows the query to retrieve the current routing status of the users in the queue.   
+
+    detailMetrics - Metrics in which to include additional detailed information. This query will get a detailed metrics of all the interaction. 
+
+    See available metrics on this [link](/api/rest/v2/analytics/metrics.html), and to learn more about observation query visit this [link](/api/rest/v2/analytics/user_observation.html).
+
+- title: Response Data
+  content: |
+    The response data displays the routing status of members of the queue with the use of oUserRoutingStatuses metrics and 
+    the detailed metrics of all interactions in the queue. Each time a conversation is recieved a new data will be retrived.
+    
+    To learn more about Analytics API, visit this [link](/api/rest/v2/analytics/index.html) or watch this [DevCast video](https://www.youtube.com/watch?v=K0K70FWOR4U&list=PL4anLPM52HBCRXF-OjTd66u0DsZUPMXVX&index=4&t=0s).
+
+languages: 
+  python:
+    displayName: Python
+    steps:
+    - file: "python/index.py"
+      highlight: "0-96"
+    - file: "python/index.py"
+      highlight: "17-20"
+    - file: "python/index.py"
+      highlight: "28-65"
+    - file: "python/index.py"
+      highlight: "67-93"
+    - file: "python/response.js"
+      highlight: "0-128"
