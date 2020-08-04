@@ -14,7 +14,7 @@ print("-------------------------------------------------------------")
 print("- Realtime Queues Member Analytics -")
 print("-------------------------------------------------------------")
 
-# Outhenticate with Genesys Cloud
+# Authenticate with Genesys Cloud
 apiClient = PureCloudPlatformClientV2.api_client.ApiClient() \
             .get_client_credentials_token(os.environ['CLIENT_ID'], 
             os.environ['CLIENT_SECRET'])
