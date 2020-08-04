@@ -9,11 +9,10 @@ steps:
   content: |
     Analytics API allows to retrieve real-time and historical data from Genesys Cloud. These data can be decomposed to three different perspective: detail records, aggregate metrics and instantaneous observations.
     
-    This tutorial will cover how to query instantaneous observations metrics. Instantaneous observations are metrics that are pertinent right now, no time interval, no lagging indicators (e.g. averages), no coarser views of the world. 
-    
-    This tutorial will show you how to get observation analytics data in real-time manner, by subscribing to Genesys Cloud's Notification API. 
-
     To learn more about other analytics perspective visit [Analytics Overview](/api/rest/v2/analytics/overview.html) for more details.
+    
+    This tutorial covers how to query instantaneous observations metrics. Instantaneous observations metrics are pertinent right now, no time interval, no lagging indicators (e.g. averages), no coarser views of the world. 
+    To allow real-time data query, this tutorial will also use [Notification API](/api/rest/v2/notifications/).
 
 - title: Authentication
   content: |
@@ -21,8 +20,8 @@ steps:
 
 - title: Create a Notification Channel
   content: |
-    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, and establish a persistent connection using a websocket.
-    The goal is for the application listen to any inbound or outbound interaction within the specified queue. 
+    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`. Then establish a persistent connection using a websocket.
+    By subscribing to the mentioned topic, the application able to detect any inbound or outbound interaction within the specified queue. 
 
     Each time an interaction message is received, the notification payload will be parsed to a JSON data. 
     It is then checked if one of the participants in the array of data has a key value pair of `"purpose":"customer"`. 
@@ -30,25 +29,28 @@ steps:
 
 - title: Analytics Queue Observation Query
   content: |
-    As discussed in previously, the queue observation query is used to retrieve real-time snapshots of data in a Genesys Cloud queue. If a customer interaction is detected, the function to display the observation metrics will be called, thus providing real-time view of what is the current update in the given queue. And to retrieve the data impertinent to the organizations need, the request payload has to be supplied with the following:      
+    As previously discussed, the queue observation query is used to retrieve real-time snapshots of data in a Genesys Cloud queue. 
+    If a customer interaction is detected, the function to display the observation metrics will be called, thus providing real-time 
+    view of what is the current update in the given queue. To retrieve the data impertinent to the organizations need, 
+    the request payload has to be supplied with the following:      
     
-      filter - Filters the observation data by providing boolean logical predicates. Multiple queue data can be retrieved in one query, but for this sample tutorial only one is supplied. 
+      *filter - Filters the observation data by providing boolean logical predicates. Multiple queue data can be retrieved in one query, but for this sample tutorial only one is supplied. 
     
-      metrics - Retrieve the metrics provided in the query. If omitted, all metrics available will be returned. The metrics observed for this tutorial is ` oUserRoutingStatuses`, this metric will provide the count of members in routing status in the given queue. Any routing status with zero count will be omitted. 
+      *metrics - Only retrieves the metrics provided in the query. If omitted, all metrics available will be returned. The metrics observed for this tutorial is ` oUserRoutingStatuses`, this metric will provide the count of members per routing status in the given queue. Any routing status with zero count will be omitted. 
       
-      detailMetrics - Metrics in which to include additional detailed information. This query will get a detailed metrics of all the current interactions, and for this tutorial the ` oInteracting` metric is provided, which will allow the retrieval of detailed data on current interactions.  
+      *detailMetrics - Metrics in which to include additional detailed information. This query will get a detailed metrics of all the current interactions, and for this tutorial the ` oInteracting` metric is provided, which will allow the retrieval of detailed data on current interactions.  
     
-    Also, see available check out useful links below: 
+    Check out useful links below for more details: 
     
-    [Metrics](/api/rest/v2/analytics/metrics.html) 
+      *[Metrics](/api/rest/v2/analytics/metrics.html) 
     
-    [User Observation](/api/rest/v2/analytics/user_observation.html).
+      *[User Observation](/api/rest/v2/analytics/user_observation.html).
 
 - title: Response Data
   content: |
-    In the response data, all the routing status of the agents in the queue has been listed down. The snapshot data shows that there are two interacting, one idle and three off queue agents in the specified queue.
+    In the response data, all the routing status of the agents in the queue has been listed down. The snapshot data shows that there are two interactions, one idle and three off queue agents in the queue.
     
-    After the routing status data is the detailed data of the interactions. The two interactions mentioned earlier is now provided with more details such as conversation ID, session ID and more.
+    After the routing status data is the detailed metrics of the interactions. The two interactions mentioned earlier is provided with more details such as conversation ID, session ID and more.
     
     To learn more about Analytics API, visit this [link](/api/rest/v2/analytics/index.html) or watch this [DevCast video](https://www.youtube.com/watch?v=K0K70FWOR4U&list=PL4anLPM52HBCRXF-OjTd66u0DsZUPMXVX&index=4&t=0s).
 
