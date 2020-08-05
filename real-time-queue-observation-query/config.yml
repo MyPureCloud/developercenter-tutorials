@@ -19,19 +19,18 @@ steps:
 
 - title: Create a Notification Channel
   content: |
-    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`. Then establish a persistent connection using a websocket.
-    By subscribing to the mentioned topic, the application will be able to detect any inbound or outbound interaction within the specified queue. 
-
+    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, then establish a persistent connection using a websocket. The application will now be able to detect any inbound or outbound interaction within the specified queue. 
+    
     Each time an interaction message is received, the notification payload will be parsed to a JSON data. 
     It is then checked if one of the participants in the array of data has a key value pair of `"purpose":"customer"`. 
     If a value matches, the application will call the observation query function. 
 
 - title: Analytics Queue Observation Query
   content: |
-    As previously discussed, the queue observation query is used to retrieve real-time snapshots of data in a Genesys Cloud queue. 
+    As previously discussed, the queue observation query is used to retrieve real-time snapshots of data in a queue in Genesys Cloud. 
     If a customer interaction is detected, the function to display the observation metrics will be called, thus, providing real-time 
     view of what is the current update in the given queue. To retrieve the data impertinent to the organizations' needs, 
-    the request payload must be supplied with the following:      
+    the request payload must be supplied with the following information:      
     
       *filter - Filters the observation data by providing boolean logical predicates. Multiple queue data can be retrieved in one query, but for this sample tutorial, only one is supplied. 
 
@@ -47,9 +46,9 @@ steps:
 
 - title: Response Data
   content: |
-    In the response data, all the routing status of the agents in the queue has been listed down. The snapshot data shows that there are two interactions, one idle and three off queue agents in the queue.
+    In the response data, all the routing status of the agents in the queue has been listed down. The snapshot data shows that there are two current interactions, one idle and three off queue agents in the queue.
     
-    After the routing status data is the detailed metrics of the interactions. The two interactions mentioned earlier is provided with more details such as conversation ID, session ID and more.
+    After the routing status data, is the detailed metrics of the interactions. The two interactions are provided with more details such as conversation ID, session ID and more.
     
     To learn more about Analytics API, visit this [link](/api/rest/v2/analytics/index.html) or watch this [DevCast video](https://www.youtube.com/watch?v=K0K70FWOR4U&list=PL4anLPM52HBCRXF-OjTd66u0DsZUPMXVX&index=4&t=0s).
 
