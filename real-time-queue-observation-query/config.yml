@@ -7,12 +7,11 @@ categories:
 steps:
 - title: Introduction
   content: |
-    Analytics API allows to retrieve real-time and historical data from Genesys Cloud. These data can be decomposed to three different perspectives: detail records, aggregate metrics and instantaneous observations.
+    Analytics API allows you to retrieve real-time and historical data from Genesys Cloud. This data can be viewed at three different levels of granularity: detail records, aggregate metrics and instantaneous observations. 
     
-    To learn more about other analytics perspective, visit [Analytics Overview](/api/rest/v2/analytics/overview.html) for more details.
+    We are going to cover the instantaneous perspective in this tutorial. To learn more about other analytics perspectives, visit [Analytics Overview](/api/rest/v2/analytics/overview.html). 
     
-    This tutorial covers how to query instantaneous observations metrics. Instantaneous observations metrics are pertinent right now, no time interval, no lagging indicators (e.g. averages), no coarser views of the world. 
-    To allow real-time data query, this tutorial will also use [Notification API](/api/rest/v2/notifications/).
+    Instantaneous observations metrics are pertinent data right now, no time intervals, no lagging indicators (e.g. averages), no coarser views of the world. This metrics is useful for applications that displays real-time changes of data or activity in Genesys Cloud. To allow real-time data query, we will also use Genesys Cloud [Notification API](/api/rest/v2/notifications/).
 
 - title: Authentication
   content: |
@@ -35,7 +34,7 @@ steps:
     the request payload must be supplied with the following:      
     
       *filter - Filters the observation data by providing boolean logical predicates. Multiple queue data can be retrieved in one query, but for this sample tutorial, only one is supplied. 
-    
+
       *metrics - Only retrieves the metrics provided in the query. If omitted, all metrics available will be returned. The metrics observed for this tutorial is ` oUserRoutingStatuses`, this metric will provide the count of members per routing status in the given queue. Any routing status with zero count will be omitted. 
       
       *detailMetrics - Metrics in which to include additional detailed information. This query will get a detailed metric of all the current interactions, and for this tutorial the ` oInteracting` metric is provided, which will allow the retrieval of detailed data on current interactions.  
