@@ -84,7 +84,7 @@ public class Main {
         }
     }
 
-    public static class QueueMemberEventListener implements NotificationListener<MyQueueUserEventTopicQueueMember> {
+    public static class QueueMemberEventListener implements NotificationListener<QueueUserEventTopicQueueMember> {
         private String topic;
         private Queue queue;
 
@@ -92,15 +92,15 @@ public class Main {
             return topic;
         }
 
-        public Class<MyQueueUserEventTopicQueueMember> getEventBodyClass() {
-            return MyQueueUserEventTopicQueueMember.class;
+        public Class<QueueUserEventTopicQueueMember> getEventBodyClass() {
+            return QueueUserEventTopicQueueMember.class;
         }
 
         // This is the callback for queue membership events. Called when a member joins or leaves the queue
         @Override
         public void onEvent(NotificationEvent<?> event) {
-            // Extract the MyQueueUserEventTopicQueueMember object from the eventBody
-            MyQueueUserEventTopicQueueMember member = (MyQueueUserEventTopicQueueMember)event.getEventBody();
+            // Extract the QueueUserEventTopicQueueMember object from the eventBody
+            QueueUserEventTopicQueueMember member = (QueueUserEventTopicQueueMember)event.getEventBody();
             // Get the necessary details
             String id = member.getId();
             boolean joined = member.getJoined();
