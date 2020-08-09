@@ -6,17 +6,23 @@ categories:
 steps:
 - title: Introduction
   content: |
-    Data tables allow organizations to store data locally and ensure that Architect can access it within an interaction. They can be used to access data sets larger than allowed by a switch statement. 
+    Data tables allow organizations to store data locally.
     
+    One of the most common use cases is integration with third party services. An example is a service that determines the account type based on the caller's input and then route the caller to a corresponding queue. Instead of the switching logic being in the callflow, the account type-queue relationship could be defined in a data table. This allows for easier management especially if there are multiple values.
+
+    Another thing to keep in mind is when NOT to use data tables. It is not recommended to be used when frequent read-write operations are required - as tempting as that may be. There are use cases where the data table needs to be updated dynamically but only in relatively light loads. Data tables is not a replacement for dedicated databases. 
+
     This tutorial demonstrates how to create a data table and import information from a CSV.
 
-    NOTE: Though its contents can be appended to, and modified, after creation, it's not a dedicated database solution. Data tables are not recommended for use where fast and frequent data updating is required.
+    The values can be any of the following common data types: string, boolean, integer, and float (identified as "number" by the API). The key identifier will always be a string.
 
-    For mor information on data tables see the [Resource Center](https://help.mypurecloud.com/articles/work-with-data-tables/)
+    For more information on data tables see the [Resource Center](https://help.mypurecloud.com/articles/work-with-data-tables/)
 
 - title: Authenticate with Genesys Cloud
   content: |
     The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
+
+    For more information on authorization see this [page](https://developer.mypurecloud.com/api/rest/authorization/)
 
 - title: Define the data table schema
   content: |
@@ -48,3 +54,29 @@ languages:
       highlight: "51-63"
     - file: "nodejs/index.js"
       highlight: "82-107"
+  python:
+    displayName: Python
+    steps:
+    - file: "python/datatables.py"
+      highlight: "1-98"
+    - file: "python/datatables.py"
+      highlight: "10-14"
+    - file: "python/datatables.py"
+      highlight: "18-56"
+    - file: "python/datatables.py"
+      highlight: "58-64"
+    - file: "python/datatables.py"
+      highlight: "66-97"
+  java:
+    displayName: Java
+    steps:
+    - file: "java/main/java/Main.java"
+      highlight: "1-146"
+    - file: "java/main/java/Main.java"
+      highlight: "66-85"
+    - file: "java/main/java/Main.java"
+      highlight: "18-56"
+    - file: "java/main/java/Main.java"
+      highlight: "89-97"
+    - file: "java/main/java/Main.java"
+      highlight: "99-143"

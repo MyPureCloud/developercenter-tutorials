@@ -28,9 +28,9 @@ const dataTableSchema = {
                 'default': false
             },
             'quantity': {
-                'title': 'quantity',
+                'title': 'expiration',
                 'type': 'integer',
-                '$id': '/properties/quantity',
+                '$id': '/properties/expiration',
             },
             'price': {
                 'title': 'price',
