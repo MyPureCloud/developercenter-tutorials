@@ -1,0 +1,68 @@
+---
+title: Retrieving Notifications from a Historical Adherence Query
+description: Tutorial on how to subscribe to a historical adherence notifications and retreive the results of a query
+categories:
+- Notifications
+steps:
+- title: Introduction
+  content: |
+    This tutorial shows how to subscribe to historical adherence notifications for a query and retrieve the resulting downloadUrls.
+- title: Client Credential Authentication
+  content: |
+    Authentication using Client Credentials
+- title: Retrieving Your User ID
+  content: |
+    Using the UserApi you can retrieve your own userId for the subscription.
+- title: Building the NotificationHandler to listen for historical adherence query events
+  content: |
+    Instantiate a new notification handler and add a listener for the query completed response
+- title: Writing a custom NotificationListener
+  content: |
+    Create a class implementing the NotificationListener<T> interface.
+    A list of mappings of topics to classes for T can be found here: https://github.com/MyPureCloud/platform-client-sdk-java/blob/master/notificationMappings.json
+    Since we are subscribing to the "v2.users.{myId}.workforcemanagement.historicaladherencequery" topic, the class is WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
+    The schema for "v2.users.{myId}.workforcemanagement.historicaladherencequery" can be found here: https://developer.mypurecloud.com/api/rest/v2/notifications/available_topics.html
+- title: Setup Your Historical Adherence Query
+  content: |
+    First, get the management unit ID for the users you plan to query.
+    
+    Then, create a list of the users who's adherence you plan to query.
+
+    Last, set the start date, end date, and timezone for the query and construct the body of the request.
+- title: Making a Request
+  content: |
+    Create an instance of the WorkforceManagementApi to make the request and, in a try catch, make the request with the postWorkforcemanagementManagementunitHistoricaladherencequery() method.
+    Save the ID from the inital response.
+    This will be used to retrieve your query response from the hashMap of events.
+- title: Creating a Helper Method to Check for the Completion of the Query
+  content: |
+    There are different ways to check for the results of a request.
+    Here is a simple implementation that takes a function that returns a boolean while allowing you to set a timeout and wait period between retries.
+- title: Retrieving the Query Results
+  content: |
+    Use the "waitUntil" helper method, or your method of choice, to await the response for the query.
+    Then retrieve the result in the form of a WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
+    The completed result has a list of download URLs than can be used to get your historical adherence results for each user in json format.
+    The schema of the response json can be found here: https://developer.mypurecloud.com/api/rest/v2/workforcemanagement/#post-api-v2-workforcemanagement-managementunits--muId--historicaladherencequery
+languages:
+  java:
+    displayName: Java
+    steps:
+    - file: "java/Main.java"
+      highlight: "0-203"
+    - file: "java/Main.java"
+      highlight: "32-48"
+    - file: "java/Main.java"
+      highlight: "48-53"
+    - file: "java/Main.java"
+      highlight: "53-65"
+    - file: "java/Main.java"
+      highlight: "156-202"
+    - file: "java/Main.java"
+      highlight: "65-94"
+    - file: "java/Main.java"
+        highlight: "94-108"
+    - file: "java/Main.java"
+        highlight: "137-154"
+    - file: "java/Main.java"
+        highlight: "108-137"
