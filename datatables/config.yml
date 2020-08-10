@@ -22,7 +22,7 @@ steps:
   content: |
     The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
 
-    For more information on authorization see this [page](https://developer.mypurecloud.com/api/rest/authorization/)
+    For more information on authorization see this [page](/api/rest/authorization/)
 
 - title: Define the data table schema
   content: |
