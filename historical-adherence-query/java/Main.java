@@ -69,7 +69,14 @@ public class Main {
         // Workforce Management Api Instance for the request
         WorkforceManagementApi wfmApiInstance = new WorkforceManagementApi();
 
-        String managementUnitId = "33333333-3333-3333-3333-333333333333"; // String | The management unit ID of the management unit
+        // Get the ID of your division
+        String divisionId = me.getDivision().getId();
+
+        // Get a list of management units
+        List<ManagementUnit> managementUnits = wfmApiInstance.getWorkforcemanagementManagementunits(1, 1,"", "", divisionId).getEntities();
+        
+        // Get the ID of the management unit
+        String managementUnitId = managementUnits.get(0).getId();
 
         // List of all users in the management unit
         List<User> users = wfmApiInstance.getWorkforcemanagementManagementunitUsers(managementUnitId).getEntities();
@@ -148,7 +155,7 @@ public class Main {
 
             // Thows an exception if over the set maximum time
             if (sw.elapsed(TimeUnit.SECONDS) > maxTimeSeconds) {
-                throw new TimeoutException("Timed out waiting after " + maxTimeSeconds + " seconds");
+                throw new TimeoutException(String.format("Timed out waiting after %s seconds", maxTimeSeconds));
             }
         }
     }
@@ -168,7 +175,7 @@ public class Main {
 
         public HistoricalAdherenceEventListener(String userId) {
             // The topic to which the notification handler subscribes
-            this.topic = "v2.users." + userId + ".workforcemanagement.historicaladherencequery";
+            this.topic = String.format("v2.users.%s.workforcemanagement.historicaladherencequery", userId);
         }
 
         // Allows you to retrieve the result after it has been completed
@@ -185,7 +192,7 @@ public class Main {
                     return true;
                 }
                 // If the result is not "complete", you can determine how to handle that, here we throw an exception.
-                throw new NoSuchElementException("The resulting state for " + operationId + " was " + result.getQueryState());
+                throw new NoSuchElementException(String.format("The resulting state for %s was %s", operationId, result.getQueryState()));
             }
             // The request has not yet been completed
             return false;

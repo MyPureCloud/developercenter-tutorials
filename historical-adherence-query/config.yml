@@ -1,12 +1,16 @@
 ---
 title: Retrieving Notifications from a Historical Adherence Query
-description: Tutorial on how to subscribe to a historical adherence notifications and retreive the results of a query
+description: Tutorial on how to subscribe to a historical adherence notifications and retrieve the results of a query
 categories:
 - Notifications
 steps:
 - title: Introduction
   content: |
     This tutorial shows how to subscribe to historical adherence notifications for a query and retrieve the resulting downloadUrls.
+    Subscribing to notifications is how you are able to retrieve events that include the results of your requests.
+    With historical adherence queries specifically, after your intital request your results will begin processing.
+    After your query has finished processing, an event will be returned that can be caught if subscribed to historical adherence query notifications.
+    The body of this event contains the results of your query, including the downloadUrls with the historical adherence of each user for the range of time you queried.
 - title: Client Credential Authentication
   content: |
     Authenticate using Client Credentials
@@ -22,7 +26,7 @@ steps:
     Create a class implementing the NotificationListener<T> interface.
     A list of mappings of topics to classes for T can be found [here.] (https://github.com/MyPureCloud/platform-client-sdk-java/blob/master/notificationMappings.json)
     Since we are subscribing to the "v2.users.{myId}.workforcemanagement.historicaladherencequery" topic, the class is WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
-    The schema for "v2.users.{myId}.workforcemanagement.historicaladherencequery" can be found here: https://developer.mypurecloud.com/api/rest/v2/notifications/available_topics.html
+    The schema for "v2.users.{myId}.workforcemanagement.historicaladherencequery" can be found [here.] (/api/rest/v2/notifications/available_topics.html)
 
     This notification listener gets events with the historicaladherencequery topic.
 
@@ -31,18 +35,24 @@ steps:
     That result object is then mapped to its operation ID in a hash table.
 
     This hash table can be checked by our application to see if the request has finished processing and retrieve the results of the query.
-- title: Setup Your Historical Adherence Query
+- title: Retrieve The Management Unit ID
   content: |
-    First, get the management unit ID for the users you plan to query.
-    
-    Then, create a list of the users from that management unit who's adherence you plan to query.
-
-    Last, construct the body of the request. For more details on the schema of a request look [here.] (/api/rest/v2/workforcemanagement/#post-api-v2-workforcemanagement-managementunits--muId--historicaladherencequery)
+    Get the management unit ID for the users you plan to query.
+    Here we are using our own division ID to retreieve a list of managment units using getWorkforcemanagementManagementunits().
+    We can then get the ID of the managment unit we plan to use.
+- title: Create a List of Users for the Query
+  content: |
+    Create a list of the users from that management unit who's adherence you plan to query.
+    Here we make another request, getWorkforcemanagementManagementunitUsers(), to retrieve a list of all users in that managment unit.
+    We can then select the users we wish to query and make a list of their IDs.
+- title: Construct the Body of Your Query
+  content: |
+    Using the users and managment unit retrieved above, construct the body of your request.
+    For more details on the schema of a request look [here.] (/api/rest/v2/workforcemanagement/#post-api-v2-workforcemanagement-managementunits--muId--historicaladherencequery)
 - title: Making a Request
   content: |
-    Create an instance of the WorkforceManagementApi to make the request and, in a try catch, make the request with the postWorkforcemanagementManagementunitHistoricaladherencequery() method.
-    In the response from this request, you will get an id back.
-    Think of this as an operation ID.
+    In a try catch, make the request with the postWorkforcemanagementManagementunitHistoricaladherencequery() method of the WorkforceManagementApi.
+    In the response from this request, you will get an id back. Think of this as an operation ID.
     In your eventListener, watch for a notification with an id that matches the one you got back from your request to make sure this is your request, and not another request in the same Management Unit.
 - title: Creating a Helper Method to Check for the Completion of the Query
   content: |
@@ -64,20 +74,24 @@ languages:
     displayName: Java
     steps:
     - file: "java/Main.java"
-      highlight: "0-203"
+      highlight: "0-211"
     - file: "java/Main.java"
-      highlight: "32-48"
+      highlight: "34-48"
     - file: "java/Main.java"
       highlight: "48-53"
     - file: "java/Main.java"
-      highlight: "53-65"
+      highlight: "53-68"
     - file: "java/Main.java"
-      highlight: "156-202"
+      highlight: "163-210"
     - file: "java/Main.java"
-      highlight: "65-94"
+      highlight: "68-80"
     - file: "java/Main.java"
-        highlight: "94-108"
+      highlight: "80-89"
     - file: "java/Main.java"
-        highlight: "137-154"
+      highlight: "89-110"
     - file: "java/Main.java"
-        highlight: "108-137"
+        highlight: "110-119"
+    - file: "java/Main.java"
+        highlight: "146-162"
+    - file: "java/Main.java"
+        highlight: "119-144"
