@@ -8,7 +8,7 @@ steps:
   content: |
     This tutorial shows how to subscribe to historical adherence notifications for a query and retrieve the resulting downloadUrls.
     Subscribing to notifications is how you are able to retrieve events that include the results of your requests.
-    With historical adherence queries specifically, after your intital request your results will begin processing.
+    With historical adherence queries specifically, after your initial request your results will begin processing.
     After your query has finished processing, an event will be returned that can be caught if subscribed to historical adherence query notifications.
     The body of this event contains the results of your query, including the downloadUrls with the historical adherence of each user for the range of time you queried.
 - title: Client Credential Authentication
@@ -26,7 +26,7 @@ steps:
     Create a class implementing the NotificationListener<T> interface.
     A list of mappings of topics to classes for T can be found [here.] (https://github.com/MyPureCloud/platform-client-sdk-java/blob/master/notificationMappings.json)
     Since we are subscribing to the "v2.users.{myId}.workforcemanagement.historicaladherencequery" topic, the class is WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
-    The schema for "v2.users.{myId}.workforcemanagement.historicaladherencequery" can be found [here.] (/api/rest/v2/notifications/available_topics.html)
+    The schema for the event body the "v2.users.{myId}.workforcemanagement.historicaladherencequery" topic returns can be found [here.] (/api/rest/v2/notifications/available_topics.html)
 
     This notification listener gets events with the historicaladherencequery topic.
 
@@ -54,6 +54,8 @@ steps:
     In a try catch, make the request with the postWorkforcemanagementManagementunitHistoricaladherencequery() method of the WorkforceManagementApi.
     In the response from this request, you will get an id back. Think of this as an operation ID.
     In your eventListener, watch for a notification with an id that matches the one you got back from your request to make sure this is your request, and not another request in the same Management Unit.
+
+    If you are making multiple historical adherence queries in quick succession, keep in mind that there is some [rate limiting in place.] (/api/rest/rate_limits.html)
 - title: Creating a Helper Method to Check for the Completion of the Query
   content: |
     There are different ways to check for the results of a request.
