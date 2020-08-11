@@ -1,6 +1,6 @@
 ---
 title: Retrieving Notifications from a Historical Adherence Query
-description: Tutorial on how to subscribe to a historical adherence notifications and retrieve the results of a query
+description: Tutorial on how to subscribe to historical adherence notifications and retrieve the results of a query
 categories:
 - Notifications
 steps:
@@ -38,16 +38,16 @@ steps:
 - title: Retrieve The Management Unit ID
   content: |
     Get the management unit ID for the users you plan to query.
-    Here we are using our own division ID to retreieve a list of managment units using getWorkforcemanagementManagementunits().
-    We can then get the ID of the managment unit we plan to use.
+    Here we are using our own division ID to retrieve a list of management units using getWorkforcemanagementManagementunits().
+    We can then get the ID of the management unit we plan to use.
 - title: Create a List of Users for the Query
   content: |
-    Create a list of the users from that management unit who's adherence you plan to query.
-    Here we make another request, getWorkforcemanagementManagementunitUsers(), to retrieve a list of all users in that managment unit.
+    Create a list of the users from that management unit whose adherence you plan to query.
+    Here we make another request, getWorkforcemanagementManagementunitUsers(), to retrieve a list of all users in that management unit.
     We can then select the users we wish to query and make a list of their IDs.
 - title: Construct the Body of Your Query
   content: |
-    Using the users and managment unit retrieved above, construct the body of your request.
+    Using the users and management unit retrieved above, construct the body of your request.
     For more details on the schema of a request look [here.] (/api/rest/v2/workforcemanagement/#post-api-v2-workforcemanagement-managementunits--muId--historicaladherencequery)
 - title: Making a Request
   content: |
@@ -66,7 +66,7 @@ steps:
   content: |
     Wait until the query with your operation ID is completed.
     Here we are using the "waitUntil" method and waiting a maximum of 15 seconds with one second in between each check.
-    Larger queries will take longer,hundreds of users for multiple weeks of time could take over a minute to respond.
+    Larger queries will take longer, hundreds of users for multiple weeks of time could take over a minute to respond.
 
     Retrieve the result in the form of a WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
     The completed result has a list of download URLs than can be used to get your historical adherence results for each user in json format.
