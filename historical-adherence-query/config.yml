@@ -1,0 +1,99 @@
+---
+title: Retrieving Notifications from a Historical Adherence Query
+description: Tutorial on how to subscribe to historical adherence notifications and retrieve the results of a query
+categories:
+- Notifications
+steps:
+- title: Introduction
+  content: |
+    This tutorial shows how to subscribe to historical adherence notifications for a query and retrieve the resulting downloadUrls.
+    Subscribing to notifications is how you are able to retrieve events that include the results of your requests.
+    With historical adherence queries specifically, after your initial request your results will begin processing.
+    After your query has finished processing, an event will be returned that can be caught if subscribed to historical adherence query notifications.
+    The body of this event contains the results of your query, including the downloadUrls with the historical adherence of each user for the range of time you queried.
+- title: Client Credential Authentication
+  content: |
+    Authenticate using Client Credentials
+    For more information on how to authenticate your api client, [here is a useful resource.] (/api/rest/client-libraries/java/index.html#authenticating)
+- title: Retrieving Your User ID
+  content: |
+    Using the UserApi you can retrieve your own userId for the subscription.
+- title: Building the NotificationHandler to listen for historical adherence query events
+  content: |
+    Instantiate a new notification handler and add a listener for the query completed response
+- title: Writing a custom NotificationListener
+  content: |
+    Create a class implementing the NotificationListener<T> interface.
+    A list of mappings of topics to classes for T can be found [here.] (https://github.com/MyPureCloud/platform-client-sdk-java/blob/master/notificationMappings.json)
+    Since we are subscribing to the "v2.users.{myId}.workforcemanagement.historicaladherencequery" topic, the class is WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
+    The schema for the event body the "v2.users.{myId}.workforcemanagement.historicaladherencequery" topic returns can be found [here.] (/api/rest/v2/notifications/available_topics.html)
+
+    This notification listener gets events with the historicaladherencequery topic.
+
+    The body of the event is extracted into a WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice object.
+
+    That result object is then mapped to its operation ID in a hash table.
+
+    This hash table can be checked by our application to see if the request has finished processing and retrieve the results of the query.
+- title: Retrieve The Management Unit ID
+  content: |
+    Get the management unit ID for the users you plan to query.
+    Here we are using our own division ID to retrieve a list of management units using getWorkforcemanagementManagementunits().
+    We can then get the ID of the management unit we plan to use.
+- title: Create a List of Users for the Query
+  content: |
+    Create a list of the users from that management unit whose adherence you plan to query.
+    Here we make another request, getWorkforcemanagementManagementunitUsers(), to retrieve a list of all users in that management unit.
+    We can then select the users we wish to query and make a list of their IDs.
+- title: Construct the Body of Your Query
+  content: |
+    Using the users and management unit retrieved above, construct the body of your request.
+    For more details on the schema of a request look [here.] (/api/rest/v2/workforcemanagement/#post-api-v2-workforcemanagement-managementunits--muId--historicaladherencequery)
+- title: Making a Request
+  content: |
+    In a try catch, make the request with the postWorkforcemanagementManagementunitHistoricaladherencequery() method of the WorkforceManagementApi.
+    In the response from this request, you will get an id back. Think of this as an operation ID.
+    In your eventListener, watch for a notification with an id that matches the one you got back from your request to make sure this is your request, and not another request in the same Management Unit.
+
+    If you are making multiple historical adherence queries in quick succession, keep in mind that there is some [rate limiting in place.] (/api/rest/rate_limits.html)
+- title: Creating a Helper Method to Check for the Completion of the Query
+  content: |
+    There are different ways to check for the results of a request.
+    Here's a simple implementation that waits for a condition to become true before continuing processing.
+
+    If the request still is not done by the time we hit our max time, we throw an exception saying it has timed out to avoid being stuck waiting on a response indefinitely.
+- title: Retrieving the Query Results
+  content: |
+    Wait until the query with your operation ID is completed.
+    Here we are using the "waitUntil" method and waiting a maximum of 15 seconds with one second in between each check.
+    Larger queries will take longer, hundreds of users for multiple weeks of time could take over a minute to respond.
+
+    Retrieve the result in the form of a WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice.
+    The completed result has a list of download URLs than can be used to get your historical adherence results for each user in json format.
+    The schema of the response json can be found [here] (/api/rest/v2/workforcemanagement/#post-api-v2-workforcemanagement-managementunits--muId--historicaladherencequery)
+languages:
+  java:
+    displayName: Java
+    steps:
+    - file: "java/Main.java"
+      highlight: "0-211"
+    - file: "java/Main.java"
+      highlight: "34-48"
+    - file: "java/Main.java"
+      highlight: "48-53"
+    - file: "java/Main.java"
+      highlight: "53-68"
+    - file: "java/Main.java"
+      highlight: "163-210"
+    - file: "java/Main.java"
+      highlight: "68-80"
+    - file: "java/Main.java"
+      highlight: "80-89"
+    - file: "java/Main.java"
+      highlight: "89-110"
+    - file: "java/Main.java"
+        highlight: "110-119"
+    - file: "java/Main.java"
+        highlight: "146-162"
+    - file: "java/Main.java"
+        highlight: "119-144"
