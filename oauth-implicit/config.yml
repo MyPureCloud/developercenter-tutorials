@@ -8,7 +8,7 @@ steps:
   content: |
     This tutorial walks through how to use the OAuth implicit code grant.  For more information on the implicit grant, see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html)
 
-- title: Redirect to PureCloud to Handle Authentication
+- title: Redirect to Genesys Cloud to Handle Authentication
   content: |
     When the page loads, we redirect the page to the authorization url and specify:
 
@@ -22,7 +22,7 @@ steps:
 
 - title: Make API Calls
   content: |
-    Now that we have the bearer token, we can make an Ajax call to PureCloud, setting the value of the **Authorization** parameter to **bearer** _token_, where _token_ is the value from the hash.
+    Now that we have the bearer token, we can make an Ajax call to Genesys Cloud, setting the value of the **Authorization** parameter to **bearer** _token_, where _token_ is the value from the hash.
 
 languages: 
   javascript:

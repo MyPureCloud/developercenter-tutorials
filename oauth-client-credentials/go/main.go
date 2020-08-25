@@ -14,9 +14,9 @@ import (
 )
 
 func main() {
-	environment := os.Getenv("PURECLOUD_ENVIRONMENT") // expected format: mypurecloud.com
-	clientID := os.Getenv("PURECLOUD_CLIENT_ID")
-	clientSecret := os.Getenv("PURECLOUD_CLIENT_SECRET")
+	environment := os.Getenv("GENESYS_CLOUD_ENVIRONMENT") // expected format: mypurecloud.com
+	clientID := os.Getenv("GENESYS_CLOUD_CLIENT_ID")
+	clientSecret := os.Getenv("GENESYS_CLOUD_CLIENT_SECRET")
 	authURL, _ := url.Parse(fmt.Sprintf("https://login.%v/oauth/token", environment))
 	timeout, _ := time.ParseDuration("16s")
 	client := http.Client{Timeout: timeout}

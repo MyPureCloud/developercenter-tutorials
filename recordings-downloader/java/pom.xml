@@ -8,7 +8,7 @@
     <artifactId>recordingsdownloader</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>PureCloud Recordings Downloader</name>
+    <name>Genesys Cloud Recordings Downloader</name>
     <description>Sample program for querying conversations and downloading their recordings.</description>
     <build>
         <sourceDirectory>src</sourceDirectory>

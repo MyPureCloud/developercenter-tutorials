@@ -29,7 +29,7 @@ steps:
     After setting up the web socket, the topic `v2.users.{userId}.conversations` is subscribed to. This topic will provide real-time notifications for any conversations the specified user participates in.
 - title: Getting the User's Conversations
   content: |
-    This is the callback function that handles incoming notifications from PureCloud. It performs the following steps:
+    This is the callback function that handles incoming notifications from Genesys Cloud. It performs the following steps:
 
     1. Parses the notification payload to JSON. Web socket message payloads are always received as a string.
     2. Unwanted notification topics are filtered out.

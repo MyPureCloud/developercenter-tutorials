@@ -146,7 +146,7 @@ function sendMessage(message, conversationId, communicationId){
 /**
  * Should be called when there's a new conversation. 
  * Will store the conversations in a global array.
- * @param {String} conversationId PureCloud conversationId
+ * @param {String} conversationId Genesys Cloud conversationId
  */
 function registerConversation(conversationId){
     return conversationsApi.getConversation(conversationId)
@@ -262,7 +262,7 @@ function onChatConversationEvent(event){
     }
 
     // If agent has multiple interactions,
-    // open the active conversation based on PureCloud
+    // open the active conversation based on Genesys Cloud
     if(agentParticipant.state == 'connected' && customerParticipant.state == 'connected' && agentParticipant.held == false){
         setActiveChat(conversationId);
     }
@@ -280,7 +280,7 @@ function onChatConversationEvent(event){
 /**
  * Add a subscription to the channel and store the 
  * callback function mapping to the global variable
- * @param {String} topic PureCloud notification topic string
+ * @param {String} topic Genesys Cloud notification topic string
  * @param {Function} callback callback function to fire when the event occurs
  */
 function addSubscription(topic, callback){

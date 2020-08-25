@@ -8,9 +8,9 @@ print("- Python3 Create an Outbound Dialing Campaign -")
 print("-------------------------------------------------------------")
 
 # Get Authorization Token
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
+apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
 
-# PureCloud Objects
+# Genesys Cloud Objects
 outbound_api = PureCloudPlatformClientV2.OutboundApi(apiClient)
 scripts_api = PureCloudPlatformClientV2.ScriptsApi(apiClient)
 routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)

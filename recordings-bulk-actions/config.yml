@@ -8,9 +8,9 @@ steps:
     content: |
       User will specify an analytics query and a time range over which we should match conversation recordings.
       Additonaly, the user need to specify the action type (export\delete) and the action date. This will result in deletion\export of the matched recordings
-  - title: Authenticate with PureCloud
+  - title: Authenticate with Genesys Cloud
     content: |
-      The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+      The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
   - title: Create a recording Job
     content: |
       The user will use the POST API for creating a bulk Job. The response will include the generated job_id.
