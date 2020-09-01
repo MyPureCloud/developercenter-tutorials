@@ -16,7 +16,7 @@ steps:
   content: |
     Start by making a POST call to https://login.mypurecloud.com/oauth/token to request a token. Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
     
-    For this tutorial, Implicit Grant Type will be used as user context is not needed in acquiring the desired information.
+    For this tutorial, Implicit Grant Type will be used as user context is needed in acquiring the desired information.
     
     More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
 - title: Instantiate APIs
