@@ -8,7 +8,7 @@
     <artifactId>agentless-sms-notifications</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>PureCloud Agentless SMS</name>
+    <name>Genesys Cloud Agentless SMS</name>
     <description>Sample program for sending agentless sms outbound notifications.</description>
     <build>
         <sourceDirectory>src</sourceDirectory>

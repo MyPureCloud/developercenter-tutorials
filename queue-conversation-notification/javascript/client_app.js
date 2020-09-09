@@ -5,7 +5,7 @@ import clientIDs from './clientIDs.js';
 
 let clientApp = {};
 
-// PureCloud OAuth information
+// Genesys Cloud OAuth information
 const platformClient = require('platformClient');
 const client = platformClient.ApiClient.instance;
 // const redirectUri = "http://localhost:3000/";
@@ -17,12 +17,12 @@ const notificationsApi = new platformClient.NotificationsApi();
 const analyticsApi = new platformClient.AnalyticsApi();
 const routingApi = new platformClient.RoutingApi();
 
-// Will Authenticate through PureCloud and subscribe to User Conversation Notifications
+// Will Authenticate through Genesys Cloud and subscribe to User Conversation Notifications
 clientApp.setup = function(pcEnv, langTag, html){
     let clientId = clientIDs[pcEnv] || clientIDs['mypurecloud.com'];
     clientApp.langTag = langTag;
 
-    // Authenticate via PureCloud
+    // Authenticate via Genesys Cloud
     client.setPersistSettings(true);
     client.loginImplicitGrant(clientId, redirectUri + html, { state: "state" })
     .then(data => {
@@ -102,11 +102,11 @@ clientApp.onSocketMessage = function(event){
 };
 
 clientApp.toastIncomingCall = function(callerLocation){
-    if(clientApp.hasOwnProperty('purecloudClientApi')){
+    if(clientApp.hasOwnProperty('genesysCloudClientApi')){
         if(clientApp.langTag !== null) {
-            clientApp.purecloudClientApi.alerting.showToastPopup(clientApp.language[clientApp.langTag].IncomingCall, clientApp.language[clientApp.langTag].From + ": " + callerLocation);
+            clientApp.genesysCloudClientApi.alerting.showToastPopup(clientApp.language[clientApp.langTag].IncomingCall, clientApp.language[clientApp.langTag].From + ": " + callerLocation);
         } else {
-            clientApp.purecloudClientApi.alerting.showToastPopup(clientApp.language["en-us"].IncomingCall, clientApp.language["en-us"].From + ": " + callerLocation);
+            clientApp.genesysCloudClientApi.alerting.showToastPopup(clientApp.language["en-us"].IncomingCall, clientApp.language["en-us"].From + ": " + callerLocation);
         }        
     }
 };

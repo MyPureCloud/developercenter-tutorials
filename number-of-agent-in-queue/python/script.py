@@ -2,12 +2,12 @@ import base64, json, requests, os
 import PureCloudPlatformClientV2
 from PureCloudPlatformClientV2.rest import ApiException
 
-print('-------------------------------------------------------------')
-print('- Python3 Get Number of On-Queue Agents using PureCloud SDK -')
-print('-------------------------------------------------------------')
+print('-----------------------------------------------------------------')
+print('- Python3 Get Number of On-Queue Agents using Genesys Cloud SDK -')
+print('-----------------------------------------------------------------')
 	
-# Configure the token for use by the SDK
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
+# Authenticate with genesys cloud
+apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
 
 # Create an instance of the Routing API and Analytics API
 routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)

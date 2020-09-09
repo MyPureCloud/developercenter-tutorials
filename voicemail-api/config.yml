@@ -1,0 +1,53 @@
+---
+  title:  Download Voicemail Recordings
+  description: Download Voicemail Recordings using the Voicemail API
+  categories:
+  - Recordings
+  steps:
+  - title: Introduction
+    content: |
+      This tutorial provides users a step by step procedure on how to download Voicemail Recordings using Voicemail API for user or queue.    
+  - title: Authentication
+    content: |
+      Authenticate with Genesys Cloud using Implicit Grant. More information about authentication could be found in the [Authorization Documentation](/api/rest/authorization/).
+      
+  - title: Instantiate API
+    content: |
+      Instance of Voicemail API will be created and will be passed to methods that will be used to get corresponding user or queue voicemail details and download the recordings of the voicemail.
+  - title: Get user details
+    content: |
+      List voicemail messages and get voicemail details associated to a user using the [getVoicemailMessages()](/api/rest/client-libraries/javascript/VoicemailApi.html#getVoicemailMeMessages) function using the Voicemail API such as: messageId, date, duration, queue ID and caller details.
+  - title: Get queue details
+    content: |
+      Get voicemail details of the selected queue using the [getVoicemailQueueMessages()](/api/rest/client-libraries/javascript/VoicemailApi.html#getVoicemailQueueMessages) function using the Voicemail API such as: messageId, date, duration, queue ID and caller details.
+  - title: Get voicemail media
+    content: |
+      Once the user chooses to download recording for user or queue, the next step will be getting the voicemail media. 
+      
+      The messageId will be used by this function as reference to generate the download link for the recording of the voicemail.
+      
+      Using the [getVoicemailMessageMedia()](/api/rest/client-libraries/javascript/VoicemailApi.html#getVoicemailMessageMedia) using the Voicemail API, get the playback URI for the voicemail message.
+      
+      The user can choose their preferred media format by changing the value of 'formatId' key. 
+      
+      Other available formats are: WAV, WEBM, WAV_ULAW, OGG_VORBIS, OGG_OPUS, MP3, NONE.
+      
+      Please take note that this function only works using Implicit Grant authentication.
+      
+      
+  languages: 
+    javascript:
+      displayName: Javascript
+      steps:
+      - file: "javascript/index.html"
+        highlight: "0-231"
+      - file: "javascript/index.html"
+        highlight: "79-85"
+      - file: "javascript/index.html"
+        highlight: "70-70"
+      - file: "javascript/index.html"
+        highlight: "117-133"
+      - file: "javascript/index.html"
+        highlight: "135-154"
+      - file: "javascript/index.html"
+        highlight: "163-181"

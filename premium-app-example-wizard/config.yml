@@ -6,156 +6,136 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps of implementing an installation flow that will configure the PureCloud environment for use by the Premium App.
+    The wizard is a simple web app built to provision additional items in Genesys Cloud for use by the Premium App. This tutorial explores the sample Premium App Wizard installer and how partners can leverage it for their own Premium Apps. 
 
-    Common configurations that need to be done includes creating additional roles, creating groups, and creating additional instances of the app.
+    The four most provisioned Genesys Cloud items are:
 
-    For this project, we are going to use the Javascript PureCloud SDK and using Javascript ES6 coding standards.
+    * Roles that contain access to the Premium App.
+    * Groups that can further filter acccess to the app.
+    * OAuth Client that's normally passed to the app backend.
+    * App Instances for additional widgets in the Genesys Cloud UI.
 
-    Other requirements:
+    The source for the project is at: https://github.com/MyPureCloud/purecloud-premium-app
 
-    * A role that includes the premium app permission.
-    * A premium app integration to access the installation web app.
-
-
-- title: Creation of Javascript Object for Installation
+- title: Configuration File
   content: |
-    There are three common PureCloud objects that need to be configured:
+    The config file contains everything that the partner needs to modify for use by their own premium app.
 
-    * Roles
-    * Groups
-    * App Instances
-
-    We're going to store all that we need in a simple Javascript Object to centralize and make it easier to modify in the future. This information could also be loaded from an external resource instead of being harcoded into the web app. 
-
-    Objects created by the Installer are determined by the prefix on their name 
-    'PREMIUM_APP_'. A safer option could be to store the ids of the generated PureCloud objects into an external database or storage.
-
-- title: Set up Client App and determine Language and Environment
+- title: Config File - Client IDs
   content: |
-    It is recommended for PureCloud apps to use the Client App SDK. This allows certain integrations to be implemented for example: Displaying an alert to the PureCloud UI, implementing lifecycle events, popping user profiles, and popping PureCloud help pages.
+    The Client ID is a unique OAuth Implict Grant ID specifically for use by your premium app. This works across all regions.
 
-    We'll also determine the the environment (.com, .ie, .jp) and the language of the PureCloud user so the Premium App could use the correct authentication keys and language for the content.
-
-- title: Authenticate through PureCloud
+- title: Config File - URLs
   content: |
-    Before we can start making PureCloud API calls, we need to first authenticate to PureCloud. Different regions have different OAuth secrets so it must be determined before ateempting to authenticate.
+    These are the public URLs for the wizard and for the actual premium app.
 
-- title: Getting User Information
+    Commented out are example URLs for testing.
+
+- title: Config File - App Name
   content: |
-    It is a good practice to always start off geting the curent user's detail. This will make personalizing the page with the user's information better and will also allow double checking of any user setting or configuration.
+    Once the Premium App is approved by the AppFoundry Team, this unique string id will be assigned to the premium app.
+
+- title: Config File - Additional Configuration
+  content: |
+    Most of the time there'd be no need to modify these values but are provided to enable further customization.   
+
+- title: Config File - Prefix
+  content: |
+    The prefix is appended to all the wizard-provisioned Genesys Cloud items. This provides a way to immediately identify them and is currently how the wizard tracks if the application is installed.
+
+- title: Config File - Provisioning Info
+  content: |
+    The recipe for the provisioning process. This is where the items to be provisioned are defined. Each property of the provisiongInfo object is an array that further defines each instance of that object type. For this sample it only provisions one of each type.
 
 - title: Validate Product Availability
   content: |
-    As a precaution, make sure to check that the PureCloud org has the premium app feature enabled.
+    The first step is to check whether the Genesys Cloud org has the product available. It does this by checking the if the appName (from the config file) is included in the available products for the org.
 
-- title: Check if Existing
+- title: Check Existing Items
   content: |
-    Before installation, it's recommended to first check if existing objects are still present. In this example, the web app will redirect the user to a different page instead of continuing with the installation. 
+    The wizard next checks if the app is currently installed. This is determined by checking if any Genesys Cloud items contain the unique prefix defined in the config file. If there are, the wizard will redirect to the premium app URL, and if not, it will continue on with the provisioning process.
 
-- title: Get existing Roles
+- title: Custom Setup Page
   content: |
-    In order to query Roles by prefix, we set the 'name' parameter to Prefix + '*' - whch serves as a wildcard for the search.
+    Some apps may require the user to login to their own system before the provisioning. This page can be modified by partners to contain their own code before the actual provisioning process.
 
-- title: Get Existing Groups
+- title: Create Items
   content: |
-    In querying groups, the API provides more parameters and we can use "START_WITH" to search for groups starting with a specific prefix.
+    The next step is to create the Genesys Cloud objects defined in the provisioningInfo.
 
-- title: Get Existing Integration Instances
+    There's no need to actually modify the code contained in this file.
+
+- title: Configure Items
   content: |
-    The API for listing integrations does not include any search/query parameters. We'll be getting a list of all integrations and manually filter the list to get the desired integrations. 
+    Some items like Integrations has properties that can only be configured after they are created. Hence, after the creation step, there's an additional configuration step.
 
-- title: Install Configurations
+    Similar to the creation step, there's mostly no need to modify any of the code presented.
+
+- title: Installed Data Summary
   content: |
-    Installing all the configurations include 3 major steps:
+    After a successful installation, a JSON summary of everything that was provisioned will be included in the Notes section of the original Integration instance. 
 
-    * Create Roles 
-    * Create Groups
-    * Create Integrations
+    Example: 
+    ```
+    {
+        "role": {
+            "Role": {
+                "id": "3949e936-7d47-46a3-8537-76797ddaa50f",
+                "name": "PREMIUM_EXAMPLE_Role"
+            }
+        },
+        "group": {
+            "Supervisors": {
+                "id": "3eb84c57-ad1f-4e73-b136-bed9d5988b85",
+                "name": "PREMIUM_EXAMPLE_Supervisors"
+            }
+        },
+        "oauth-client": {
+            "OAuth Client": {
+                "id": "d58dd21e-83ee-4207-9e05-558a7ae336e5",
+                "name": "PREMIUM_EXAMPLE_OAuth Client"
+            }
+        }
+    }
+    ```
 
-    Each major step may contain more than one API call for setting up.
-
-    First, we'll need to create instances of the APIs that we're going to need:
-
-    * AuthorizationApi (for Roles)
-    * GroupsApi (for Groups)
-    * IntegrationsAPI (for Integrations)
-
-    The installation will be performed in sequential order so we'll need to track the parallel calls using Promise arrays before moving to the next step.
-
-    In this example, we're also resolving each API call to be displayed on the screen. We'll need arrays to contain the actual information that are needed for succeeding steps. 
-
-- title: Create Roles
+- title: Deprovisioning
   content: |
-    Creating roles require the role name and permissions assosciated with the role.
+    For testing purposes, the wizard has an uninstall function that deletes everything that was created by the wizard.
 
-    After creating the role, it will be automatically assigned to the current user.
-
-- title: Create Groups
-  content: |
-    To maintain the sequence of installation in this example, groups will only be created after the roles. This could be run in parallel since there are no data dependencies between the two.
-
-    The current user will automatically be assign as the owner of the group.
-
-- title: Create Integrations
-  content: |
-    In this example, integrations need to be created after groups because they can contain group filtering in their configuration.
-
-    There are 3 steps in setting up the integration:
-
-    1. Create an Integration (This API does not allow configuring the integration on creation)
-    2. Configure the Integration (Name, URL, Group Filtering, etc.)
-    3. Activate the Integration (By default Integrations are inactive)
-
-- title: Redirect to App
-  content: |
-    After installation, the example should redirect to the Premium App Sample. 
-
-    The Client App have no native way of knowing its own Inegration ID. It is recommended to not modify the URI but to have the default page redirect to either installation or the Premium App proper based on the status/existence of PureCloud objects.
-
-- title: Clear Configuration
-  content: |
-    It is recommended to have a way to take down any existing configurations. This allows a new and clean installation of the Premium App.
-
-    Things to note in this example:
-
-
-    * Since we're tracking generated objects through the prefix, the original role and original integration instance created will not be deleted.
-    * Groups that contain members, and roles that's assigned to users will not carry over to the new installation after deleting them.\
+    In production however, this function is not recommended to be offered to clients.
 
 languages: 
   javascript:
     displayName: Javascript
     steps:
-    - file: "javascript/wizard-app.js"
-      highlight: "1-514"
-    - file: "javascript/wizard-app.js"
-      highlight: "11-70"
-    - file: "javascript/wizard-app.js"
-      highlight: "72-115"
-    - file: "javascript/wizard-app.js"
-      highlight: "117-126"
-    - file: "javascript/wizard-app.js"
-      highlight: "141-148"
-    - file: "javascript/wizard-app.js"
-      highlight: "151-168"
-    - file: "javascript/wizard-app.js"
-      highlight: "170-202"
-    - file: "javascript/wizard-app.js"
-      highlight: "292-302"
-    - file: "javascript/wizard-app.js"
-      highlight: "265-282"
-    - file: "javascript/wizard-app.js"
-      highlight: "312-330"
-    - file: "javascript/wizard-app.js"
-      highlight: "341-488"
-    - file: "javascript/wizard-app.js"
-      highlight: "360-387"
-    - file: "javascript/wizard-app.js"
-      highlight: "387-413"
-    - file: "javascript/wizard-app.js"
-      highlight: "413-460"
-    - file: "javascript/index.html"
-      highlight: "105-125"
-    - file: "javascript/wizard-app.js"
-      highlight: "203-263"
+    - file: "javascript/wizard.js"
+      highlight: "1-215"
+    - file: "javascript/_config.js"
+      highlight: "1-90"
+    - file: "javascript/_config.js"
+      highlight: "2-2"
+    - file: "javascript/_config.js"
+      highlight: "4-9"
+    - file: "javascript/_config.js"
+      highlight: "11-13"
+    - file: "javascript/_config.js"
+      highlight: "15-29"
+    - file: "javascript/_config.js"
+      highlight: "30-31"
+    - file: "javascript/_config.js"
+      highlight: "33-89"
+    - file: "javascript/main.js"
+      highlight: "90-105"
+    - file: "javascript/wizard.js"
+      highlight: "98-121"
+    - file: "javascript/custom-setup.html"
+      highlight: "1-82"
+    - file: "javascript/wizard.js"
+      highlight: "128-144"
+    - file: "javascript/wizard.js"
+      highlight: "147-165"
+    - file: "javascript/wizard.js"
+      highlight: "183-196"
+    - file: "javascript/wizard.js"
+      highlight: "200-214"

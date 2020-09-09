@@ -16,7 +16,7 @@ let siteId = null;
 const CLIENT_ID = process.env.GENESYS_CLIENT_ID;
 const CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
 
-// Authenticate with genesys cloud
+// Authenticate with Genesys cloud
 client.loginClientCredentialsGrant(process.env.GENESYS_CLIENT_ID, process.env.GENESYS_CLIENT_SECRET)
     .then(() => {
         console.log('Authentication successful!');
@@ -72,7 +72,7 @@ function createLocation() {
         });
 }
 
-// This function will get the default Edge Group - PureCloud Voice - AWS
+// This function will get the default Edge Group - Genesys Cloud Voice - AWS
 function getEdgeSite() {
     const opts = {
         pageSize: 25,
@@ -84,7 +84,7 @@ function getEdgeSite() {
     telephonyProvidersEdgeApi.getTelephonyProvidersEdgesSites(opts)
         .then((data) => {
             console.log(`getTelephonyProvidersEdgesSites success! data: ${JSON.stringify(data, null, 2)}`);
-            // Find default PureCloud Voice - AWS provider edge on the list
+            // Find default Genesys Cloud Voice - AWS provider edge on the list
             const awsItem = data.entities.find((entitiesItem) => entitiesItem.name === 'PureCloud Voice - AWS');
             createSite(awsItem);
         })

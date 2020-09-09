@@ -1,4 +1,4 @@
-This repo is pulled into the [PureCloud Developer Center](http://developer.mypurecloud.com) and contains walkthroughs of applications and examples.  
+This repo is pulled into the [Genesys Cloud Developer Center](http://developer.mypurecloud.com) and contains walkthroughs of applications and examples.  
 This project is based off of [Viewsaurus](https://www.npmjs.com/package/viewsaurus) which is MIT licensed at version 0.3.1 but adds multi language support.
 
 # Adding a tutorial

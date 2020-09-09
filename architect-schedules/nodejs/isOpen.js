@@ -1,6 +1,6 @@
 const rrulestr = require('rrule').rrulestr;
 const moment = require('moment');
-const purecloud = require('purecloud-platform-client-v2');
+const genesysCloud = require('purecloud-platform-client-v2');
 
 function isCurrentlyInSchedule(schedule) {
 	var rule = rrulestr('RRULE:' + schedule.rrule);
@@ -23,7 +23,7 @@ function isCurrentlyInSchedule(schedule) {
 }
 
 function evaluateScheduleGroup(scheduleGroup) {
-	let architectApi = new purecloud.ArchitectApi();
+	let architectApi = new genesysCloud.ArchitectApi();
 
 	let openSchedulePromises = [];
 	let closedSchedulePromises = [];
@@ -62,15 +62,15 @@ function evaluateScheduleGroup(scheduleGroup) {
 		.catch(console.log);
 }
 
-let clientSecret = process.env.PURECLOUD_CLIENT_SECRET;
-let clientId = process.env.PURECLOUD_CLIENT_ID;
+let clientSecret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+let clientId = process.env.GENESYS_CLOUD_CLIENT_ID;
 
-var client = purecloud.ApiClient.instance;
+var client = genesysCloud.ApiClient.instance;
 
 client
 	.loginClientCredentialsGrant(clientId, clientSecret)
 	.then(() => {
-		var architectApi = new purecloud.ArchitectApi();
+		var architectApi = new genesysCloud.ArchitectApi();
 
 		const IVR_NAME = 'Queue 1';
 		architectApi

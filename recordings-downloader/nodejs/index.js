@@ -4,10 +4,10 @@ const prompt = require('prompt');
 const http = require('https');
 const fs = require('fs');
 
-// Set purecloud objects
+// Set Genesys Cloud objects
 const platformClient = require('purecloud-platform-client-v2');
 const client = platformClient.ApiClient.instance;
-// Import API that will be used to fetch conversations and recording from PureCloud
+// Import API that will be used to fetch conversations and recording from Genesys Cloud
 const conversationsApi = new platformClient.ConversationsApi();
 const recordingApi = new platformClient.RecordingApi();
 

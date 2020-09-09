@@ -7,7 +7,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps how to integrate with [PureCloud Client App SDK](https://developer.mypurecloud.com/api/client-apps/). The Client App SDK framework lets developers embed custom web based applicaitons in the PureCloud web. 
+    This tutorial walks through the steps how to integrate with [Genesys Cloud Client App SDK](https://developer.mypurecloud.com/api/client-apps/). The Client App SDK framework lets developers embed custom web based applicaitons in the Genesys Cloud web. 
 
     The main topics that will be covered in the tutorial are the following:
 
@@ -53,7 +53,7 @@ steps:
 
 - title: Deep Dive on pcEnvironment for Authentication
   content: |
-    Before we can start making PureCloud API calls, we need to determine the PureCloud environment that the app is running in.
+    Before we can start making Genesys Cloud API calls, we need to determine the Genesys Cloud environment that the app is running in.
     
     ```
     ex. mypurecloud.com, mypurecloud.ie, mypurecloud.com.au, mypurecloud.jp, etc.
@@ -85,7 +85,7 @@ steps:
   content: |
     In order to send toast notifications for incoming calls, we need to create a channel and subscribe to call conversations of the current user.
 
-    We need to use the JavaScript PureCloud SDK and call the postNotificationsChannels() and the postNotificationsChannelSubscriptions() of the Notifications API.
+    We need to use the JavaScript Genesys Cloud SDK and call the postNotificationsChannels() and the postNotificationsChannelSubscriptions() of the Notifications API.
 
 - title: Handling Websocket Messages
   content: |
@@ -93,7 +93,7 @@ steps:
 
 - title: Calling Toast Popup in the Client App SDK
   content: |
-    To show a toast popup in PureCloud, we need to call the showToastPopup() method of the Alerting API on the Client App SDK passing the title, message and options (optional) as parameters.
+    To show a toast popup in Genesys Cloud, we need to call the showToastPopup() method of the Alerting API on the Client App SDK passing the title, message and options (optional) as parameters.
 
     For more details on how to configure options in the Toast Popup, you may read more about [alerting.showToastPopup(title, message, options)](https://developer.mypurecloud.com/api/client-apps/client-app-sdk.html#module_alerting).
 languages: 

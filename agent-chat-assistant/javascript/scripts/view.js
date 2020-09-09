@@ -26,8 +26,8 @@ export default {
 
     /**
      * Show the entire transcript of a chat conversation
-     * @param {Array} messagesArr array of PureCloud messages
-     * @param {Object} conversation PureCloud convresation
+     * @param {Array} messagesArr array of Genesys Cloud messages
+     * @param {Object} conversation Genesys Cloud convresation
      */
     displayTranscript(messagesArr, conversation){
         this.clearActiveChat();
@@ -68,7 +68,7 @@ export default {
      * Add a new chat message to the page.
      * @param {String} sender sender name to be displayed
      * @param {String} message chat message to be displayed
-     * @param {String} conversationId PureCLoud conversationid
+     * @param {String} conversationId Genesys Cloud conversationid
      */
     addChatMessage(sender, message, conversationId, purpose){        
         let tabEl = document.getElementById('tab-' + conversationId);
@@ -92,7 +92,7 @@ export default {
     /**
      * Add a new entry(tab) to the customers list
      * @param {String} name Name of the chat customer
-     * @param {String} conversationId Purecloud converstaionId
+     * @param {String} conversationId Genesys Cloud converstaionId
      * @param {Function} onClickFunc Function for when the tab is clicked
      */
     addCustomerList(name, conversationId, onClickFunc){
@@ -138,8 +138,8 @@ export default {
     },
 
     /**
-     * Make tab active if agent switches to this customer in PureCloud
-     * @param {String} conversationId Purecloud converstaionId
+     * Make tab active if agent switches to this customer in Genesys Cloud
+     * @param {String} conversationId Genesys Cloud converstaionId
      */
     makeTabActive(conversationId){
         var i, tabcontent, tablinks;
