@@ -1,8 +1,6 @@
 /* 
 *   NOTE: This sample uses ES6.
 */
-import clientIDs from './clientIDs.js';
-
 let clientApp = {};
 
 // Genesys Cloud OAuth information
@@ -17,7 +15,9 @@ const notificationsApi = new platformClient.NotificationsApi();
 const analyticsApi = new platformClient.AnalyticsApi();
 const routingApi = new platformClient.RoutingApi();
 
-// Will Authenticate through Genesys Cloud and subscribe to User Conversation Notifications
+const clientIDs = { 'mypurecloud.com': 'your-client-id' }; // Insert your Client ID here
+
+// Will Authenticate through PureCloud and subscribe to User Conversation Notifications
 clientApp.setup = function(pcEnv, langTag, html){
     let clientId = clientIDs[pcEnv] || clientIDs['mypurecloud.com'];
     clientApp.langTag = langTag;

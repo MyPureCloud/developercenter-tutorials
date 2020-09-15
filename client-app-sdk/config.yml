@@ -65,8 +65,18 @@ steps:
 
 - title: Deep Dive on pcEnvironment for Authentication
   content: |
-    A separate JavaScript file contains the object that holds the different Client IDs per region. We need to filter the object to get which Client ID to be used and call the loginImplicitGrant() method of the Javascript Genesys Cloud SDK. If the pcEnvironment is not set, it will default to mypurecloud.com region.
+    We need to filter the object to get which Client ID to be used and call the loginImplicitGrant() method of the Javascript PureCloud SDK. If the pcEnvironment is not set, it will default to mypurecloud.com region.
 
+    Below is a sample of the clientIDs constant with different client IDs per region. For this sample, we are only using mypurecloud.com.
+
+    ```{"language":"json"}
+    {
+      'mypurecloud.com': 'your-client-id',	
+      'mypurecloud.ie': 'your-client-id',	
+      'mypurecloud.com.au': 'your-client-id',	
+      'mypurecloud.jp': 'your-client-id'	
+    }
+    ```
 - title: Creating Toast Notifications for Incoming Calls
   content: |
     Aside form URL Interpolation, the Client App SDK also has the capability to send toast messages.
