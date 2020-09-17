@@ -101,23 +101,23 @@ languages:
     displayName: C#
     steps:
     - file: "csharp/Program.cs"
-      highlight: "0-214"
+      highlight: "0-172"
     - file: "csharp/Program.cs"
-      highlight: "24-32"
+      highlight: "44-54"
     - file: "csharp/Program.cs"
-      highlight: "36-38"
+      highlight: "58-64"
     - file: "csharp/Program.cs"
-      highlight: "200-212"
+      highlight: "58-64"
     - file: "csharp/Program.cs"
-      highlight: "40-41"
+      highlight: "66-68"
     - file: "csharp/Program.cs"
-      highlight: "48-51"
+      highlight: "71-83"
     - file: "csharp/Program.cs"
-      highlight: "103-122"
+      highlight: "96-113"
     - file: "csharp/Program.cs"
-      highlight: "147-160"
+      highlight: "154-170"
     - file: "csharp/Program.cs"
-      highlight: "162-197"
+      highlight: "136-152"
   java:
     displayName: Java
     steps:
