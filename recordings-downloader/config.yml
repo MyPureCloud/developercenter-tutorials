@@ -113,7 +113,7 @@ languages:
     - file: "csharp/Program.cs"
       highlight: "71-83"
     - file: "csharp/Program.cs"
-      highlight: "96-113"
+      highlight: "96-134"
     - file: "csharp/Program.cs"
       highlight: "154-170"
     - file: "csharp/Program.cs"
