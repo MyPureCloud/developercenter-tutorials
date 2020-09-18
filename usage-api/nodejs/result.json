@@ -1,0 +1,121 @@
+"--- OVERALL CUSTOMER COUNT ---"
+{
+    "regions": [
+        {
+            "id": "ca-central-1",
+            "organizationCounts": {
+                "samplePremiumApp": 2
+            }
+        },
+        {
+            "id": "ap-northeast-1",
+            "organizationCounts": {
+                "samplePremiumApp": 0
+            }
+        },
+        {
+            "id": "eu-central-1",
+            "organizationCounts": {
+                "samplePremiumApp": 1
+            }
+        }
+    ]  
+}
+"--- CUSTOMER FROM REGION ca-central-1 ---"
+{
+    "organizations": [
+        {
+            "orgId": "1aa11a1a-1111-1a11-1a11-11a1a111a1aa",
+            "orgName": "First Sample OrgName",
+            "usageQuantities": {
+                "samplePremiumApp": 825
+            }
+        },
+        {
+            "orgId": "2bb22b2b-2222-2b22-2b22-22b2b222b2bb",
+            "orgName": "Second Sample OrgName",
+            "usageQuantities": {
+                "samplePremiumApp": 15
+            }
+        }
+    ]
+}
+"--- CUSTOMER FROM REGION eu-central-1 ---"
+{
+    "organizations": [
+        {
+            "orgId": "3cc33c3c-3333-3cc33-3c33-33c3c333c3cc",
+            "orgName": "Third Sample OrgName",
+            "usageQuantities": {
+                "samplePremiumApp": 45
+            }
+        }
+    ]
+}
+"--- SUBSCRIPTION FROM REGION ca-central-1, FROM ORG 1aa11a1a-1111-1a11-1a11-11a1a111a1aa ---"
+{
+    "orgId": "1aa11a1a-1111-1a11-1a11-11a1a111a1aa",
+    "orgName": "First Sample OrgName",
+    "contractStartDate": "2018-10-01T00:00:00.000Z",
+    "contractEndDate": "2024-12-31T23:59:59.999Z",
+    "rampPeriodStartDate": "2018-09-28T00:00:00.000Z",
+    "rampPeriodEndDate": "2018-12-31T23:59:59.999Z",
+    "billingPeriodStartDate": "2020-05-01T00:00:00.000Z",
+    "billingPeriodEndDate": "2020-05-31T23:59:59.999Z",
+    "currency": "USD",
+    "subscriptionType": "PREPAY",
+    "usages": [
+        {
+            "appId": "samplePremiumApp",
+            "chargeName": "Sample Premium Application for Genesys Cloud",
+            "partNumber": "PC-170-NV-PCSAMPLE",
+            "prepayQuantity": 1000,
+            "usageQuantity": 825          
+        }
+    ]
+}
+"--- SUBSCRIPTION FROM REGION ca-central-1, FROM ORG 2bb22b2b-2222-2b22-2b22-22b2b222b2bb ---"
+{
+    "orgId": "2bb22b2b-2222-2b22-2b22-22b2b222b2bb",
+    "orgName": "Second Sample OrgName",
+
+    "contractStartDate":"2020-08-31T00:00:00.000Z",
+    "contractEndDate":"2020-09-29T23:59:59.999Z",
+    "rampPeriodStartDate":"2019-05-31T00:00:00.000Z",
+    "rampPeriodEndDate":"2019-05-31T00:00:00.000Z",
+    "billingPeriodStartDate":"2020-08-31T00:00:00.000Z",
+    "billingPeriodEndDate":"2020-09-29T23:59:59.999Z",
+    "currency":"USD",
+    "subscriptionType":"PREPAY",
+    "usages":[
+        {
+            "appId": "samplePremiumApp",
+            "chargeName": "Sample Premium Application for Genesys Cloud",
+            "partNumber": "PC-170-NV-PCSAMPLE2",
+            "prepayQuantity": 100,
+            "usageQuantity": 15          
+        }
+    ]
+}
+"--- SUBSCRIPTION FROM REGION ca-central-1, FROM ORG 3cc33c3c-3333-3cc33-3c33-33c3c333c3cc ---"
+{
+    "orgId": "3cc33c3c-3333-3cc33-3c33-33c3c333c3cc",
+    "orgName": "Third Sample OrgName", 
+    "contractStartDate":"2020-04-30T00:00:00.000Z",
+    "contractEndDate":"2021-04-29T23:59:59.999Z",
+    "rampPeriodStartDate":"2018-01-30T08:00:00.000Z",
+    "rampPeriodEndDate":"2018-01-30T08:00:00.000Z",
+    "billingPeriodStartDate":"2020-08-30T00:00:00.000Z",
+    "billingPeriodEndDate":"2020-09-29T23:59:59.999Z",
+    "currency":"USD",
+    "subscriptionType":"MONTH_TO_MONTH",
+    "usages":[
+        {
+            "appId": "samplePremiumApp",
+            "chargeName": "Sample Premium Application for Genesys Cloud",
+            "partNumber": "PC-170-NV-PCSAMPLE3",
+            "prepayQuantity": 100,
+            "usageQuantity": 45
+        }
+    ]
+}
