@@ -26,8 +26,7 @@
   - title: Overall Customer Count
     content: |
       The first API call returns customer counts that uses **samplePremiumApp** per Genesys Cloud region.
-      The sample code will loop through the payload and for each region with **organizationCounts**  
-      greater than zero, the program will call the next Usage API function. 
+      The sample code will loop through the payload and for each region with **organizationCounts**  greater than zero, the program will call the next Usage API function. 
       
       
       ```{"language":"json"}
