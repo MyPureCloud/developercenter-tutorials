@@ -1,62 +1,69 @@
-// Get variables needed from environment variables
+// Variable declarations
 require('dotenv').config();
 let apiKey = process.env.APIKEY;
-let contentType = 'application/json'
 let appId = encodeURIComponent(process.env.APPID);
-let region = encodeURIComponent(process.env.REGION);
-let orgId = encodeURIComponent(process.env.ORGID);
-
 let request = require('request');
 
-// Function calls to different usage api
+// Call the first function overallCustomerCount()
 overallCustomerCount();
-usagePerCustomerWithinRegion();
-individualCustomerSubscription();
 
-// Function to get the overall customer count 
 function overallCustomerCount() {
     let options = {
         'method': 'GET',
         'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions?appIds=' + appId,
         'headers': {
-            'Content-Type': contentType,
+            'Content-Type': 'application/json',
             'x-api-key': apiKey
         }
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log("Return for overallCustomerCount() function:\n" + response.body);
+        console.log("--- OVERALL CUSTOMER COUNT ---");
+        console.log(response.body);
+        let bodyResponse = JSON.parse(response.body);
+        for (i in bodyResponse.regions) {
+            let regionId = bodyResponse.regions[i].id;
+            let regionsOrgCnt = bodyResponse.regions[i].organizationCounts.ariaWFMIntegration;
+            if (regionsOrgCnt != 0) {
+                usagePerCustomerWithinRegion(regionId,regionsOrgCnt);
+            }
+        }
     });
 }
 
-// Function to get the organization and the usage count per region
-function usagePerCustomerWithinRegion() {
+function usagePerCustomerWithinRegion(regionId, OrgCnt) {
     let options = {
         'method': 'GET',
-        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/' + region + '/organizations?appIds=' + appId,
+        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/' + regionId + '/organizations?appIds=' + appId,
         'headers': {
-            'Content-Type': contentType,
+            'Content-Type': 'application/json',
             'x-api-key': apiKey
         }
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log("Return for usagePerCustomerWithinRegion() function:\n" + response.body);
+        console.log('--- CUSTOMER FROM REGION '+regionId+' ---')
+        bodyResponse = JSON.parse(response.body)
+        console.log(response.body);
+        for (i=0;i<OrgCnt;i++) {
+            orgId = bodyResponse.organizations[i].orgId;
+            individualCustomerSubscription(regionId, orgId)
+        }
     });
 }
 
-// Function to get the subscription details of an organization
-function individualCustomerSubscription() {
+function individualCustomerSubscription(regionId, orgId) {
     let options = {
         'method': 'GET',
-        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/' + region + '/organizations/' + orgId + '?appIds=' + appId,
+        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/' + regionId + '/organizations/' + orgId + '?appIds=' + appId,
         'headers': {
-            'Content-Type': contentType,
+            'Content-Type': 'application/json',
             'x-api-key': apiKey
         }
     };
     request(options, function (error, response) { 
         if (error) throw new Error(error);
-        console.log("Return for individualCustomerSubscription() function:\n" + response.body);
+        console.log('--- SUBSCRIPTION FROM REGION '+regionId+', FROM ORG '+orgId+' ---')
+        console.log(response.body);
     });
 }
