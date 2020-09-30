@@ -12,7 +12,7 @@ steps:
   content: |
     For this tutorial, the user will be asked to input the credentials through a simple console input.
 
-    The user will be also asked for the date interval of the recordings. Please take note of the format for the date input (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss)
+    The user will be also asked for the date interval of the recordings. Please take note of the format for the date input `(YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss)`.
 - title: Configure SDK Settings
   content: |
     Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
@@ -24,18 +24,18 @@ steps:
     Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
 
     For this tutorial, Client Credentials Grant Type will be used as user context is not needed in acquiring the desired information
-    More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
+    More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/).
 
 - title: Instantiate APIs
   content: |
     Instance of Conversation API and Recording API will be created and will be passed to methods that will request for the batch download.
 
     To get the recordings, separated functions were created
-    * Get Conversation IDs within a date interval.
-    * Use the Conversation IDs and and Recording IDs and request a batch download for the conversations.
-    * Get all conversations with recordings.
-    * Determine the file extension to be used depending on the contenttype.
-    * Download recordings in a directory.
+    * Get Conversation IDs within a date interval
+    * Use the Conversation IDs and and Recording IDs and request a batch download for the conversations
+    * Get all conversations with recordings
+    * Determine the file extension to be used depending on the contenttype
+    * Download recordings
 
 - title: Get Conversation IDs
   content: |
@@ -45,8 +45,11 @@ steps:
 
     The function should return the Conversation ID of the conversation which will be used in requesting the batch download of the recordings.
 
-    * The postAnalyticsConversationsDetailsQuery function accepts a search interval that does not exceed 7 days.
-    * The postAnalyticsConversationsDetailsQuery function has a default to return 25 conversations. Use the `paging` property to customize the `pageSize` and the `pageNumber`.
+    Starting December 9, 2020, [POST /api/v2/analytics/conversations/details/query](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-query) will allow querying for interval start dates up to 35 days in the past (including today) and will return a maximum of 10,000 records per query.
+
+    * The [POST /api/v2/analytics/conversations/details/query](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-query) function accepts a search interval that does not exceed 7 days.
+    * We recommend using the [POST /api/v2/analytics/conversations/details/jobs](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-jobs) for any historical queries.
+    * The [POST /api/v2/analytics/conversations/details/query](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-query) function has a default to return 25 conversations. Use the `paging` property to customize the `pageSize` and the `pageNumber`.
       * pageSize - How many results per page
       * pageNumber - How many pages in
 
@@ -59,6 +62,7 @@ steps:
       }
     }
     ```
+
 - title: Request Batch Recordings Download
   content: |
     Create a function that will get all recordings of the conversations.
@@ -101,23 +105,23 @@ languages:
     displayName: C#
     steps:
     - file: "csharp/Program.cs"
-      highlight: "0-214"
+      highlight: "0-172"
     - file: "csharp/Program.cs"
-      highlight: "24-32"
+      highlight: "44-54"
     - file: "csharp/Program.cs"
-      highlight: "36-38"
+      highlight: "58-64"
     - file: "csharp/Program.cs"
-      highlight: "200-212"
+      highlight: "58-64"
     - file: "csharp/Program.cs"
-      highlight: "40-41"
+      highlight: "66-68"
     - file: "csharp/Program.cs"
-      highlight: "48-51"
+      highlight: "71-83"
     - file: "csharp/Program.cs"
-      highlight: "103-122"
+      highlight: "96-134"
     - file: "csharp/Program.cs"
-      highlight: "147-160"
+      highlight: "154-170"
     - file: "csharp/Program.cs"
-      highlight: "162-197"
+      highlight: "136-152"
   java:
     displayName: Java
     steps:

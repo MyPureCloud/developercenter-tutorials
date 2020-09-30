@@ -11,7 +11,6 @@ using System.Diagnostics;
 using PureCloudPlatform.Client.V2.Api;
 using PureCloudPlatform.Client.V2.Client;
 using PureCloudPlatform.Client.V2.Extensions;
-using PureCloudPlatform.Client.V2.Extensions.Notifications;
 using PureCloudPlatform.Client.V2.Model;
 using Newtonsoft.Json;
 
@@ -19,36 +18,19 @@ namespace Recordings
 {
     class Program
     {
+        private static ConversationsApi conversationsApi;
+        private static RecordingApi recordingApi;
+        private static ApiClient apiClient;
+        private static String clientId;
+        private static String clientSecret;
+        private static String dates;
+        private static BatchDownloadJobSubmission batchRequestBody = new BatchDownloadJobSubmission();
+        private static List<BatchDownloadRequest> batchDownloadRequestList = new List<BatchDownloadRequest>();
+
         static void Main(string[] args)
         {
-            // OAuth input
-            Console.Write("Enter Client ID: ");
-            string clientId = Console.ReadLine();
-            Console.Write("Enter Client Secret: ");
-            string clientSecret = Console.ReadLine();
-
-            // Get the Date Interval
-            Console.Write("Enter Date Interval (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss): ");
-            string interval = Console.ReadLine();
-
-            Console.WriteLine("Working...");
-
-            // Configure SDK Settings
-            string accessToken = GetToken(clientId, clientSecret);
-            PureCloudPlatform.Client.V2.Client.Configuration.Default.AccessToken = accessToken;
-
-            // Instantiate APIs
-            ConversationsApi conversationsApi = new ConversationsApi();
-
-            // Create folder that will store all the downloaded recordings
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            path = path.Substring(0, path.LastIndexOf("bin"));
-            System.IO.Directory.CreateDirectory(path + "\\Recordings");
-
-            // Call conversation API, pass date inputted to extract conversationIds needed
-            AnalyticsConversationQueryResponse conversationDetails = conversationsApi.PostAnalyticsConversationsDetailsQuery(new ConversationQuery(Interval: interval));
-            // Pass conversation details to function
-            extractConversationDetails(conversationDetails);
+            authentication();
+            downloadAllRecordings(dates);
 
             // Final Output
             Console.WriteLine("DONE");
@@ -59,155 +41,132 @@ namespace Recordings
             }
         }
 
-        /// <summary>
-        /// Format conversation details to object inside and array. Get every mediatype per conversation
-        /// </summary>
-        /// <param name="conversationDetails"></param>
-        /// <returns></returns>
-        private static void extractConversationDetails(AnalyticsConversationQueryResponse conversationDetails)
+        public static void authentication()
         {
-            // Push all conversationId from conversationDetails to conversationIds
-            foreach (var conversationDetail in conversationDetails.Conversations)
+            //OAuth input
+            Console.Write("Enter Client ID: ");
+            clientId = Console.ReadLine();
+            Console.Write("Enter Client Secret: ");
+            clientSecret = Console.ReadLine();
+
+            // Get the Date Interval
+            Console.Write("Enter Date Interval (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss): ");
+            dates = Console.ReadLine();
+
+            Console.WriteLine("Working...");
+
+            //Set Region
+            PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
+            Configuration.Default.ApiClient.setBasePath(region);
+
+            // Configure SDK Settings
+            var accessTokenInfo = Configuration.Default.ApiClient.PostToken(clientId, clientSecret);
+            Configuration.Default.AccessToken = accessTokenInfo.AccessToken;
+
+            // Create API instances
+            conversationsApi = new ConversationsApi();
+            recordingApi = new RecordingApi();
+        }
+
+        public static void downloadAllRecordings(string dates)
+        {
+            Console.WriteLine("Start batch request process.");
+            BatchDownloadJobStatusResult completedBatchStatus = new BatchDownloadJobStatusResult();
+
+            // Process and build the request for downloading the recordings
+            // Get the conversations within the date interval and start adding them to batch request
+            AnalyticsConversationQueryResponse conversationDetails = conversationsApi.PostAnalyticsConversationsDetailsQuery(new ConversationQuery(Interval: dates));
+
+            foreach (var conversations in conversationDetails.Conversations)
             {
-                getRecordingMetaData(conversationDetail.ConversationId);
+                addConversationRecordingsToBatch(conversations.ConversationId);
+            }
+
+            // Send a batch request and start polling for updates
+            BatchDownloadJobSubmissionResult result = recordingApi.PostRecordingBatchrequests(batchRequestBody);
+            completedBatchStatus = getRecordingStatus(result);
+
+            // Start downloading the recording files individually
+            foreach (var recording in completedBatchStatus.Results)
+            {
+                downloadRecording(recording);
             }
         }
 
-        /// <summary>
-        /// Generate recordingId for every conversationId
-        /// </summary>
-        /// <param name="conversationId"></param>
-        /// <returns></returns>
-        private static void getRecordingMetaData(string conversationId)
+        // Get all the recordings metadata of the conversation and add it to the global batch request object
+        public static void addConversationRecordingsToBatch(string conversationId)
         {
-            RecordingApi recordingApi = new RecordingApi();
-            List<Recording> recordingsData = recordingApi.GetConversationRecordingmetadata(conversationId);
+            List<RecordingMetadata> recordingsData = recordingApi.GetConversationRecordingmetadata(conversationId);
 
-            // Pass recordingsMetadata to a function
-            iterateRecordingsData(recordingsData);
-        }
-
-        /// <summary>
-        /// Iterate through every result, check if there are one or more recordingIds in every conversation
-        /// </summary>
-        /// <param name="recordingsData"></param>
-        /// <returns></returns>
-        private static void iterateRecordingsData(List<Recording> recordingsData)
-        {
-            foreach (var iterateRecordings in recordingsData)
+            // Iterate through every result, check if there are one or more recordingIds in every conversation
+            foreach (var recording in recordingsData)
             {
-                getSpecificRecordings(iterateRecordings);
+                BatchDownloadRequest batchRequest = new BatchDownloadRequest();
+                batchRequest.ConversationId = recording.ConversationId;
+                batchRequest.RecordingId = recording.Id;
+
+                batchDownloadRequestList.Add(batchRequest);
+                batchRequestBody.BatchDownloadRequestList = batchDownloadRequestList;
+
+                Console.WriteLine("Added " + recording.ConversationId + " to batch request");
             }
         }
 
-        /// <summary>
-        /// Plot conversationId and recordingId to request for batchDownload Recordings
-        /// </summary>
-        /// <param name="iterateRecordings"></param>
-        /// <returns></returns>
-        private static void getSpecificRecordings(Recording iterateRecordings)
+        // Plot conversationId and recordingId to request for batchdownload Recordings
+        private static BatchDownloadJobStatusResult getRecordingStatus(BatchDownloadJobSubmissionResult recordingBatchRequest)
         {
-            List<BatchDownloadRequest> batchRequest = new List<BatchDownloadRequest>();            
-            BatchDownloadRequest batchDownloadRequest = new BatchDownloadRequest(ConversationId: iterateRecordings.ConversationId, RecordingId: iterateRecordings.Id);
-            batchRequest.Add(batchDownloadRequest);
-            
-            // Create the batch job with the request list
-            BatchDownloadJobSubmission batchSubmission = new BatchDownloadJobSubmission(BatchDownloadRequestList: batchRequest);
+            Console.WriteLine("Processing the recordings...");
+            BatchDownloadJobStatusResult result = new BatchDownloadJobStatusResult();
 
-            BatchDownloadJobSubmissionResult recordingBatchRequestId = new BatchDownloadJobSubmissionResult();
-            RecordingApi recordingApi = new RecordingApi();
-            recordingBatchRequestId = recordingApi.PostRecordingBatchrequests(batchSubmission);
+            result = recordingApi.GetRecordingBatchrequest(recordingBatchRequest.Id);
 
-            recordingStatus(recordingBatchRequestId);
-        }
-
-        /// <summary>
-        /// Check status of generating url for downloading, if the result is still unavailble. The function will be called again until the result is available.
-        /// </summary>
-        /// <param name="recordingBatchRequestId"></param>
-        /// <returns></returns>
-        private static void recordingStatus(BatchDownloadJobSubmissionResult recordingBatchRequestId)
-        {
-            BatchDownloadJobStatusResult getRecordingBatchRequestData = new BatchDownloadJobStatusResult();
-            RecordingApi recordingApi = new RecordingApi();
-            getRecordingBatchRequestData = recordingApi.GetRecordingBatchrequest(recordingBatchRequestId.Id);
-
-            if (getRecordingBatchRequestData.ExpectedResultCount == getRecordingBatchRequestData.ResultCount)
+            if (result.ExpectedResultCount != result.ResultCount)
             {
-                // Pass the getRecordingBatchRequestData to getExtension function
-                getExtension(getRecordingBatchRequestData);
-            }
-            else
-            {
+                Console.WriteLine("Batch Result Status:" + result.ResultCount + " / " + result.ExpectedResultCount);
+
+                // Simple polling through recursion
                 Thread.Sleep(5000);
-                recordingStatus(recordingBatchRequestId);
+                return getRecordingStatus(recordingBatchRequest);
             }
+
+            // Once result count reach expected.
+            return result;
         }
 
-        /// <summary>
-        /// Get extension of every recordings
-        /// </summary>
-        /// <param name="getRecordingBatchRequestData"></param>
-        /// <returns></returns>
-        private static void getExtension(BatchDownloadJobStatusResult getRecordingBatchRequestData)
+        // Download Recordings
+        private static void downloadRecording(BatchDownloadJobResult recording)
+        {
+            Console.WriteLine("Downloading now. Please wait...");
+
+            String ext = getExtension(recording);
+            String conversationId = recording.ConversationId;
+            String recordingId = recording.RecordingId;
+            String sourceURL = recording.ResultUrl;
+
+            String targetDirectory = ".";
+
+            string filename = conversationId + "_" + recordingId;
+
+            using (WebClient wc = new WebClient())
+                wc.DownloadFile(sourceURL, targetDirectory + "\\" + filename + "." + ext);
+        }
+
+        // Get extension of a recording
+        private static string getExtension(BatchDownloadJobResult recording)
         {
             // Store the contentType to a variable that will be used later to determine the extension of recordings.
-            string contentType = getRecordingBatchRequestData.Results[0].ContentType;
+            string contentType = recording.ContentType;
+
             // Split the text and gets the extension that will be used for the recording
             string ext = contentType.Split('/').Last();
 
-            createDirectory(ext, getRecordingBatchRequestData);
-        }
+            // For the JSON special case
+            if (ext.Length >= 4)
+            {
+                ext = ext.Substring(0, 4);
+            }
 
-        /// <summary>
-        /// Generate directory for recordings that will be downloaded
-        /// </summary>
-        /// <param name="ext"></param>
-        /// <param name="getRecordingBatchRequestData"></param>
-        /// <returns></returns>
-        private static void createDirectory(string ext, BatchDownloadJobStatusResult getRecordingBatchRequestData)
-        {
-            Console.WriteLine("Processing please wait...");
-
-            string conversationId = getRecordingBatchRequestData.Results[0].ConversationId;
-            string recordingId = getRecordingBatchRequestData.Results[0].RecordingId;
-            string url = getRecordingBatchRequestData.Results[0].ResultUrl;
-
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            path = path.Substring(0, path.LastIndexOf("bin"));
-            System.IO.Directory.CreateDirectory(path + "\\Recordings\\" + conversationId + "_" + recordingId);
-
-            downloadRecording(url, ext, path + "\\Recordings\\" + conversationId + "_" + recordingId);
-        }
-
-        /// <summary>
-        /// Download recordings
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="ext"></param>
-        /// <param name="targetDirectory"></param>
-        /// <returns></returns>
-        private static void downloadRecording(string url, string ext, string targetDirectory)
-        {
-            // string downloadFile = conversationId + '_' + recordingId + '.' + ext;
-            string filename = targetDirectory.Substring(targetDirectory.LastIndexOf('\\') + 1, 73);
-
-            using (WebClient wc = new WebClient())
-                wc.DownloadFile(url, targetDirectory + "\\" + filename + "." + ext);
-        }
-        
-        /// <summary>
-        /// Request client credentials token from PureCloud
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <param name="clientSecret"></param>
-        /// <returns></returns>
-        private static string GetToken(string clientId, string clientSecret)
-        {
-            var accessTokenInfo = Configuration.Default.ApiClient.PostToken(clientId, clientSecret);
-            string token = accessTokenInfo.AccessToken;
-
-            return token;
+            return ext;
         }
     }
 }
