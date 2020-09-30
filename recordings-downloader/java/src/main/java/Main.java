@@ -27,6 +27,7 @@ public class Main {
     private static String clientId;
     private static String clientSecret;
     private static String dates;
+    private static BatchDownloadJobSubmission batchRequestBody = new BatchDownloadJobSubmission();
 
     private static void authenticate(){
         System.out.println("authenticate");
