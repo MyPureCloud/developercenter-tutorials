@@ -153,13 +153,21 @@ public class Main {
     // Download Recordings
     private static void downloadRecording(BatchDownloadJobResult recording) {
         System.out.println("Downloading now. Please wait...");
-
-        String ext = getExtension(recording);
         String conversationId = recording.getConversationId();
         String recordingId = recording.getRecordingId();
         String sourceURL = recording.getResultUrl();
+        String errorMsg = recording.getErrorMsg();
 
         String targetDirectory = ".";
+
+        // If there is an errorMsg skip the recording download
+        if(errorMsg != null) {
+            System.out.println("Skipping this recording. Reason: " + errorMsg);
+            return;
+        }
+
+        // Download the recording if available
+        String ext = getExtension(recording);
 
         try {
             URL url = new URL(sourceURL);
@@ -170,7 +178,6 @@ public class Main {
             System.err.println("Exception when downloading the recording to a file.");
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args){
