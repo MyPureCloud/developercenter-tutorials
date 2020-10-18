@@ -138,12 +138,21 @@ namespace Recordings
         {
             Console.WriteLine("Downloading now. Please wait...");
 
-            String ext = getExtension(recording);
             String conversationId = recording.ConversationId;
             String recordingId = recording.RecordingId;
             String sourceURL = recording.ResultUrl;
+            String errorMsg = recording.ErrorMsg;
 
             String targetDirectory = ".";
+
+            // If there is an errorMsg skip the recording download
+            if(errorMsg != null) {
+                Console.WriteLine("Skipping this recording. Reason: " + errorMsg);
+                return;
+            }
+
+            // Download the recording if available
+            String ext = getExtension(recording);
 
             string filename = conversationId + "_" + recordingId;
 
