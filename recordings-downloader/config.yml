@@ -79,28 +79,30 @@ steps:
   content: |
     Create a function that will download each conversation recordings and save it in a directory.
 
+    Take note that archived recordings will only display error message and will not be downloaded.
+
 languages:
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-146"
+      highlight: "0-175"
     - file: "nodejs/index.js"
-      highlight: "17"
+      highlight: "18-36"
     - file: "nodejs/index.js"
-      highlight: "18-19"
+      highlight: "42-43"
     - file: "nodejs/index.js"
-      highlight: "18-19"
+      highlight: "42-43"
     - file: "nodejs/index.js"
-      highlight: "11-12"
+      highlight: "14-16"
     - file: "nodejs/index.js"
-      highlight: "25-36"
+      highlight: "56-95"
     - file: "nodejs/index.js"
-      highlight: "76-94"
+      highlight: "97-140"
     - file: "nodejs/index.js"
-      highlight: "112-120"
+      highlight: "142-158"
     - file: "nodejs/index.js"
-      highlight: "122-145"
+      highlight: "160-174"
   csharp:
     displayName: C#
     steps:

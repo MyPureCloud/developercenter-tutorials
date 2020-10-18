@@ -4,40 +4,45 @@ const prompt = require('prompt');
 const http = require('https');
 const fs = require('fs');
 
+let batchRequestBody = {
+    batchDownloadRequestList: []
+};
+
 // Set Genesys Cloud objects
 const platformClient = require('purecloud-platform-client-v2');
 const client = platformClient.ApiClient.instance;
-// Import API that will be used to fetch conversations and recording from Genesys Cloud
+// Create API instances
 const conversationsApi = new platformClient.ConversationsApi();
 const recordingApi = new platformClient.RecordingApi();
 
+// Properties of input
+let schemaInput = {
+    properties: {
+        clientIdInput: {
+            message: 'Enter Client ID:',
+            required: true
+        },
+
+        clientSecretInput: {
+            message: 'Enter Client Secret: ',
+            required: true
+        },
+        // Get the Date Interval
+        dateInput: {
+            message: 'Enter Date Interval (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss): ',
+            required: true
+        }
+    }
+};
+
 // Start the prompt
 prompt.start();
-// Input clientId and clientSecret from user
-prompt.get(['clientId', 'clientSecret', 'dates'], function (_err, result) {
-    client.loginClientCredentialsGrant(result.clientId, result.clientSecret)
+// OAuth input
+prompt.get(schemaInput, function (_err, result) {
+    client.loginClientCredentialsGrant(result.clientIdInput, result.clientSecretInput)
         .then(() => {
-            console.log('Working...');
-            let body = {
-                interval: result.dates
-            }; // Object | query
-
-            // Call conversation API, pass date inputted to extract conversationIds needed
-            conversationsApi.postAnalyticsConversationsDetailsQuery(body)
-                .then((conversationDetails) => {
-                    // Create folder that will store all the downloaded recordings
-                    fs.mkdirSync('./' + ('Recordings'), function (err) {
-                        if (err) {
-                            return console.error(err);
-                        }
-                    });
-                    // Pass conversation details to function
-                    extractConversationDetails(conversationDetails);
-                })
-                .catch((err) => {
-                    console.log('There was a failure calling postAnalyticsConversationsDetailsQuery');
-                    console.error(err);
-                });
+            let dates = result.dateInput;
+            downloadAllRecordings(dates);
         })
 
         .catch((err) => {
@@ -45,21 +50,62 @@ prompt.get(['clientId', 'clientSecret', 'dates'], function (_err, result) {
             console.log(err);
         });
 });
-// Format conversation details to object inside and array. Get every mediatype per conversation
-function extractConversationDetails (conversationDetails) {
 
-    // Iterate every conversations in conversationDetails and pass the conversationId to getRecordingMetaData function
-    for (conversationDetail of conversationDetails.conversations) {
-        getRecordingMetaData(conversationDetail.conversationId);
-    }
+// Process and build the request for downloading the recordings
+// Get the conversations within the date interval and start adding them to batch request
+function downloadAllRecordings (dates) {
+    console.log('Start batch request process');
+
+    let body = {
+        interval: dates
+    }; // Object | query
+
+    conversationsApi.postAnalyticsConversationsDetailsQuery(body)
+        .then((conversationDetails) => {
+            let conversationDetail = [];
+            for (conversations of conversationDetails.conversations) {
+                conversationDetail.push(addConversationRecordingsToBatch(conversations.conversationId));
+            }
+            return Promise.all(conversationDetail);
+        })
+        // Send a batch request and start polling for updates
+        .then(() => {
+            return recordingApi.postRecordingBatchrequests(batchRequestBody);
+        })
+        // Start downloading the recording files individually
+        .then((result) => {
+            return getRecordingStatus(result);
+        })
+        .then((completedBatchStatus) => {
+            for (recording of completedBatchStatus.results) {
+
+                // If there is an errorMsg skip the recording download
+                if (recording.errorMsg !== '') {
+                    console.log("Skipping this recording. Reason:  " + recording.errorMsg);
+                    continue;
+                } else {
+                    downloadRecording(recording);
+                }
+            }
+        })
+        .catch((err) => {
+            console.log('There was an error: ');
+            console.error(err);
+        });
 }
 
-// Generate recordingId for every conversationId
-function getRecordingMetaData (conversationId) {
-    recordingApi.getConversationRecordingmetadata(conversationId)
+// Get all the recordings metadata of the conversation and add it to the global batch request object
+function addConversationRecordingsToBatch (conversationId) {
+    return recordingApi.getConversationRecordingmetadata(conversationId)
         .then((recordingsData) => {
-            // Pass recordingsMetadata to a function
-            iterateRecordingsData(recordingsData);
+            // Iterate through every result, check if there are one or more recordingIds in every conversation
+            for (recording of recordingsData) {
+                let batchRequest = {};
+                batchRequest.conversationId = recording.conversationId;
+                batchRequest.recordingId = recording.id;
+                batchRequestBody.batchDownloadRequestList.push(batchRequest);
+                console.log('Added ' + recording.conversationId + ' to batch request');
+            }
         })
         .catch((err) => {
             console.log('There was a failure calling getConversationRecordingmetadata');
@@ -67,79 +113,62 @@ function getRecordingMetaData (conversationId) {
         });
 }
 
-// Iterate through every result, check if there are one or more recordingIds in every conversation
-function iterateRecordingsData (recordingsData) {
-    for (iterateRecordings of recordingsData) {
-        getSpecificRecordings(iterateRecordings)
+// Plot conversationId and recordingId to request for batchdownload Recordings
+function getRecordingStatus (recordingBatchRequest) {
+    return new Promise((resolve, reject) => {
+        let recursiveRequest = () => {
+            recordingApi.getRecordingBatchrequest(recordingBatchRequest.id)
+                .then((result) => {
+                    if (result.expectedResultCount !== result.resultCount) {
+                        console.log('Batch Result Status:' + result.resultCount + '/' + result.expectedResultCount)
+
+                        // Simple polling through recursion
+                        setTimeout(() => recursiveRequest(), 5000);
+                    } else {
+                        // Once result count reach expected.
+                        resolve(result);
+                    }
+                })
+                .catch((err) => {
+                    console.log('There was a failure calling getRecordingBatchrequest');
+                    console.error(err);
+                    reject(err);
+                });
+        };
+        recursiveRequest();
+    });
+}
+
+// Get extension of every recording
+function getExtension (recording) {
+    // Store the contentType to a variable that will be used later to determine the extension of recordings
+    let contentType = recording.contentType;
+    // Split the text and gets the extension that will be used for the recording
+    let ext = contentType.split('/').slice(-1);
+    ext = String(ext);
+
+    // For the JSON special case
+    if (ext.length >= 4) {
+        console.log('length' + ext.length);
+        ext = ext.substring(0, 4);
+        return ext;
+    } else {
+        return ext;
     }
 }
-// Plot conversationId and recordingId to request for batchdownload Recordings
-function getSpecificRecordings (iterateRecordings) {
-    let getSpecificRecordingsbody = {
-        batchDownloadRequestList: [{
-            conversationId: iterateRecordings.conversationId,
-            recordingId: iterateRecordings.id
-        }]
-    }; // Object | Job submission criteria
 
-    recordingApi.postRecordingBatchrequests(getSpecificRecordingsbody)
-        .then((recordingBatchrequestid) => {
-            recordingStatus(recordingBatchrequestid);
-        })
-        .catch((err) => {
-            console.log('There was a failure calling postRecordingBatchrequests');
-            console.error(err);
-        });
-}
+// Download Recordings
+function downloadRecording (recording) {
+    console.log('Downloading now. Please wait...');
+    let ext = getExtension(recording);
+    let conversationId = recording.conversationId;
+    let recordingId = recording.recordingId;
+    let sourceURL = recording.resultUrl;
+    let targetDirectory = '.';
+    let fileName = conversationId + '_' + recordingId;
 
-// Check status of generating url for downloading, if the result is still unavailble. The function will be called again until the result is available.
-function recordingStatus (recordingBatchrequestid) {
-    recordingApi.getRecordingBatchrequest(recordingBatchrequestid.id)
-        .then((getRecordingBatchrequestdata) => {
-            if (getRecordingBatchrequestdata.expectedResultCount === getRecordingBatchrequestdata.resultCount) {
-                // Pass the getRecordingBatchrequestdata to getExtension function
-                getExtension(getRecordingBatchrequestdata);
-            } else {
-                setTimeout(() => recordingStatus(recordingBatchrequestid), 5000);
-            }
-        })
-        .catch((err) => {
-            console.log('There was a failure calling getRecordingBatchrequest');
-            console.error(err);
-        });
-}
-
-// Get extension of every recordings
-function getExtension (getRecordingBatchrequestdata) {
-    // Store the contenttype to a variable that will be used later to determine the extension of recordings.
-    let contentType = getRecordingBatchrequestdata.results[0].contentType;
-    // Slice the text and gets the extension that will be used for the recording
-    let ext = contentType.split('/').splice(-1);
-
-    createDirectory(ext, getRecordingBatchrequestdata);
-}
-
-// Generate directory for recordings that will be downloaded
-function createDirectory (ext, getRecordingBatchrequestdata) {
-    console.log('Processing please wait...');
-
-    let conversationId = getRecordingBatchrequestdata.results[0].conversationId;
-    let recordingId = getRecordingBatchrequestdata.results[0].recordingId;
-    let url = getRecordingBatchrequestdata.results[0].resultUrl;
-
-    fs.mkdirSync('./Recordings/' + (conversationId + '_' + recordingId), function (err) {
-        if (err) {
-            return console.error(err);
-        }
-    });
-
-    downloadRecording(conversationId, recordingId, url, ext);
-}
-// Download recordings
-function downloadRecording (conversationId, recordingId, url, ext) {
-    const downloadFile = conversationId + '_' + recordingId + '.' + ext;
-    const file = fs.createWriteStream(('./Recordings/' + conversationId + '_' + recordingId + '/' + downloadFile));
-    http.get(url, function (response) {
+    const file = fs.createWriteStream((targetDirectory + fileName + '.' + ext));
+    http.get(sourceURL, function (response) {
         response.pipe(file);
     });
 }
