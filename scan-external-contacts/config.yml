@@ -1,0 +1,146 @@
+---
+title: Scan through External Contacts
+description: See how to scan through external contacts, external organizations, relationships and notes using the External Contacts API.
+categories:
+- Contacts
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps of implementing a function to scan through the external contacts of a Genesys Cloud organization, and to process them before saving them into a file.
+
+    There are 4 types of objects that can be retrieved using the External Contacts Scanning API: External Contacts, External Organizations, Relationships, and Notes.
+
+    Go here for more information about [External Contacts Scanning](/api/rest/v2/externalcontacts/scan.html).
+
+    For this tutorial, we are going to use the Genesys Cloud SDK, and we will scan and export the External Contacts.
+    
+    The sample code is using javascript async/await (making it synchronous) to ease readibility. You can change and update it based on your needs.
+
+- title: Authentication
+  content: |
+    You will need an OAuth client using Client Credentials to authenticate. See [Create an OAuth Client](https://help.mypurecloud.com/articles/create-an-oauth-client/) for more info
+    
+    Your OAuth client (Client Credentials Grant) will need the following permissions (assigned through a role).
+    
+    To scan External Contacts, Relationships or Notes: `externalContacts:contact:view`
+    
+    To scan External Organizations: `externalContacts:externalOrganization:view`
+    
+    Update this sample with your OAuth ClientID, ClientSecret, and your Genesys Cloud region.
+
+- title: Generate an OAuth client token
+  content: |
+    In order to call the External Contacts Scanning endpoint you will need to use your OAuth client to generate a token. See [Grant - Client Credentials](/api/rest/authorization/use-client-credentials.html) for more info
+
+- title: Sample Parameters
+  content: |
+    The sample code defines a set of parameters, specific to the sample, to make it easier to modify them and to adapt them to your needs.
+
+    `maxRecordsPerPage`: the External Contacts Scan API endpoints allow to retrieve from 10 (min) to 200 (max) records per page. Default value is 100.
+
+    `minAPIRequestInterval` and `minWaitTime`: the sample code forces a pause between 2 API requests. This is to make sure that if you run the script, you will not hit an API rate limit (300 requests/minute for the client token). The sample is currently configured for more or less 2 API requests/second (500ms interval).
+    
+    You can adapt the pause duration to your needs and current use of API in your organization.
+    
+    As the scan of External Contacts (for export/save) is likely not something that has to return immediately (no real-time needs), it shouldn't be a problem to make a pause, and even to execute your code via a nightly batch.
+
+    The sample also manages a maximum number of consecutive login failures or rate limit errors (the application will exit).
+
+    It is possible to export the External Contacts to a CSV file (and to configure the field separator) or to a raw JSON file (JSON Array of External Contacts).
+
+- title: Main Function
+  content: |
+    The main function first obtains an OAuth Client token.
+
+- title: Main Function
+  content: |
+    A Stream (Write) is created to write the External Contacts to a file.
+
+    Depending on the type of export (CSV or raw JSON), a "header" string is written to the file.
+
+- title: Main Function
+  content: |
+    The main function will then initiate a loop, [scanning for External Contacts page per page](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts), until all data is retrieved.
+
+- title: Main Function
+  content: |
+    If a page containing External Contacts is retrieved, they are processed and written to the output file (via the Stream) according to the type of export (CSV or raw JSON).
+
+    Note that an External Contacts Scan request can be successful while not bringing back any External Contacts (entities array attribute is empty).
+
+    This can happen in certain exceptional conditions (database congestion, contacts from last page deleted just before requesting last page, ...)
+
+    This does not mean that there is no more data to retrieve. End of Data (last page) is only based on not having an "after" attribute under "cursors" object.
+    
+- title: Main Function
+  content: |
+    If the page was the last one (no cursors.after attribute - i.e. isFinished === true), the variable used to exit the loop is updated.
+
+    Otherwise, the script performs a forced pause before making the next API request. The duration of the pause varies and is meant to impose a minimum time of minAPIRequestInterval milliseconds between 2 API requests (500 ms in this sample).
+
+- title: Main Function
+  content: |
+    Once all External Contacts are retrieved and exported to the file, depending on the type of export (CSV or raw JSON), a "footer" string is written to the file and the Stream is closed.
+
+- title: gcloudContactsScan Function
+  content: |
+    The gcloudContactsScan function performs the [External Contacts Scan API request](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts).
+
+    The first time the function is called, cursor input parameter is null - so it is not added/set in the External Contacts Scan API request (request first page).
+
+- title: gcloudContactsScan Function
+  content: |
+    On success, the function checks if some External Contacts have been returned (entities array attribute).
+
+- title: gcloudContactsScan Function
+  content: |
+    The function then checks if there is more data to retrieve, or if it was the last page, based on the "after" attribute inside "cursors" (cursors.after).
+
+- title: gcloudContactsScan Function
+  content: |
+    The function also manages certain error conditions - an authenrization error in this case (401) - ex: token expired
+
+    The function will attempt to log back and to request the same page again.
+
+- title: gcloudContactsScan Function
+  content: |
+    The function also manages API rate limit errors (429)
+    
+    The function will make a pause, using the duration provided in the 429 "retry-after" header (as seconds).
+    
+    The function will then attempt to request the same page again.
+
+languages: 
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-324"
+    - file: "nodejs/index.js"
+      highlight: "4-13"
+    - file: "nodejs/index.js"
+      highlight: "43-60,123-125,190-192"
+    - file: "nodejs/index.js"
+      highlight: "15-28"
+    - file: "nodejs/index.js"
+      highlight: "190-196"
+    - file: "nodejs/index.js"
+      highlight: "205-224"
+    - file: "nodejs/index.js"
+      highlight: "226-296"
+    - file: "nodejs/index.js"
+      highlight: "236-266"
+    - file: "nodejs/index.js"
+      highlight: "268-289"
+    - file: "nodejs/index.js"
+      highlight: "298-314"
+    - file: "nodejs/index.js"
+      highlight: "62-89"
+    - file: "nodejs/index.js"
+      highlight: "91-95"
+    - file: "nodejs/index.js"
+      highlight: "97-102"
+    - file: "nodejs/index.js"
+      highlight: "113-135"
+    - file: "nodejs/index.js"
+      highlight: "136-163"
