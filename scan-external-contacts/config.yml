@@ -18,13 +18,16 @@ steps:
 
 - title: Authentication
   content: |
-    You will need an OAuth client using Client Credentials to authenticate. See [Create an OAuth Client](https://help.mypurecloud.com/articles/create-an-oauth-client/) for more info
+    You will need an OAuth client to authenticate. See [Create an OAuth Client](https://help.mypurecloud.com/articles/create-an-oauth-client/) for more info
     
-    Your OAuth client (Client Credentials Grant) will need the following permissions (assigned through a role).
+    Your OAuth client will need the following permissions (assigned through a role).
     
     To scan External Contacts, Relationships or Notes: `externalContacts:contact:view`
     
     To scan External Organizations: `externalContacts:externalOrganization:view`
+    
+
+    In this tutorial, we will use an OAuth client with Client Credentials Grant.
     
     Update this sample with your OAuth ClientID, ClientSecret, and your Genesys Cloud region.
 
@@ -44,25 +47,25 @@ steps:
     
     As the scan of External Contacts (for export/save) is likely not something that has to return immediately (no real-time needs), it shouldn't be a problem to make a pause, and even to execute your code via a nightly batch.
 
-    The sample also manages a maximum number of consecutive login failures or rate limit errors (the application will exit).
+    The sample also manages a maximum number of consecutive rate limit errors (the application will exit).
 
     It is possible to export the External Contacts to a CSV file (and to configure the field separator) or to a raw JSON file (JSON Array of External Contacts).
 
-- title: Main Function
+- title: Login
   content: |
     The main function first obtains an OAuth Client token.
 
-- title: Main Function
+- title: Opening output file for export
   content: |
     A Stream (Write) is created to write the External Contacts to a file.
 
     Depending on the type of export (CSV or raw JSON), a "header" string is written to the file.
 
-- title: Main Function
+- title: Scan in loop
   content: |
     The main function will then initiate a loop, [scanning for External Contacts page per page](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts), until all data is retrieved.
 
-- title: Main Function
+- title: Process and Export retrieved data
   content: |
     If a page containing External Contacts is retrieved, they are processed and written to the output file (via the Stream) according to the type of export (CSV or raw JSON).
 
@@ -72,41 +75,38 @@ steps:
 
     This does not mean that there is no more data to retrieve. End of Data (last page) is only based on not having an "after" attribute under "cursors" object.
     
-- title: Main Function
+- title: Continue or Finish loop
   content: |
     If the page was the last one (no cursors.after attribute - i.e. isFinished === true), the variable used to exit the loop is updated.
 
     Otherwise, the script performs a forced pause before making the next API request. The duration of the pause varies and is meant to impose a minimum time of minAPIRequestInterval milliseconds between 2 API requests (500 ms in this sample).
 
-- title: Main Function
+- title: Closing output file
   content: |
     Once all External Contacts are retrieved and exported to the file, depending on the type of export (CSV or raw JSON), a "footer" string is written to the file and the Stream is closed.
 
-- title: gcloudContactsScan Function
+- title: scanContacts Function
   content: |
-    The gcloudContactsScan function performs the [External Contacts Scan API request](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts).
+    The scanContacts function performs the [External Contacts Scan API request](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts).
 
     The first time the function is called, cursor input parameter is null - so it is not added/set in the External Contacts Scan API request (request first page).
 
-- title: gcloudContactsScan Function
+- title: Check if some data was received
   content: |
     On success, the function checks if some External Contacts have been returned (entities array attribute).
 
-- title: gcloudContactsScan Function
+- title: Check if there is some more data to retrieve
   content: |
     The function then checks if there is more data to retrieve, or if it was the last page, based on the "after" attribute inside "cursors" (cursors.after).
 
-- title: gcloudContactsScan Function
+- title: Manage API Rate Limit error
   content: |
-    The function also manages certain error conditions - an authenrization error in this case (401) - ex: token expired
-
-    The function will attempt to log back and to request the same page again.
-
-- title: gcloudContactsScan Function
-  content: |
-    The function also manages API rate limit errors (429)
+    The function also manages API rate limit errors (429).
+    
+    This type of errors should not happen unless you modify the minAPIRequestInterval parameter to a too small value, which will cause the script to invoke API requests over the rate limit ([300 requests per token/minute](/api/rest/v2/organization/limits.html)).
     
     The function will make a pause, using the duration provided in the 429 "retry-after" header (as seconds).
+    See [Best practices for retrying requests](/api/rest/rate_limits.html#best_practices_for_retrying_requests).
     
     The function will then attempt to request the same page again.
 
@@ -115,32 +115,30 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-324"
+      highlight: "0-298"
     - file: "nodejs/index.js"
-      highlight: "4-13"
+      highlight: "5-14"
     - file: "nodejs/index.js"
-      highlight: "43-60,123-125,190-192"
+      highlight: "42-59,166-172"
     - file: "nodejs/index.js"
-      highlight: "15-28"
+      highlight: "16-28"
     - file: "nodejs/index.js"
-      highlight: "190-196"
+      highlight: "166-172"
     - file: "nodejs/index.js"
-      highlight: "205-224"
+      highlight: "177-195"
     - file: "nodejs/index.js"
-      highlight: "226-296"
+      highlight: "197-267"
     - file: "nodejs/index.js"
-      highlight: "236-266"
+      highlight: "207-237"
     - file: "nodejs/index.js"
-      highlight: "268-289"
+      highlight: "239-260"
     - file: "nodejs/index.js"
-      highlight: "298-314"
+      highlight: "269-285"
     - file: "nodejs/index.js"
-      highlight: "62-89"
+      highlight: "61-88"
     - file: "nodejs/index.js"
-      highlight: "91-95"
+      highlight: "90-94"
     - file: "nodejs/index.js"
-      highlight: "97-102"
+      highlight: "96-101"
     - file: "nodejs/index.js"
-      highlight: "113-135"
-    - file: "nodejs/index.js"
-      highlight: "136-163"
+      highlight: "111-139"

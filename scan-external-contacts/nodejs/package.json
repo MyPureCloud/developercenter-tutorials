@@ -10,6 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "purecloud-platform-client-v2": "*"
+    "purecloud-platform-client-v2": "*",
+    "fast-csv": "*"
   }
 }

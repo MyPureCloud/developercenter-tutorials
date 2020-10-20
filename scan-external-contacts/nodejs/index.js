@@ -1,5 +1,6 @@
 // Import built in libraries needed.
 const fs = require('fs');
+const csv = require('fast-csv');
 
 // Set Genesys Cloud objects
 const platformClient = require('purecloud-platform-client-v2');
@@ -20,16 +21,14 @@ const maxRecordsPerPage = 100;
 const minAPIRequestInterval = 500;
 // i.e. If there is a pause to make (processing time < minAPIRequestInterval), the pause will be at minimum minWaitTime
 const minWaitTime = 50;
-// - Define a maximum number of retries (for Login/Authorization errors, for API Rate Limit rejects)
-const maxLoginRetryAttempts = 1;
+// - Define a maximum number of retries (for API Rate Limit rejects)
 const maxRateLimitRetryAttempts = 2;
 // - Settings for Export to file (CSV or RAW)
 const fieldSeparator = ',';
 const exportType = 'CSV';
 
 // Global vars
-var writeStream;
-var consecutiveLoginRetryAttempts = 0;
+var writeStream, csvStream;
 var consecutiveRateLimitRetryAttempts = 0;
 
 /*
@@ -59,8 +58,8 @@ const login = async () => {
     }
 }
 
-// Perform an External Contacts Scan API request and manage errors (401, 429)
-const gcloudContactsScan = async (cursor) => {
+// Perform an External Contacts Scan API request and manage errors (429)
+const scanContacts = async (cursor) => {
 
     // Defining the default values for the result structure
     let result = {
@@ -88,7 +87,7 @@ const gcloudContactsScan = async (cursor) => {
         let scanData = await contactsApi.getExternalcontactsScanContacts(opts);
         // If the request is successful, we analyze the response
 
-        // The response may contain an empty "entities" array in certain conditions (congestion on database, contacts deleted before the equest was performed, ...)
+        // The response may contain an empty "entities" array in certain conditions (congestion on database, contacts deleted before the request was performed, ...)
         if (scanData.entities && scanData.entities.length > 0) {
             result.isEmpty = false;
             result.entities = scanData.entities;
@@ -102,7 +101,6 @@ const gcloudContactsScan = async (cursor) => {
         }
 
         // Reset of some global vars - counters for retry
-        consecutiveLoginRetryAttempts = 0;
         consecutiveRateLimitRetryAttempts = 0;
 
         return result;
@@ -110,30 +108,7 @@ const gcloudContactsScan = async (cursor) => {
     catch (error) {
         console.log('External Contacts Scan error - Error:', JSON.stringify(error, null, 2));
 
-        if (error.status && error.status === 401) {
-            // Login - Invalid token, Token expired, ...
-            // Exit Application if too many consecutive login failures
-            if (consecutiveLoginRetryAttempts >= maxLoginRetryAttempts) {
-                result.errorMsg = "Max consecutive login failures. Exiting...";
-                result.error = true;
-                return result;
-            } else {
-                consecutiveLoginRetryAttempts++;
-
-                // Trying to login again
-                let isLoggedIn = await login();
-
-                if (isLoggedIn) {
-                    // Try to request the same data again (current value of cursor)
-                    let retryScanData = await gcloudContactsScan(cursor);
-                    return retryScanData;
-                } else {
-                    result.errorMsg = "Unsuccessful Relogin attempt. Exiting...";
-                    result.error = true;
-                    return result;
-                }
-            }
-        } else if (error.status && error.status === 429) {
+        if (error.status && error.status === 429) {
             // API Rate Limit - Max number of API requests per minute reached
             // Exit Application if too many consecutive retry failures
             if (consecutiveRateLimitRetryAttempts >= maxRateLimitRetryAttempts) {
@@ -158,12 +133,13 @@ const gcloudContactsScan = async (cursor) => {
                 consecutiveRateLimitRetryAttempts++;
 
                 // Try to request the same data again (current value of cursor)
-                let retryScanData = await gcloudContactsScan(cursor);
+                let retryScanData = await scanContacts(cursor);
                 return retryScanData;
             }
         }
         else {
             // 400 Bad Request - ex: cursor invalid/expired
+            // 401 Unauthorized - ex: Invalid token, Token expired
             // and other errors
             result.errorMsg = "Unexpected Error. Exiting...";
             result.error = true;
@@ -199,28 +175,23 @@ const gcloudContactsScan = async (cursor) => {
         console.log("Starting export of External Contacts at: " + new Date(Date.now()).toISOString());
 
         // Open write stream for file output
-        let output_filename, headerString, footerString;
+        let output_filename;
         let firstWrite = true;
 
         if (exportType === 'CSV') {
             console.log("Export to CSV");
             output_filename = "GenesysCloud_ExternalContacts_Export_" + (Date.now()).toString() + ".csv";
             // We will export to a csv format - so we will need a first line with the column/header names we want to export
-            headerString = "id" + fieldSeparator + "modifyDate" + fieldSeparator + "firstName" + fieldSeparator + "lastName" + fieldSeparator + "workPhone" + fieldSeparator + "workEmail" + fieldSeparator + "externalOrganizationId" + fieldSeparator + "surveyOptOut" + "\n";
+            csvStream = csv.format({ headers: ['id', 'modifyDate', 'firstName', 'lastName', 'workPhone', 'workEmail', 'externalOrganizationId', 'surveyOptOut'], delimiter: fieldSeparator });
+            writeStream = fs.createWriteStream(output_filename);
+            csvStream.pipe(writeStream);
         } else {
             console.log("Export to Raw JSON");
             output_filename = "GenesysCloud_ExternalContacts_Export_" + (Date.now()).toString() + ".json";
             // We will export to a raw json format (JSON Array) - so we will need to open the JSON array
-            headerString = "[";
-        }
-
-        writeStream = fs.createWriteStream(output_filename);
-
-        // Write Header for Contacts (if necessary)
-        if (writeStream) {
-            if (headerString) {
-                writeStream.write(headerString);
-            }
+            let headerString = "[";
+            writeStream = fs.createWriteStream(output_filename);
+            writeStream.write(headerString);
         }
 
         // Starting API scan of External Contacts
@@ -230,7 +201,7 @@ const gcloudContactsScan = async (cursor) => {
 
         while (isCompleted === false) {
             console.log("Scan External Contacts - cursor: ", currentCursor);
-            let scanResult = await gcloudContactsScan(currentCursor);
+            let scanResult = await scanContacts(currentCursor);
 
             if (scanResult.error === false) {
                 if (scanResult.isEmpty === false) {
@@ -240,11 +211,11 @@ const gcloudContactsScan = async (cursor) => {
 
                     if (exportType === 'CSV') {
                         // CSV
-                        if (writeStream) {
+                        if (writeStream && csvStream) {
                             for (let entity of scanResult.entities) {
-                                // For each entity element, print a line (CSV) with a field separator between values
-                                let entityString = (entity.id ? entity.id : '') + fieldSeparator + (entity.modifyDate ? entity.modifyDate : '') + fieldSeparator + (entity.firstName ? entity.firstName : '') + fieldSeparator + (entity.lastName ? entity.lastName : '') + fieldSeparator + (entity.workPhone ? entity.workPhone.e164 : '') + fieldSeparator + (entity.workEmail ? entity.workEmail : '') + fieldSeparator + (entity.externalOrganization ? entity.externalOrganization.id : '') + fieldSeparator + (entity.surveyOptOut ? entity.surveyOptOut.toString() : 'false') + "\n";
-                                writeStream.write(entityString);
+                                // For each entity element, print a line (CSV)
+                                let csvrow = [(entity.id ? entity.id : ''), (entity.modifyDate ? entity.modifyDate : ''), (entity.firstName ? entity.firstName : ''), (entity.lastName ? entity.lastName : ''), (entity.workPhone ? entity.workPhone.e164 : ''), (entity.workEmail ? entity.workEmail : ''), (entity.externalOrganization ? entity.externalOrganization.id : ''), (entity.surveyOptOut ? entity.surveyOptOut.toString() : 'false')];
+                                csvStream.write(csvrow);
                             }
                         }
                     } else {
@@ -295,22 +266,22 @@ const gcloudContactsScan = async (cursor) => {
             }
         }
 
-        if (exportType === 'CSV') {
-            // CSV
-            // No footer to write when exporting to a csv file
-            footerString = null;
-        } else {
-            // RAW JSON
-            // We need to close the JSON array
-            footerString = "]";
-        }
         // Write Footer for Contacts (if necessary) and close stream
-        if (writeStream) {
-            if (footerString) {
-                writeStream.write(footerString);
+        if (exportType === 'CSV') {
+            // CSV - No footer to write when exporting to a csv file
+            if (csvStream) {
+                csvStream.end();
             }
-
-            writeStream.end();
+            if (writeStream) {
+                writeStream.end();
+            }
+        } else {
+            // RAW JSON - Footer to close the JSON array
+            let footerString = "]";
+            if (writeStream) {
+                writeStream.write(footerString);
+                writeStream.end();
+            }
         }
 
         console.log("Finishing export of External Contacts at: " + new Date(Date.now()).toISOString());
