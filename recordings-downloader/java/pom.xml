@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.mypurecloud</groupId>
             <artifactId>platform-client-v2</artifactId>
-            <version>101.0.0</version>
+            <version>106.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
