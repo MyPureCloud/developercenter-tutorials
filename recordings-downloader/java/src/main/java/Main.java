@@ -27,6 +27,7 @@ public class Main {
     private static String clientId;
     private static String clientSecret;
     private static String dates;
+    private static BatchDownloadJobSubmission batchRequestBody = new BatchDownloadJobSubmission();
 
     private static void authenticate(){
         System.out.println("authenticate");
@@ -59,126 +60,128 @@ public class Main {
         recordingApi = new RecordingApi();
     }
 
-    private static void downloadConversations(String dates){
-        System.out.println("downloadConversations");
+    private static void downloadAllRecordings(String dates){
+        System.out.println("Start batch request process.");
+        BatchDownloadJobStatusResult completedBatchStatus = new BatchDownloadJobStatusResult();
 
-        // Call conversation API, pass date inputted to extract conversationIds needed
+        // Process and build the request for downloading the recordings
         try {
+            // Get the conversations within the date interval and start adding them to batch request
             ConversationQuery body = new ConversationQuery().interval(dates);
             AnalyticsConversationQueryResponse result = conversationsApi.postAnalyticsConversationsDetailsQuery(body);
-            extractConversationDetails(result);
+
+            result.getConversations().forEach((c) -> addConversationRecordingsToBatch(c.getConversationId()));
         } catch (Exception e) {
             System.err.println("Exception when calling ConversationsApi#postAnalyticsConversationsDetailsQuery");
             e.printStackTrace();
-            System.out.println(((ApiException)e).getRawBody());
         }
-    }
 
-    // Format conversation details to object inside and array. Get every mediatype per conversation
-    private static void extractConversationDetails(AnalyticsConversationQueryResponse conversationDetails){
-        System.out.println("extractConversationDetails");
-
-
-        // Create conversationIds array to store all conversationId
-        ArrayList<String> conversationIds = new ArrayList<String>();
-        conversationDetails.getConversations().forEach((c) -> conversationIds.add(c.getConversationId()));
-
-        // Call getRecordingMetaData function through all IDs
-        conversationIds.forEach((c) -> getRecordingMetaData(c));
-    }
-
-    // Generate recordingId for every conversationId
-    private static void getRecordingMetaData(String conversationId){
-        System.out.println("getRecordingMetaData");
-
-
+        // Send a batch request and start polling for updates
         try {
-            List<Recording> result = recordingApi.getConversationRecordingmetadata(conversationId);
-
-            // Iterate through every result, check if there are one or more recordingIds in every conversation
-            result.forEach((r) -> getSpecificRecordings(r));
-        } catch (Exception e) {
-            System.err.println("Exception when calling RecordingApi#getConversationRecordingmetadata");
-            e.printStackTrace();
-            System.out.println(((ApiException)e).getRawBody());
-        }
-    }
-
-    // Plot conversationId and recordingId to request for batchdownload Recordings
-    private static void getSpecificRecordings(Recording recording){
-        System.out.println("getSpecificRecordings");
-
-        BatchDownloadRequest batchRequest = new BatchDownloadRequest()
-                                                    .conversationId(recording.getConversationId())
-                                                    .recordingId(recording.getId());
-        List<BatchDownloadRequest> batchRequestList = new ArrayList<>();
-        batchRequestList.add(batchRequest);
-        BatchDownloadJobSubmission body = new BatchDownloadJobSubmission().batchDownloadRequestList(batchRequestList);
-
-        try {
-            BatchDownloadJobSubmissionResult result = recordingApi.postRecordingBatchrequests(body);
-            recordingStatus(result);
+            BatchDownloadJobSubmissionResult result = recordingApi.postRecordingBatchrequests(batchRequestBody);
+            completedBatchStatus = getRecordingStatus(result);
         } catch (Exception e) {
             System.err.println("Exception when calling RecordingApi#postRecordingBatchrequests");
             e.printStackTrace();
-            System.out.println(((ApiException)e).getRawBody());
+        }
+
+        // Start downloading the recording files individually
+        completedBatchStatus.getResults().forEach((recording) -> downloadRecording(recording));
+    }
+
+
+    // Get all the recordings metadata of the conversation and add it to the global batch request object
+    private static void addConversationRecordingsToBatch(String conversationId){
+        try {
+            List<RecordingMetadata> result = recordingApi.getConversationRecordingmetadata(conversationId);
+            // Iterate through every result, check if there are one or more recordingIds in every conversation
+
+            result.forEach((recording) -> {
+                BatchDownloadRequest batchRequest = new BatchDownloadRequest()
+                        .conversationId(recording.getConversationId())
+                        .recordingId(recording.getId());
+                batchRequestBody.getBatchDownloadRequestList().add(batchRequest);
+                System.out.println("Added " + recording.getConversationId() +
+                                    ": " + recording.getId() + " to batch request");
+            });
+        } catch (Exception e) {
+            System.err.println("Exception when calling RecordingApi#getConversationRecordingmetadata");
+            e.printStackTrace();
         }
     }
 
-    // Plot conversationId and recordingId to request for batchdownload Recordings
-    private static void recordingStatus(BatchDownloadJobSubmissionResult recordingBatchRequest){
-        System.out.println("recordingStatus");
 
+    // Plot conversationId and recordingId to request for batchdownload Recordings
+    private static BatchDownloadJobStatusResult getRecordingStatus(BatchDownloadJobSubmissionResult recordingBatchRequest){
+        System.out.println("Processing the recordings...");
+        BatchDownloadJobStatusResult result = new BatchDownloadJobStatusResult();
 
         try {
-            BatchDownloadJobStatusResult result = recordingApi.getRecordingBatchrequest(recordingBatchRequest.getId());
-            if(result.getExpectedResultCount() == result.getResultCount()){
-                getExtension(result);
-            } else {
+            result = recordingApi.getRecordingBatchrequest(recordingBatchRequest.getId());
+
+            if(result.getExpectedResultCount() != result.getResultCount()){
+                System.out.println("Batch Result Status: " + result.getResultCount() + " / " + result.getExpectedResultCount());
+
+                // Simple polling through recursion
                 Thread.sleep(5000);
-                recordingStatus(recordingBatchRequest);
+                return getRecordingStatus(recordingBatchRequest);
             }
         } catch (Exception e) {
             System.err.println("Exception when calling RecordingApi#getRecordingBatchrequest");
             e.printStackTrace();
-            System.out.println(((ApiException)e).getRawBody());
         }
+
+        // Once result count reach expected.
+        return result;
     }
 
-    // Get extension of every recordings
-    private static void getExtension(BatchDownloadJobStatusResult batchRequestData) throws IOException {
-        System.out.println("getExtension");
-
-
+    // Get extension of a recording
+    private static String getExtension(BatchDownloadJobResult jobResult) {
         // Store the content type to a variable that will be used later to determine the extension of recordings.
-        String contentType = batchRequestData.getResults().get(0).getContentType();
+        String contentType = jobResult.getContentType();
 
         // Slice the text and gets the extension that will be used for the recording
         String ext = contentType.substring(contentType.lastIndexOf("/") + 1);
+        // For the JSON special case
+        if(ext.length() >= 4){
+            ext = ext.substring(0, 4);
+        }
 
-        downloadRecording(ext, batchRequestData);
+        return ext;
     }
 
     // Download Recordings
-    private static void downloadRecording(String ext, BatchDownloadJobStatusResult batchRequestData)
-            throws IOException
-    {
-        System.out.println("Processing please wait...");
+    private static void downloadRecording(BatchDownloadJobResult recording) {
+        System.out.println("Downloading now. Please wait...");
+        String conversationId = recording.getConversationId();
+        String recordingId = recording.getRecordingId();
+        String sourceURL = recording.getResultUrl();
+        String errorMsg = recording.getErrorMsg();
 
-        String conversationId = batchRequestData.getResults().get(0).getConversationId();
-        String recordingId = batchRequestData.getResults().get(0).getRecordingId();
-        String sourceURL = batchRequestData.getResults().get(0).getResultUrl();
+        String targetDirectory = ".";
 
-        String targetDirectory = "./";
+        // If there is an errorMsg skip the recording download
+        if(errorMsg != null) {
+            System.out.println("Skipping this recording. Reason: " + errorMsg);
+            return;
+        }
 
-        URL url = new URL(sourceURL);
-        String fileName = conversationId + "_" + recordingId;
-        Path targetPath = new File(targetDirectory + File.separator + fileName + "." + ext).toPath();
-        Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+        // Download the recording if available
+        String ext = getExtension(recording);
+
+        try {
+            URL url = new URL(sourceURL);
+            String fileName = conversationId + "_" + recordingId;
+            Path targetPath = new File(targetDirectory + File.separator + fileName + "." + ext).toPath();
+            Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            System.err.println("Exception when downloading the recording to a file.");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args){
         authenticate();
-        downloadConversations(dates);
+        downloadAllRecordings(dates);
     }
 }
