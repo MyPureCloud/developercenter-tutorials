@@ -63,6 +63,12 @@ steps:
     This handles the logic when an agent has existing chat interaction/s when the app loads.
     
     This calls the getConversationsChats function of the Conversations API to get the conversation details. Then adds a subscription to the topic `v2.conversations.chats.${conversationId}.messages`. And finally calls the populateActiveChatList to display the current customer interactions as tabs.
+- title: index.html file
+  content: /
+    This is the HTML file used in this tutorial
+- title: style.css file
+  content: /
+    All CSS styles used in the HTML file
 - title: view.js file
   content: |
     All HTML related codes are placed in this JavaScript module.
@@ -103,6 +109,10 @@ languages:
       highlight: "271-277"
     - file: "javascript/scripts/main.js"
       highlight: "161-185"
+    - file: "javascript/index.html"
+      highlight: "1-43"
+    - file: "javascript/styles/style.css"
+      highlight: "1-103"
     - file: "javascript/scripts/view.js"
       highlight: "0"
     - file: "javascript/scripts/agent-assistant-service.js"
