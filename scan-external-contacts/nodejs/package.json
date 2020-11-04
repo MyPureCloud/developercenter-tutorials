@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "purecloud-platform-client-v2": "*",
-    "fast-csv": "*"
+    "fast-csv": "*",
+    "@lifeomic/attempt": "*"
   }
 }

@@ -1,144 +1,152 @@
 ---
-title: Scan through External Contacts
-description: See how to scan through external contacts, external organizations, relationships and notes using the External Contacts API.
-categories:
-- Contacts
-steps:
-- title: Introduction
-  content: |
-    This tutorial walks through the steps of implementing a function to scan through the external contacts of a Genesys Cloud organization, and to process them before saving them into a file.
-
-    There are 4 types of objects that can be retrieved using the External Contacts Scanning API: External Contacts, External Organizations, Relationships, and Notes.
-
-    Go here for more information about [External Contacts Scanning](/api/rest/v2/externalcontacts/scan.html).
-
-    For this tutorial, we are going to use the Genesys Cloud SDK, and we will scan and export the External Contacts.
+  title: Scan through External Contacts
+  description: See how to scan through external contacts, external organizations, relationships and notes using the External Contacts API.
+  categories:
+  - Contacts
+  steps:
+  - title: Introduction
+    content: |
+      This tutorial walks through the steps of implementing a function to scan through the [external contacts of a Genesys Cloud organization](https://help.mypurecloud.com/articles/about-external-contacts/), and to process them before saving them into a file.
+  
+      There are 4 types of objects that can be retrieved using the External Contacts Scanning API: External Contacts, External Organizations, Relationships, and Notes.
+  
+      Go here for more information about [External Contacts Scanning](/api/rest/v2/externalcontacts/scan.html).
+  
+      For this tutorial, we are going to use the Genesys Cloud SDK, and we will scan and export the External Contacts.
+      
+      The sample code is using javascript async/await (making it synchronous) to ease readibility. You can change and update it based on your needs.
+  
+  - title: Authentication
+    content: |
+      You will need an OAuth client to authenticate. See [Create an OAuth Client](https://help.mypurecloud.com/articles/create-an-oauth-client/) for more info
+      
+      Your OAuth client will need the following permissions (assigned through a role).
+      
+      To scan External Contacts, Relationships or Notes: `externalContacts:contact:view`
+      
+      To scan External Organizations: `externalContacts:externalOrganization:view`
+      
+  
+      The External Contacts Scan API can be used with any OAuth client type (Token Implicit Grant, Code Authorization, SAML2 Bearer or Client Credentials).
+      
+      In this tutorial, we will use an OAuth client with Client Credentials Grant as we want to create a batch script that will run periodically or at a specified time (ex: with cron).
+      
+      Update this sample with your OAuth ClientID, ClientSecret, and your Genesys Cloud region.
+   
+  - title: Generate an OAuth client token
+    content: |
+      In order to call the External Contacts Scanning endpoint you will need to use your OAuth client to generate a token. See [Grant - Client Credentials](/api/rest/authorization/use-client-credentials.html) for more info
+  
+  - title: Sample Parameters
+    content: |
+      The sample code defines a set of parameters, specific to the sample, to make it easier to modify them and to adapt them to your needs.
+  
+      `maxRecordsPerPage`: the External Contacts Scan API endpoints allow to retrieve from 10 (min) to 200 (max) records per page. Default value is 100.
+  
+      `delayAPIRateControl`: the sample code can force a pause between 2 API requests.
+      This is to help control the script's API request rate.
+      
+      [Platform API endpoints are subject to API rate limit](/api/rest/v2/organization/limits.html).
+      The script will receive an HTTP 429 status code if an [API rate limit](/api/rest/rate_limits.html) is reached.
+      The rate limit for the Scan API Endpoints is of 300 requests/minute for the client token. 
+      
+      The sample is currently configured to make a 250 ms pause. You can adapt the pause duration to your needs and current use of API in your organization.
+      
+      You can also disable the pause (value set to 0) if you prefer the script to send API requests as fast as it can, possibly hit the [API Rate limit](/api/rest/rate_limits.html) (HTTP 429 status code), wait for the delay provided in the API Rate limit error, and send the next set of API requests after.
+      
+      The sample also manages a maximum number of consecutive rate limit errors (the application will exit).
+  
+      It is possible to export the External Contacts to a CSV file (and to configure the field separator) or to a raw JSON file (JSON Array of External Contacts).
+  
+  - title: Output Filename
+    content: |
+      The script will try to extract the filename from the command arguments (ex: node index.js myfilename) or use the default value (global constant DefaultOutputFilename).
+     
+  - title: Login
+    content: |
+      The main function first obtains an OAuth Client token and calls the contactsExportToFile() local function.
+  
+  - title: contactsExportToFile function
+    content: |
+      The function creates a Stream (Write) to write the External Contacts to a file.
+  
+      It then retrieves all External Contacts from the org, through the contactsScanAll() and contactsScanPage() local functions. The External Contacts are returned in an array (array of JSON objects).
+  
+      The array can then be processed (selecting External Contact attributes to export) and written in a CSV file (using fast-csv external module), or exported as raw JSON data.
+  
+  - title: Scan All External Contacts
+    content: |
+      The contactsScanAll function performs a loop, using a [cursor](/api/rest/v2/externalcontacts/scan.html#cursor) to [scan through External Contacts](/api/rest/v2/externalcontacts/scan.html#example_of_an_entity_scan), until all data is retrieved.
+  
+      The contactsScanPage function is called to perform the [External Contacts Scan API request](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts) and manage errors and retries.
+  
+  - title: Set of External Contacts entities
+    content: |
+      It is possible that a request is successful and that [the response contain less entities than requested (even zero). The scan should still continue.](/api/rest/v2/externalcontacts/scan.html#cursor)
+      
+      This can happen in certain exceptional conditions (database congestion, contacts from last page deleted just before requesting last page, ...)
+      
+      The retrieved External Contacts are added (cloned) to an array variable.
+      
+  - title: Scan mode data or Exit loop
+    content: |
+      [If the cursors object is empty, it means it's the last page of the scan](/api/rest/v2/externalcontacts/scan.html#cursor).
+  
+      Otherwise, the next cursor is provided in the after attribute, in the cursors object.
+  
+  - title: contactsScanPage Function
+    content: |
+      The contactsScanPage function performs the [External Contacts Scan API request](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts).
+      
+      The first time this function is called from contactsScanAll(), the scanCursor input parameter value is null.
+        
+      In this case, the cursor is not set in the External Contacts Scan API request - which will allow to [request the first set/page of data](/api/rest/v2/externalcontacts/scan.html#example_of_an_entity_scan).
     
-    The sample code is using javascript async/await (making it synchronous) to ease readibility. You can change and update it based on your needs.
-
-- title: Authentication
-  content: |
-    You will need an OAuth client to authenticate. See [Create an OAuth Client](https://help.mypurecloud.com/articles/create-an-oauth-client/) for more info
+      The function leverages the [@lifeomic/attempt external module](https://www.npmjs.com/package/@lifeomic/attempt) to manage first request attempt and retries.
+        
+  - title: Control rate and manage API Rate Limit error
+    content: |
+      In this sample, we do not want to use @lifeomic/attempt fixed delays and retry strategies (factor/exponential backoff).
     
-    Your OAuth client will need the following permissions (assigned through a role).
+      We want to have an initial delay before the first attempt is made (to allow us to limit/control the API rate).
     
-    To scan External Contacts, Relationships or Notes: `externalContacts:contact:view`
-    
-    To scan External Organizations: `externalContacts:externalOrganization:view`
-    
+      We want the sample to perform a limited number of retries, only if a HTTP 429 status code is received in return (API Rate Limit error).
+      And we want the delay before the retry to be based on the [429's retry-after header value](/api/rest/rate_limits.html#retrying_429_responses) (in seconds).
+        
+      This can be achieved with @lifeomic/attempt maxAttempts, handleError and calculateDelay.
 
-    In this tutorial, we will use an OAuth client with Client Credentials Grant.
-    
-    Update this sample with your OAuth ClientID, ClientSecret, and your Genesys Cloud region.
-
-- title: Generate an OAuth client token
-  content: |
-    In order to call the External Contacts Scanning endpoint you will need to use your OAuth client to generate a token. See [Grant - Client Credentials](/api/rest/authorization/use-client-credentials.html) for more info
-
-- title: Sample Parameters
-  content: |
-    The sample code defines a set of parameters, specific to the sample, to make it easier to modify them and to adapt them to your needs.
-
-    `maxRecordsPerPage`: the External Contacts Scan API endpoints allow to retrieve from 10 (min) to 200 (max) records per page. Default value is 100.
-
-    `minAPIRequestInterval` and `minWaitTime`: the sample code forces a pause between 2 API requests. This is to make sure that if you run the script, you will not hit an API rate limit (300 requests/minute for the client token). The sample is currently configured for more or less 2 API requests/second (500ms interval).
-    
-    You can adapt the pause duration to your needs and current use of API in your organization.
-    
-    As the scan of External Contacts (for export/save) is likely not something that has to return immediately (no real-time needs), it shouldn't be a problem to make a pause, and even to execute your code via a nightly batch.
-
-    The sample also manages a maximum number of consecutive rate limit errors (the application will exit).
-
-    It is possible to export the External Contacts to a CSV file (and to configure the field separator) or to a raw JSON file (JSON Array of External Contacts).
-
-- title: Login
-  content: |
-    The main function first obtains an OAuth Client token.
-
-- title: Opening output file for export
-  content: |
-    A Stream (Write) is created to write the External Contacts to a file.
-
-    Depending on the type of export (CSV or raw JSON), a "header" string is written to the file.
-
-- title: Scan in loop
-  content: |
-    The main function will then initiate a loop, [scanning for External Contacts page per page](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts), until all data is retrieved.
-
-- title: Process and Export retrieved data
-  content: |
-    If a page containing External Contacts is retrieved, they are processed and written to the output file (via the Stream) according to the type of export (CSV or raw JSON).
-
-    Note that an External Contacts Scan request can be successful while not bringing back any External Contacts (entities array attribute is empty).
-
-    This can happen in certain exceptional conditions (database congestion, contacts from last page deleted just before requesting last page, ...)
-
-    This does not mean that there is no more data to retrieve. End of Data (last page) is only based on not having an "after" attribute under "cursors" object.
-    
-- title: Continue or Finish loop
-  content: |
-    If the page was the last one (no cursors.after attribute - i.e. isFinished === true), the variable used to exit the loop is updated.
-
-    Otherwise, the script performs a forced pause before making the next API request. The duration of the pause varies and is meant to impose a minimum time of minAPIRequestInterval milliseconds between 2 API requests (500 ms in this sample).
-
-- title: Closing output file
-  content: |
-    Once all External Contacts are retrieved and exported to the file, depending on the type of export (CSV or raw JSON), a "footer" string is written to the file and the Stream is closed.
-
-- title: scanContacts Function
-  content: |
-    The scanContacts function performs the [External Contacts Scan API request](/api/rest/v2/externalcontacts/#get-api-v2-externalcontacts-scan-contacts).
-
-    The first time the function is called, cursor input parameter is null - so it is not added/set in the External Contacts Scan API request (request first page).
-
-- title: Check if some data was received
-  content: |
-    On success, the function checks if some External Contacts have been returned (entities array attribute).
-
-- title: Check if there is some more data to retrieve
-  content: |
-    The function then checks if there is more data to retrieve, or if it was the last page, based on the "after" attribute inside "cursors" (cursors.after).
-
-- title: Manage API Rate Limit error
-  content: |
-    The function also manages API rate limit errors (429).
-    
-    This type of errors should not happen unless you modify the minAPIRequestInterval parameter to a too small value, which will cause the script to invoke API requests over the rate limit ([300 requests per token/minute](/api/rest/v2/organization/limits.html)).
-    
-    The function will make a pause, using the duration provided in the 429 "retry-after" header (as seconds).
-    See [Best practices for retrying requests](/api/rest/rate_limits.html#best_practices_for_retrying_requests).
-    
-    The function will then attempt to request the same page again.
-
-languages: 
-  nodejs:
-    displayName: NodeJS
-    steps:
-    - file: "nodejs/index.js"
-      highlight: "0-298"
-    - file: "nodejs/index.js"
-      highlight: "5-14"
-    - file: "nodejs/index.js"
-      highlight: "42-59,166-172"
-    - file: "nodejs/index.js"
-      highlight: "16-28"
-    - file: "nodejs/index.js"
-      highlight: "166-172"
-    - file: "nodejs/index.js"
-      highlight: "177-195"
-    - file: "nodejs/index.js"
-      highlight: "197-267"
-    - file: "nodejs/index.js"
-      highlight: "207-237"
-    - file: "nodejs/index.js"
-      highlight: "239-260"
-    - file: "nodejs/index.js"
-      highlight: "269-285"
-    - file: "nodejs/index.js"
-      highlight: "61-88"
-    - file: "nodejs/index.js"
-      highlight: "90-94"
-    - file: "nodejs/index.js"
-      highlight: "96-101"
-    - file: "nodejs/index.js"
-      highlight: "111-139"
+      The calculateDelay function can be used to override the default delay calculation.
+      
+      The handleError function is triggered on error, and extracts the value of the next delay from the 429's retry-after header.
+          
+      The function will then automatically attempt to request the same page again.
+  
+  languages: 
+    nodejs:
+      displayName: NodeJS
+      steps:
+      - file: "nodejs/index.js"
+        highlight: "0-240"
+      - file: "nodejs/index.js"
+        highlight: "6-12"
+      - file: "nodejs/index.js"
+        highlight: "39-53,231-233"
+      - file: "nodejs/index.js"
+        highlight: "14-29"
+      - file: "nodejs/index.js"
+        highlight: "225-230"
+      - file: "nodejs/index.js"
+        highlight: "231-239"
+      - file: "nodejs/index.js"
+        highlight: "164-208"
+      - file: "nodejs/index.js"
+        highlight: "120-162"
+      - file: "nodejs/index.js"
+        highlight: "135-140"
+      - file: "nodejs/index.js"
+        highlight: "141-149"
+      - file: "nodejs/index.js"
+        highlight: "55-118"
+      - file: "nodejs/index.js"
+        highlight: "90-110"
+  
