@@ -6,7 +6,7 @@ categories:
 steps:
 - title: Introduction
   content: |
-    This tutorial covers step by step procedure on how to create and delete custom fields for external contacts.
+    This tutorial covers a step by step procedure on how to create and delete custom fields for external contacts.
 
     For more information about external contacts and organization customization, you can refer to the [Resource Center.](https://help.mypurecloud.com/articles/customize-external-contacts-and-organizations/)
 
@@ -18,21 +18,21 @@ steps:
 
 - title: Populate
   content: |
-    All the customizable fields are listed in the body. Corresponding explanation per fields are also given. User can choose what fields they to include in the process.
+    All customizable fields are listed in the body. Corresponding explanation per field is also given. User can choose what fields they want to include in the process.
 
-    Note that the same body is use for creating schema for custom contact and organization.
+    Note that the same body is used for creating a schema for custom contact and organization.
 
 - title: Customize Contacts
   content: |
-    The value of body will be passed to customizeContact function. And the chosen fields will be created.  
+    The value of body variable will be passed to customizeContact function and the chosen fields will be created.  
 
 - title: Customize Organization
   content: |
-    The value of body will be passed to customizeOrganization function. And the chosen fields will be created. 
+    The value of body variable will be passed to customizeOrganization function and the chosen fields will be created. 
 
 - title: Delete Schema
   content: |
-    Deleting a schema feature is not available in Genesys Cloud. It is a good to know for the users to be aware on how to delete schema. 
+    Deleting a schema feature is not available in Genesys Cloud. It is a good to know for the users to know how to delete a schema. 
 
     Schema ID is a required field for this feature.
 
