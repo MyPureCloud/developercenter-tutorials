@@ -1,0 +1,97 @@
+---
+title: Voice Transcription
+description: Get voice transcript using Speech and Text Analytics API.
+categories:
+- Analytics
+- Speech and Text Analytics
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps to get the sentiment score and voice transcript of voice interactions using the [Speech and Text Analytics API](/api/rest/v2/speechtextanalytics/).
+
+    To know more details on voice transcription, click [here](https://help.mypurecloud.com/articles/about-voice-transcription/?theme=simplified).
+- title: Input
+  content: |
+    For this tutorial, the user will be asked to input the conversation ID.
+- title: Authenticate with Genesys Cloud
+  content: |
+    Using Client Credentials OAuth, authenticate to Genesys Cloud using loginClientCredentialsGrant. 
+    
+    More information about OAuth and Authorization could be found in the [documentation](/api/rest/authorization/).
+- title: Instantiate APIs
+  content: |
+    Instance of Conversation API and Speech and Text Analytics API will be created.
+
+- title: Get Conversation Details
+  content: |
+    Before getting the voice transcript, we will need to know the Communication ID of a voice interaction.
+
+    This function gets the Communication ID by calling the getConversation function of the Conversation API. Once we have the Communication ID, we will then call the getSentimentScore and getTranscriptUrl.
+
+- title: Get Sentiment Score
+  content: |
+    This function gets the Sentiment Score by calling the getSpeechandtextanalyticsConversation function of the Speech and Text Analytics API and passing the Conversation ID.
+
+    A successful response reutrns a JSON object in this format:
+    ```{"language":"json"}
+    {
+      "conversation": {
+        "id": "",
+        "selfUri": ""
+      },
+      "sentimentScore": 0,
+      "sentimentTrend": 0
+    }
+    ```
+
+    To know more about Sentiment Analysis, click [here](https://help.mypurecloud.com/articles/about-sentiment-analysis/?theme=simplified).
+
+- title: Get Transcript URL
+  content: |
+    This function gets the S3 URL of the voice transcript by calling the getSpeechandtextanalyticsConversationCommunicationTranscripturl function of the Speech and Text Anallytics API and passing the Conversation ID and the Communication ID.
+
+    A successful response reutrns a JSON object in this format:
+    ```{"language":"json"}
+    {
+      "url": ""
+    }
+    ```
+
+- title: Consuming the S3 URL
+  content: |
+    The transcript can be accessed by going to the URL returned by the getSpeechandtextanalyticsConversationCommunicationTranscripturl function.
+
+    To consume this JSON object, we will need to use the fetch library to display the voice transcript in our application.
+
+- title: Identify the Agent and the Customer
+  content: |
+    You can identify the agent and the cutomer in the transcripts.phrases.participantPurpose property. The participant is the Agent if the value is 'internal', and the customer if the value is 'external'.
+
+- title: Sample 
+  content: /
+    Here is a sample of the voice transcript JSON object.
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0"
+    - file: "nodejs/index.js"
+      highlight: "18-26"
+    - file: "nodejs/index.js"
+      highlight: "32"
+    - file: "nodejs/index.js"
+      highlight: "9-12"
+    - file: "nodejs/index.js"
+      highlight: "41-50"
+    - file: "nodejs/index.js"
+      highlight: "52-57"
+    - file: "nodejs/index.js"
+      highlight: "59-76"
+    - file: "nodejs/index.js"
+      highlight: "65"
+    - file: "nodejs/index.js"
+      highlight: "70-71"
+    - file: "nodejs/transcript.json"
+      highlight: "0"
