@@ -41,8 +41,8 @@ prompt.get(schema, function (_err, result) {
 function getConversationDetails(conversationId) {
     conversationsApi.getConversation(conversationId)
     .then((conversationDetails) => {
-        var customer = conversationDetails.participants.find(p => p.purpose == 'customer');
-        var communicationId = customer.calls[0].id;
+        let customer = conversationDetails.participants.find(p => p.purpose == 'customer');
+        let communicationId = customer.calls[0].id;
 
         getSentimentScore(conversationId);
         getTranscriptUrl(conversationId, communicationId);
@@ -59,7 +59,7 @@ function getSentimentScore(conversationId) {
 function getTranscriptUrl(conversationId, communicationId) {
     speechTextAnalyticsApi.getSpeechandtextanalyticsConversationCommunicationTranscripturl(conversationId, communicationId)
     .then((data) => {
-        let settings = { method: "Get" };
+        let settings = { method: 'Get' };
 
         // Fetch the returned JSON object from the S3 URL
         fetch(data.url, settings)
@@ -68,7 +68,7 @@ function getTranscriptUrl(conversationId, communicationId) {
             // Display transcript
             for(phrase of json.transcripts[0].phrases) {
                 // Identify if Agent or Customer
-                var purpose = (phrase.participantPurpose == 'internal') ? 'Agent' : 'Customer';
+                let purpose = (phrase.participantPurpose == 'internal') ? 'Agent' : 'Customer';
                 console.log(purpose + ': ' + phrase.text);
             }
         });

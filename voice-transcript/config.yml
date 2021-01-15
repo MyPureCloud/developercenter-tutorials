@@ -9,9 +9,9 @@ steps:
   content: |
     This tutorial walks through the steps to get the sentiment score and voice transcript of voice interactions using the [Speech and Text Analytics API](/api/rest/v2/speechtextanalytics/).
 
-    To know more details on voice transcription, click [here](https://help.mypurecloud.com/articles/about-voice-transcription/?theme=simplified).
+    To know more details on voice transcription, click [here](https://help.mypurecloud.com/articles/about-voice-transcription).
 
-    For steps on how to configure voice transcription, visit this [article](https://help.mypurecloud.com/articles/configure-voice-transcription/?theme=simplified).
+    For steps on how to configure voice transcription, visit this [article](https://help.mypurecloud.com/articles/configure-voice-transcription).
 - title: Input
   content: |
     For this tutorial, the user will be asked to input the conversation ID.
@@ -46,7 +46,7 @@ steps:
     }
     ```
 
-    To know more about Sentiment Analysis, click [here](https://help.mypurecloud.com/articles/about-sentiment-analysis/?theme=simplified).
+    To know more about Sentiment Analysis, click [here](https://help.mypurecloud.com/articles/about-sentiment-analysis).
 
 - title: Get Transcript URL
   content: |
