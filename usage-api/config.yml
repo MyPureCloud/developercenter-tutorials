@@ -6,40 +6,37 @@
   steps:
   - title: Introduction
     content: |
-      This tutorial provides sample code on how to use the three Premium Applications - Usage APIs. These APIs allow Premium Application vendors to get the customer usage of their Premium Applications.
-      
+      This tutorial provides a sample code on how to use the Premium Applications - Usage APIs. The Usage APIs allow Premium Application vendors to get the customer usage of their Premium Applications.
+      There are three (3) separate APIs for granularity:
+
+      * Overall Customer Count: Total number of customers per Genesys Cloud Region
+      * Usage per Customer within a Region: Current usage quantity per customer within a Genesys Cloud Region, includes Org Name and Org Id
+      * Individual Customer Subscription: Customer subscription details
+
       Read more about Premium Applications - Usage APIs in this [link](/appfoundry/premium-vendor-usage.html#individual_customer_subscription).
-  - title: Variables
+  
+  - title: Variable Declaration
     content: |
-      Each API call requires different set of variables. Below are the variables needed to run the Premium Applications - Usage APIs.
-      Header Variables
-        * **apiKey** - To use Premium Applications - Usage APIs, vendors need a unique apiKey. Vendors of Premium Applications - Metered Type already have an apiKey. Vendors of Premium Applications - Usage Type can contact the AppFoundry team appfoundry@genesys.com for the apiKey.
-        * **contentType** - Default value is 'application/json'.
-      
-      URL Variables
-        * **appId** - For this tutorial, samplePremiumApp is our assumed appId. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: samplePremiumApp,secondSamplePremiumApp
-        * **region** - Genesys Cloud Regions are supplied in Overall Customer Count GET request.
-        * **orgId** - Individual customer orgId supplied in the Customer Usage per Customer within a Region.   
-  - title: Function Calls
-    content: |
-      The three function calls represents each Premium Applications - Usage APIs. These functions are http calls made by installing a npm request package. 
+      The **apiKey** and **appId** are prerequisites to be able to use Premium Applications - Usage APIs.
+
+        * **apiKey** - All vendors will need an apiKey to use our Premium Applications - Usage APIs. Vendors of Premium Applications - Metered Type already have an apiKey. Vendors of Premium Applications - Usage Type, please contact the AppFoundry team at appfoundry@genesys.com for the unique **apiKey**.
+        * **appId** - For this tutorial, **samplePremiumApp** is our sample **appId**. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: **samplePremiumApp,secondSamplePremiumApp**
+
+      With the **apiKey** and **appId** provided, start by calling the first Usage API. 
   - title: Overall Customer Count
     content: |
-      The first API call returns customer counts by Genesys Cloud region. The sample payload returned below shows the number of organizations per region that uses samplePremiumApp.
+      The first API call returns customer counts that uses **samplePremiumApp** per Genesys Cloud region.
+      The sample code will loop through the payload and for each region with **organizationCounts**  greater than zero, the program will call the next Usage API function. 
+      
+      
       ```{"language":"json"}
-      Return for overallCustomerCount() function:
+      --- OVERALL CUSTOMER COUNT ---
       {
         "regions": [
           {
             "id": "ca-central-1",
             "organizationCounts": {
               "samplePremiumApp": 2
-            }
-          },
-          {
-            "id": "us-east-1",
-            "organizationCounts": {
-              "samplePremiumApp": 7
             }
           },
           {
@@ -54,14 +51,19 @@
                 "samplePremiumApp": 1
             }
           }
-        ]
+        ]  
       }
       ```
   - title: Usage Per Customer Within Region
     content: |
-      The second API call returns customer specific usage counts by Genesys Cloud region. In the below sample return, the assumed value of region variable is the first region returned in the previous API call - 'ca-central-1'.
+      The second API call returns customer specific usage counts by Genesys Cloud region. Following the flow of the program, 
+      we are now getting the customer usage in the first region of the previous payload - **'ca-central-1'**. 
+      The returned data below are the two organizations from the **ca-central-1** region showing the usage count per organization.
+
+      The program will loop through each organization and get the **orgId**. Then continue to the next function that will provide subscription details of each organization ID.
+      
       ```{"language":"json"}
-      Return for usagePerCustomerWithinRegion() function:
+      --- CUSTOMER FROM REGION ca-central-1 ---
       {
         "organizations": [
           {
@@ -73,7 +75,7 @@
           },
           {
             "orgId": "2bb22b2b-2222-2b22-2b22-22b2b222b2bb",
-            "orgName": "First Sample OrgName",
+            "orgName": "Second Sample OrgName",
             "usageQuantities": {
               "samplePremiumApp": 15
             }
@@ -83,9 +85,10 @@
       ```   
   - title: Individual Customer Subscription
     content: |
-      The third API call returns subscription information about a vendors' Premium Application(s). The sample return below shows the assumed subscription information of 'First Sample OrgName'. Inputs to the URL are region, orgId and the appId.
+      The third API call returns subscription information about a vendor's Premium Application(s). The sample return below shows the subscription details of 'First Sample OrgName'.
+
       ```{"language":"json"}
-      Return for individualCustomerSubscription() function:
+      --- SUBSCRIPTION FROM REGION ca-central-1, FROM ORG 1aa11a1a-1111-1a11-1a11-11a1a111a1aa ---
       {
         "orgId": "1aa11a1a-1111-1a11-1a11-11a1a111a1aa",
         "orgName": "First Sample OrgName",
@@ -110,19 +113,23 @@
         ]
       }
       ```
+  - title: Sample Payload
+    content: |
+      After looping through each region and organization, you should receive a payload just like the example shown. 
+
   languages:
     nodejs:
       displayName: NodeJS
       steps:
       - file: "nodejs/index.js"
-        highlight: "0-62"
+        highlight: "0-69"
       - file: "nodejs/index.js"
-        highlight: "1-7"
+        highlight: "1-8"
       - file: "nodejs/index.js"
-        highlight: "9-14"
+        highlight: "10-32"
       - file: "nodejs/index.js"
-        highlight: "16-30"
+        highlight: "34-53"
       - file: "nodejs/index.js"
-        highlight: "32-46"
-      - file: "nodejs/index.js"
-        highlight: "48-62"
+        highlight: "55-69"
+      - file: "nodejs/result.json"
+        highlight: "1-122"

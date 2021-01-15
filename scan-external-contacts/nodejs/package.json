@@ -1,0 +1,17 @@
+{
+  "name": "nodejs",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "purecloud-platform-client-v2": "*",
+    "fast-csv": "*",
+    "@lifeomic/attempt": "*"
+  }
+}
