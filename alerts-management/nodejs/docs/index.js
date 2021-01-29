@@ -8,7 +8,7 @@ const alertingApi = new platformClient.AlertingApi();
 client.setEnvironment('mypurecloud.com');
 client.setPersistSettings(true, 'test_app');
 
-client.loginImplicitGrant('5f3e661d-61be-4a13-b536-3f54f24e26c9', 'https://localhost/')
+client.loginImplicitGrant('client-id-here', 'https://localhost/')
 .then(() => {
     let body = {
         'name': 'tAnswer Greater than 10 Second Alert',
