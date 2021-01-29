@@ -54,7 +54,7 @@ client.loginImplicitGrant('5f3e661d-61be-4a13-b536-3f54f24e26c9', 'https://local
                 for (notificationUser of alertItem.notificationUsers) {
                     // Display API response in console and HTML page
                     document.getElementById('alert-message').innerText = alertItem.name + ' alert on ' + alertItem.dimension + ' ' + alertItem.dimension + ' sent to ' + notificationUser.name;
-                    console.log(alertItem.name + ' alert on ' + alertItem.dimension + ' ' + alertItem.dimension + ' sent to ' + notificationUser.name);
+                    console.log(alertItem.name + ' alert on ' + alertItem.dimension + ' ' + alertItem.dimensionValue + ' sent to ' + notificationUser.name);
                 }
             }
         });

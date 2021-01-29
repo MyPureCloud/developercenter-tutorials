@@ -1,12 +1,12 @@
 ---
-title: Managing Alerts Rules
+title: Managing Alert Rules
 description: Manage Alert Rules by using the Alerting API.
 categories:
 - Alerting
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps to create Alert Rules, get unread alerts and get alert details using [Alerting API](/api/rest/v2/alerting/).
+    This tutorial walks through the steps to create alert rules, get unread alerts and get alert details using [Alerting API](/api/rest/v2/alerting/).
 
     To know more details on alert administration, click [here](https://help.mypurecloud.com/articles/alerts/).
 
@@ -25,9 +25,9 @@ steps:
 
 - title: Create Alerting Rule Request
   content: |
-    The Name property of the JSON object is the Alert Rule Name. This is the text of the alert that the user will receive in either SMS or email.
+    The `name` property of the JSON object is the name of the rule. This is the text of the alert that the user will receive in either SMS or email.
 
-- title: Dimension and Dimension Value
+- title: Dimension and Dimension Value Properties
   content: |
     The `dimension` property is the Alert Type in which to apply the rule and can either be an Agent or a Queue. Use the `userId` value for agent or `queueId` for queue.
 
@@ -37,7 +37,7 @@ steps:
   content: |
     The `metric` property is the metric to be assessed. This property defines the metrics that trigger the alert for this rule. 
     
-    Valid Values: tAbandon, tAnswered, tTalk, nOffered, tHandle, nTransferred, oServiceLevel, tWait, tHeld, tAcw
+    Valid Values are: tAbandon, tAnswered, tTalk, nOffered, tHandle, nTransferred, oServiceLevel, tWait, tHeld, tAcw
 
     Read more about Metrics [here](/api/rest/v2/analytics/metrics.html).
 
@@ -65,7 +65,9 @@ steps:
 
 - title: Alert Types Property
   content: |
-    The `alertTypes` property is a collection of notification methods. Valid Values: SMS, DEVICE, EMAIL
+    The `alertTypes` property is a collection of notification methods. 
+    
+    Valid Values are: SMS, DEVICE, EMAIL
 
 - title: Get Unread Alerts Count
   content: |
@@ -73,7 +75,9 @@ steps:
 
 - title: Get Alert Details
   content: |
-    The getAlertingInteractionstatsAlerts function of the Alerting API gets the alert details.
+    If unread count is greater than 0, we will get the alert details by calling the getAlertingInteractionstatsAlerts function.
+
+    Loop through the API response to get the alert name, dimension, dimension value and notificated users to display in our app.
 
 languages:
   nodejs:
@@ -106,4 +110,4 @@ languages:
     - file: "nodejs/docs/index.js"
       highlight: "37"
     - file: "nodejs/docs/index.js"
-      highlight: "47"
+      highlight: "43-61"
