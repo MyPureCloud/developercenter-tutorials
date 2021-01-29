@@ -1,0 +1,109 @@
+---
+title: Managing Alerts Rules
+description: Manage Alert Rules by using the Alerting API.
+categories:
+- Alerting
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps to create Alert Rules, get unread alerts and get alert details using [Alerting API](/api/rest/v2/alerting/).
+
+    To know more details on alert administration, click [here](https://help.mypurecloud.com/articles/alerts/).
+
+- title: Authenticate with Genesys Cloud
+  content: |
+    Using Implicit Grant OAuth, authenticate to Genesys Cloud using loginImplicitGrant. 
+    
+    More information about OAuth and Authorization could be found in the [documentation](/api/rest/authorization/).
+- title: Instantiate APIs
+  content: |
+    An instance of Alerting API will be created.
+
+- title: Create Alerting Rule
+  content: |
+    The postAlertingInteractionstatsRules function of the Alerting API will be used to create an alerting rule.
+
+- title: Create Alerting Rule Request
+  content: |
+    The Name property of the JSON object is the Alert Rule Name. This is the text of the alert that the user will receive in either SMS or email.
+
+- title: Dimension and Dimension Value
+  content: |
+    The `dimension` property is the Alert Type in which to apply the rule and can either be an Agent or a Queue. Use the `userId` value for agent or `queueId` for queue.
+
+    The `dimensionValue` property is the value of the `dimension`.
+
+- title: Metric Property
+  content: |
+    The `metric` property is the metric to be assessed. This property defines the metrics that trigger the alert for this rule. 
+    
+    Valid Values: tAbandon, tAnswered, tTalk, nOffered, tHandle, nTransferred, oServiceLevel, tWait, tHeld, tAcw
+
+    Read more about Metrics [here](/api/rest/v2/analytics/metrics.html).
+
+- title: Media Type Property
+  content: |
+    The `mediaType` property defines the media type this rule applies to. 
+    
+    Valid Values are: voice, chat, email, callback, message
+
+- title: Numeric Range, Statistic and Value Properties
+  content: |
+    The `numericRange` property is the comparison descriptor used against the metric's value. Valid Values: gt, gte, lt, lte, eq, ne
+
+    The `statistic` property is the statistic of concern for the metric. Valid Values: count, min, ratio, max
+
+    The `value` property is the threshold value.
+
+- title: Enabled Property
+  content: |
+    The `enabled` property is the indicator if the rule is enabled.
+
+- title: Notification Users Property
+  content: |
+    The `notificationUsers` property is the IDs of users who will be notified of alarm state change.
+
+- title: Alert Types Property
+  content: |
+    The `alertTypes` property is a collection of notification methods. Valid Values: SMS, DEVICE, EMAIL
+
+- title: Get Unread Alerts Count
+  content: |
+    The getAlertingInteractionstatsAlertsUnread function of the Alerting API gets the count of unread alerts.
+
+- title: Get Alert Details
+  content: |
+    The getAlertingInteractionstatsAlerts function of the Alerting API gets the alert details.
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/docs/index.js"
+      highlight: "0"
+    - file: "nodejs/docs/index.js"
+      highlight: "11"
+    - file: "nodejs/docs/index.js"
+      highlight: "5"
+    - file: "nodejs/docs/index.js"
+      highlight: "31"
+    - file: "nodejs/docs/index.js"
+      highlight: "14"
+    - file: "nodejs/docs/index.js"
+      highlight: "15-16"
+    - file: "nodejs/docs/index.js"
+      highlight: "17"
+    - file: "nodejs/docs/index.js"
+      highlight: "18"
+    - file: "nodejs/docs/index.js"
+      highlight: "19-21"
+    - file: "nodejs/docs/index.js"
+      highlight: "22"
+    - file: "nodejs/docs/index.js"
+      highlight: "23-27"
+    - file: "nodejs/docs/index.js"
+      highlight: "28"
+    - file: "nodejs/docs/index.js"
+      highlight: "37"
+    - file: "nodejs/docs/index.js"
+      highlight: "47"
