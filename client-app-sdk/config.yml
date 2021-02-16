@@ -30,7 +30,7 @@ steps:
     * The configured app should have a URL defining the pcLangTag and pcEnvironment tags
 
     ```
-    ex. https://myapp.com?langTag={pcLangTag}&environment={pcEnvironment}
+    ex. https://myapp.com?langTag={{pcLangTag}}&environment={{pcEnvironment}}
     ```
 
     This will contain information on the user's locale and which environment they are running and will look similarly to:
