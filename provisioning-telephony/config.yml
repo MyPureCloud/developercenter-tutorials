@@ -69,7 +69,7 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-331"
+      highlight: "0-330"
     - file: "nodejs/input-template.json"
       highlight: "1-32"
     - file: "nodejs/index.js"
@@ -79,8 +79,8 @@ languages:
     - file: "nodejs/index.js"
       highlight: "45-73"
     - file: "nodejs/index.js"
-      highlight: "75-137"
+      highlight: "75-136"
     - file: "nodejs/index.js"
-      highlight: "139-287"
+      highlight: "138-286"
     - file: "nodejs/index.js"
-      highlight: "289-331"
+      highlight: "289-330"

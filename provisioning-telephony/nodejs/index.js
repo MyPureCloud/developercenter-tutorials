@@ -103,24 +103,23 @@ function createSite(awsItem) {
         name: inputTemplate.site.name, // Ex: My Site Name
         primarySites: [{
             id: awsItem.id,
-            name: awsItem.name,
             selfUri: awsItem.selfUri,
         }],
         secondarySites: [{
             id: awsItem.id,
-            name: awsItem.name,
             selfUri: awsItem.selfUri,
         }],
         edgeAutoUpdateConfig: {
             timeZone: inputTemplate.site.timeZone, // Ex: America/New_York
             rrule: 'FREQ=DAILY',
             start: startTime,   // Start and end date time is represented as an ISO-8601 string without a timezone. 
-            end: endTime        // example: yyyy-MM-ddTHH:mm:ss.SSS
+            end: endTime        // Example: yyyy-MM-ddTHH:mm:ss.SSS
         },
         location: locationInfo,
         ntpSettings: {
             servers: [],
         },
+        mediaModel: "Cloud" // Allowable values are: Premises, Cloud
     };
 
     telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites(body)
