@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Configure SDK settings
-            String accessToken = "nzdoJHtTSLVB9GRiBFddTDqQWa7NgvYrU_CNnr3AK7mMYChBNu2vqnpwFipLErCQgH4Wh5lJZb09NnSddV8TEg";
+            String accessToken = "";
             Configuration.setDefaultApiClient(ApiClient.Builder.standard()
                     .withAccessToken(accessToken)
                     .withBasePath("https://api.mypurecloud.com")
@@ -27,7 +27,7 @@ public class Main {
             PresenceApi presenceApi = new PresenceApi();
 
             // Validate token with GET /api/v2/users/me (throws an exception if unauthorized)
-            UserMe me = usersApi.getUsersMe(Arrays.asList("presence"));
+            UserMe me = usersApi.getUsersMe(Arrays.asList("presence"), null);
             System.out.println("Hello " + me.getName());
 
             // Get presences
