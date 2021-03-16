@@ -60,15 +60,15 @@ languages:
     - file: "nodejs/server.js"
       highlight: "0-150"
     - file: "nodejs/server.js"
-      highlight: "108-109"
+      highlight: "107-109"
     - file: "nodejs/server.js"
-      highlight: "13-33"
+      highlight: "14-34"
     - file: "nodejs/server.js"
-      highlight: "46-86"
+      highlight: "47-83"
     - file: "nodejs/my_info.html"
       highlight: "8-16"
     - file: "nodejs/server.js"
-      highlight: "89-106"
+      highlight: "85-105"
   csharp:
     displayName: ASP.NET
     steps:
