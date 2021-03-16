@@ -1,0 +1,86 @@
+---
+title: Provisioning Telephony
+description: This tutorial implements BYOC Cloud solution with a cloud-based carrier 
+categories:
+- Trunk
+- Telephony
+steps:
+- title: Introduction
+  content: |
+    This tutorial walks through the steps on how to implement BYOC Cloud in Genesys Cloud using [Genesys Cloud Platform API](/rest/client-libraries/index.html). In order for BYOC Cloud to work with a third-party carrier, the carrier must:
+    
+    * Be SIP-compliant
+    * Support the UDP or TCP trunk transport protocol
+    * Have a publicly routable IP address or host name
+      * Carriers must fully support Record-Routing as required by RFC 3261 to ensure proper routing of sequential SIP requests.
+    
+    The Org must also have the BYOC Cloud feature enabled. For more information about carrier requirements, check the Genesys Resource Center article [Carrier requirements for BYOC Cloud](https://help.mypurecloud.com/articles/carrier-requirements-byoc-cloud/).
+    
+    To successfully run the code, a JSON file is needed to provide the necessary input. In this tutorial, the JSON file is titled input-template.json.
+
+- title: JSON Files and Variables
+  content: |
+    This file is used as substitute to input text boxes. This is where the user enters all of the necessary details. Each key value pair has a corresponding description. Ensure all values are entered where required, or left blank where entry is optional. Any phone number entries should use the E.164 format. 
+    
+    Please refer to your carrier for the possible SIP Endpoints as a list of IP Addresses or CIDR. See the example below. 
+
+    Sample: `['54.172.60.0/30','54.244.51.0/30','54.171.127.192/30','35.156.191.128/30']`
+
+- title: Authentication
+  content: |
+    The app will be authorized using OAuth Client Credentials. Once the authentication is successful, the process will continue.
+
+- title: Check BYOC Feature
+  content: |
+    Get the list of products available for the org used by calling [getAuthorizationProducts()](/api/rest/client-libraries/javascript/AuthorizationApi.html#organizationproductentitylisting_getauthorizationproducts__) function using the Authorization API to check if the org has BYOC capability.
+    
+    After Genesys enables the BYOC feature, managed telephony resources are automatically created for the organization. These resource will be used to configure the BYOC feature and are managed by Genesys. They are used by both the BYOC and PCV feature.
+
+    A list of managed objects are also visible in the Telephony Admin UI under the following headings:
+    
+        1. Edges - will contain one or more virtual-edge-i-xxxxxxxxxx entries.
+        
+        2. EdgeGroup - will contain an object named PureCloud Voice.
+        
+        3. Site - will contain an object named PureCloud Voice – AWS.
+    
+    If the org is BYOC capable, it will proceed to create location function.  Please take note that only BYOC enabled orgs can proceed. If the org does not have the BYOC feature, the user should contact their sales representative or account manager.
+
+- title: Create Location
+  content: |
+    Create a location in Genesys Cloud  by calling the [postLocations()](/api/rest/client-libraries/javascript/LocationsApi.html#postLocations) function of the locations API and save the returned location data in a global variable.
+
+- title: Create Site
+  content: |
+    To create a new site, there are a few pieces of information required before making an API call. First, is the location information saved in a global variable from an earlier step. Second, is the default Edge group which is found in Genesys Cloud Admin > Telephony > Edge Groups. Third, is the Edge software update schedule and in this tutorial is set to the default schedule window of 2AM to 5AM. Read more about scheduling automatic updates for the Edge software [here](https://help.mypurecloud.com/articles/schedule-automatic-updates-edge-software/).
+
+    Get the default edge group by calling [getTelephonyProvidersEdgesSites()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSites) function and look for "PureCloud Voice – AWS". Save the returned data and proceed to creating a new site with [postTelephonyProvidersEdgesSites()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#postTelephonyProvidersEdgesSites) function. Both functions are under telephony providers edge API.
+
+- title: Create Trunk
+  content: |
+    Create a trunk object from the user input credentials from the JSON file by calling the [postTelephonyProvidersEdgesTrunkbasesettings()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#trunkbase_posttelephonyprovidersedgestrunkbasesettings_body_) function of Telephony Providers Edge API. Once the trunk is successfully created, it will proceed to the siteOutboundRoutes function. Please take note that the sipServers value from the JSON file should be unique across the entire org.
+
+- title: Set Outbound Route
+  content: |
+    Lastly, with the use of telephony providers edge API, get the default  outbound route created by when the site was setting up using the [getTelephonyProvidersEdgesSiteOutboundroutes()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#getTelephonyProvidersEdgesSiteOutboundroutes) function, then update the external trunk base value of the trunk created in the previous step by calling the [putTelephonyProvidersEdgesSiteOutboundroutes()](/api/rest/client-libraries/javascript/TelephonyProvidersEdgeApi.html#putTelephonyProvidersEdgesEdgegroupEdgetrunkbase) function.
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-330"
+    - file: "nodejs/input-template.json"
+      highlight: "1-32"
+    - file: "nodejs/index.js"
+      highlight: "15-25"
+    - file: "nodejs/index.js"
+      highlight: "27-43"
+    - file: "nodejs/index.js"
+      highlight: "45-73"
+    - file: "nodejs/index.js"
+      highlight: "75-136"
+    - file: "nodejs/index.js"
+      highlight: "138-286"
+    - file: "nodejs/index.js"
+      highlight: "289-330"

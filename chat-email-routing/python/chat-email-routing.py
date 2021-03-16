@@ -17,9 +17,9 @@ QUEUE_ID = "QUEUE_ID"
 PROVIDER_NAME = "Developer Center Tutorial"
 
 # OAuth when using Client Credentials
-apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
+apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENSYS_CLOUD_CLIENT_ID'], os.environ['GENSYS_CLOUD_CLIENT_SECRET'])
 
-# Set PureCloud Objects
+# Set Genesys Cloud Objects
 notifications_api = PureCloudPlatformClientV2.NotificationsApi(apiclient)
 conversations_api = PureCloudPlatformClientV2.ConversationsApi(apiclient)
 

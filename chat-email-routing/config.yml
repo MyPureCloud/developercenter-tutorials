@@ -1,17 +1,17 @@
 ---
 title: 3rd Party Chat and Email Routing
-description: Introduction on how to route external objects through PureCloud ACD
+description: Introduction on how to route external objects through Genesys Cloud ACD
 categories:
 - Chat
 - Email
 steps:
 - title: Introduction
   content: |
-    Use cases can arise where there are entities external to PureCloud which need to be routed through PureCloud's ACD engine. The most common use case is with a CRM that supports email to case functionality and then the callcenter wants to ACD route that case to an available agent. Using [POST /api/v2/conversations/emails](/api/rest/v2/conversations/#postConversationsEmails) and [POST /api/v2/conversations/chats](/api/rest/v2/conversations/#postConversationsChats) it is now possible to create a representation of those external objects in PureCloud as email or chat objects.  This tutorial demonstrates routing an email, but the concepts also apply for a chat.
+    Use cases can arise where there are entities external to Genesys Cloud which need to be routed through Genesys Cloud's ACD engine. The most common use case is with a CRM that supports email to case functionality and then the callcenter wants to ACD route that case to an available agent. Using [POST /api/v2/conversations/emails](/api/rest/v2/conversations/#postConversationsEmails) and [POST /api/v2/conversations/chats](/api/rest/v2/conversations/#postConversationsChats) it is now possible to create a representation of those external objects in Genesys Cloud as email or chat objects.  This tutorial demonstrates routing an email, but the concepts also apply for a chat.
     
-- title: Authenticate with PureCloud
+- title: Authenticate with Genesys Cloud
   content: |
-    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud. After authenticating, a new notification channel is created for the app.
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud. After authenticating, a new notification channel is created for the app.
     
 - title: Initialize Queue or User Watcher
   content: |
@@ -21,13 +21,13 @@ steps:
     
 - title: Create an Email
   content: |
-    When creating the data for an email, the only required fields are queueId, which is the queue used to route the email and provider. The provider field is an arbitrary string value which identifies your routing integration. Native PureCloud emails and chats will have a provider of "PureCloud Email" and "PureCloud Webchat".
+    When creating the data for an email, the only required fields are queueId, which is the queue used to route the email and provider. The provider field is an arbitrary string value which identifies your routing integration. Native Genesys Cloud emails and chats will have a provider of "Genesys Cloud Email" and "Genesys Cloud Webchat".
 
     The other fields on the email are optional but the from/to name can be used to display helpful information to the agent and the from/to address may be useful for the integration.
     
 - title: Handling a Conversation Notification
   content: |
-    This is the callback function that handles incoming notifications from PureCloud. It performs the following steps:
+    This is the callback function that handles incoming notifications from Genesys Cloud. It performs the following steps:
 
     1. Parses the notification payload to JSON. Web socket message payloads are always received as a string.
     2. Unwanted notification topics are filtered out.

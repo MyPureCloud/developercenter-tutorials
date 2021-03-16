@@ -1,18 +1,18 @@
 const platformClient = require('purecloud-platform-client-v2');
 const WebSocket = require('websocket').w3cwebsocket;
 
-// Set purecloud objects
+// Set Genesys Cloud objects
 const client = platformClient.ApiClient.instance;
 const notificationsApi = new platformClient.NotificationsApi();
 const conversationsApi = new platformClient.ConversationsApi();
 
-// Set PureCloud settings
+// Set Genesys Cloud settings
 client.setEnvironment('mypurecloud.com');
 client.setPersistSettings(true, 'test_app');
 
 // Get client credentials from environment variables
-const PURECLOUD_CLIENT_ID = process.env.PURECLOUD_CLIENT_ID;
-const PURECLOUD_CLIENT_SECRET = process.env.PURECLOUD_CLIENT_SECRET;
+const GENSYS_CLOUD_CLIENT_ID = process.env.GENSYS_CLOUD_CLIENT_ID;
+const GENSYS_CLOUD_CLIENT_SECRET = process.env.GENSYS_CLOUD_CLIENT_SECRET;
 
 // Use your own data here
 const PROVIDER_NAME = 'Developer Center Tutorial';
@@ -22,10 +22,10 @@ const QUEUE_ID = '636f60d4-04d9-4715-9350-7125b9b553db';
 let conversationsTopic = null;
 let webSocket = null;
 
-// Authenticate with PureCloud
-client.loginClientCredentialsGrant(PURECLOUD_CLIENT_ID, PURECLOUD_CLIENT_SECRET)
+// Authenticate with Genesys Cloud
+client.loginClientCredentialsGrant(GENSYS_CLOUD_CLIENT_ID, GENSYS_CLOUD_CLIENT_SECRET)
 	.then(() => {
-		console.log('Authenticated with PureCloud');
+		console.log('Authenticated with Genesys Cloud');
 
 		// Create a new notification channel for this app
 		return notificationsApi.postNotificationsChannels();

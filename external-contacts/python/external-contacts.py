@@ -8,7 +8,7 @@ print('- Python3 External Contacts -')
 print('-------------------------------------------------------------')
 
 # OAuth when using Client Credentials
-apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
+apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
 
 # Create an instance of the External Contacts API API
 external_contacts_api = PureCloudPlatformClientV2.ExternalContactsApi(apiclient)
@@ -26,7 +26,7 @@ new_org.address.countryCode = "USA"
 new_org.employee_count = 2000
 new_org.websites = ["https://developer.mypurecloud.com"]
 new_org.twitter_id = PureCloudPlatformClientV2.TwitterId()
-new_org.twitter_id.screen_name = 'PureCloud_dev'
+new_org.twitter_id.screen_name = 'GenesysCloudDev'
 
 try:
     # Create an external organization

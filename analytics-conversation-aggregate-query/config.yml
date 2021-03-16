@@ -6,9 +6,9 @@ categories:
 steps:
 - title: Introduction
   content: |
-    The Analytics API provides a flexible way to query historical information from PureCloud.  For full details see [Analytics Overview](/api/rest/v2/analytics/overview.html). 
+    The Analytics API provides a flexible way to query historical information from Genesys Cloud.  For full details see [Analytics Overview](/api/rest/v2/analytics/overview.html). 
     
-    When querying historical statistics for a queue, we'll need to build up an aggregation query to send to the [PureCloud API](/api/rest/v2/analytics/index.html).
+    When querying historical statistics for a queue, we'll need to build up an aggregation query to send to the [Genesys Cloud API](/api/rest/v2/analytics/index.html).
 - title: Build Query
   content: |
     The aggregation query contains a number of different parameters.
@@ -38,7 +38,7 @@ steps:
     Finally we need to build the query filter. A list of dimensions used to build the query [is available](/api/rest/v2/analytics/dimensions.html) but we are simply going to query by queueId.  This example is getting the queue named Support.
 - title: Send Query
   content: |
-    Now that the query is built, we can send the query to PureCloud and handle the result set as needed.
+    Now that the query is built, we can send the query to Genesys Cloud and handle the result set as needed.
 - title: Results
   content: |
     Here is an example response containing the results of the query. For this query, we can see that the only media type presented in the queue were chats, there were 5 calls offered as well as details on the talk time and answer time.

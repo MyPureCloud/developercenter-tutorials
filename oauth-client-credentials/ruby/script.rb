@@ -2,8 +2,8 @@ require 'rest-client'
 require 'json'
 require "base64"
 
-secret = ENV['purecloud_secret']
-id = ENV['purecloud_client_id']
+secret = ENV['genesys_cloud_secret']
+id = ENV['genesys_cloud_client_id']
 
 basic = Base64.strict_encode64("#{id}:#{secret}")
 

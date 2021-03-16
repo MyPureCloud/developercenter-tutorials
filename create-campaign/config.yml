@@ -8,7 +8,7 @@ steps:
   content: |
     Campaigns are the workhorses for outbound dialing. Before you can create a campaign, you'll need to have [created a contact list](https://developer.mypurecloud.com/api/tutorials/create-contact-list/#javascript) and, for most dialing modes, a queue. Most dialing modes also require a script, but you can use the default outbound script that's provided.
 
-- title: Log In to PureCloud
+- title: Log In to Genesys Cloud
   content: |
     First, the user must authorize the application. 
 

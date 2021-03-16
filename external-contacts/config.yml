@@ -10,11 +10,11 @@ steps:
 
     Loading external contacts doesn't have to be a manual process and this tutorial will walk through the steps of creating external contacts sourced by a csv file.
 
-    For mor information on external contacts see the [Resource Center](https://help.mypurecloud.com/articles/about-external-contacts/)
+    For more information on external contacts see the [Resource Center](https://help.mypurecloud.com/articles/about-external-contacts/)
 
-- title: Authenticate with PureCloud
+- title: Authenticate with Genesys Cloud
   content: |
-    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with PureCloud.
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
 
 - title: Create an Organization
   content: |

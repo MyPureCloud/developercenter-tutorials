@@ -48,7 +48,7 @@ steps:
 
 - title: Updating Presence
   content: |
-    Finally, we can update the presence.  The call to update the presence requires a "Source Id". PureCloud could potentially have different status sources from external systems, but here we want to update the PureCloud status so we can pass in the key of _PURECLOUD_.
+    Finally, we can update the presence.  The call to update the presence requires a "Source Id". Genesys Cloud could potentially have different status sources from external systems, but here we want to update the Genesys Cloud status so we can pass in the key of _PURECLOUD_.
 
 languages: 
   javascript:

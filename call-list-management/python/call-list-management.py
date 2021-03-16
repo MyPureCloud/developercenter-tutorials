@@ -12,9 +12,9 @@ contact_list_id = "cc1f7deb-0ca2-422d-b152-62dc092f05cc"
 campaign_id = "af5624eb-c445-4fdf-a659-d93f61d84395"
 
 # OAuth when using Client Credentials
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
+apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
 
-# PureCloud Objects
+# Genesys Cloud Objects
 outbound_api = PureCloudPlatformClientV2.OutboundApi(apiClient)
 
 contact_data = [PureCloudPlatformClientV2.WritableDialerContact()]
@@ -48,7 +48,7 @@ if campaign_info.campaign_status != 'on':
 
     # datetime properties need to be converted to string if part of a request
     # these are optional so we'll just be assigning a blank string.
-    # This won't affect the object's properties in PureCloud side.
+    # This won't affect the object's properties in Genesys Cloud side.
     campaign_info.date_modified = ""
     campaign_info.date_created = ""
 

@@ -10,21 +10,21 @@
 	</style>
 	<script type="text/javascript">
 		// This client ID expects the redirect URL to be http://localhost:8080/
-		const clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
+		const clientId = GENESYS_CLOUD_CLIENT_ID;
 		const redirectUri = window.location.href;
 
-		// Set purecloud objects
+		// Set Genesys Cloud objects
 		const platformClient = require('platformClient');
 		const client = platformClient.ApiClient.instance;
 		const analyticsapi = new platformClient.AnalyticsApi();
 		const routingapi = new platformClient.RoutingApi();
 
-		// Set PureCloud settings
+		// Set Genesys Cloud settings
 		client.setEnvironment('mypurecloud.com');
 		client.setPersistSettings(true, 'test_app');
 
 		$(document).ready(function() {
-			// Authenticate with PureCloud
+			// Authenticate with Genesys Cloud
 			client.loginImplicitGrant(clientId, redirectUri)
 				.then(() => {
 					console.log('Logged in');
