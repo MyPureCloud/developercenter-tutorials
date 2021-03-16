@@ -1,16 +1,20 @@
 ---
-title: Get Number of On-Queue Agents using Genesys Cloud SDK
+title: Get Number of On-Queue Agents
 description: This tutorial walks through the steps of implementing a function to get the number of On-Queue Agents on a specific queue.
 categories:
 - Routing
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps of implementing a function to get the number of On-Queue Agents on a specific queue.
+    This tutorial walks through implementing a function to get the number of On-Queue Agents on a specific queue.
 
-    There are 5 types of Routing Status: IDLE, INTERACTING, COMMUNINCATING, OFF_QUEUE, and NOT_RESPONDING. To determine if an agent is On-Queue, he/she should have a routing status of either IDLE or INTERACTING.
+    There are 5 types of Routing Status: IDLE, INTERACTING, COMMUNINCATING, OFF_QUEUE, and NOT_RESPONDING. To determine if an agent is On-Queue, they should have a routing status of either IDLE or INTERACTING.
 
     Go here for more information about [Presences and Routing Status](/api/rest/v2/presence/understanding_presence.html):
+
+    The Queue Observation Query allows for querying data from queues including the number of on-queue users represented by the *oOnQueueUsers* metric.
+
+    This article provide more information about the [Queue query](https://developer.mypurecloud.com/api/rest/v2/analytics/queue.html).
 
     For this tutorial, we are going to use the Genesys Cloud SDK.
 
@@ -18,32 +22,34 @@ steps:
   content: |
     Authenticate with Genesys Cloud using Client Credentials. More information about authentication could be found in the [Authorization Documentation](/api/rest/authorization/)
 
-- title: Create instance of Routing API
+- title: Create API instances
   content: |
-    Configure the token to be used by the Genesys Cloud SDK. This token will be sent along every API call automatically.
+    Create an instance of the Routing API and the Analytics API.
 
-    Create an instance of the Routing API which will be used to make the API calls.
+    Routing API will be used in identifying the queue based on its name.
+
+    Analytics API will be used in querying the data and getting how many agents are currently on-queue.
 
 - title: Create the function
   content: |
-    First, search for the queue using its name. It should return exactly one result, otherwise it should return an exception.
+    First, search for the queue using its name.
 
-    The next API call should get the users of the queue with the desired routing status. ("IDLE", "INTERACTING").
+    The next step is to build the Queue Observation Query.
 
-    The number of users will simple be returned from the function.
+    The number of users will simply be returned from the function.
 
 languages: 
   python:
     displayName: Python
     steps:
     - file: "python/script.py"
-      highlight: "0-68"
+      highlight: "0-76"
     - file: "python/script.py"
-      highlight: "9-10"
+      highlight: "8-16"
     - file: "python/script.py"
-      highlight: "12-13"
+      highlight: "17-20"
     - file: "python/script.py"
-      highlight: "16-63"
+      highlight: "22-69"
   nodejs:
     displayName: NodeJS
     steps:
