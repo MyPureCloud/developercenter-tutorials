@@ -45,11 +45,11 @@ languages:
     - file: "python/script.py"
       highlight: "0-76"
     - file: "python/script.py"
-      highlight: "8-16"
+      highlight: "9-16"
     - file: "python/script.py"
-      highlight: "17-20"
+      highlight: "18-20"
     - file: "python/script.py"
-      highlight: "22-69"
+      highlight: "23-70"
   nodejs:
     displayName: NodeJS
     steps:
