@@ -1,13 +1,13 @@
 ---
 title: Bulk delete\export of recordings
-description: Bulk delete\export of recordings based on analytics query parameters
+description: Bulk delete\export of recordings based on analytics query parameters and using S3 integration.
 categories:
   - Recordings
 steps:
   - title: Introduction
     content: |
       User will specify an analytics query and a time range over which we should match conversation recordings.
-      Additonaly, the user need to specify the action type (export\delete) and the action date. This will result in deletion\export of the matched recordings
+      Additionally, the user needs to specify the action type (EXPORT\DELETE) and the action date. This will result in export\deletion of the matched recordings
   - title: Authenticate with Genesys Cloud
     content: |
       The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
@@ -21,7 +21,7 @@ steps:
       The user will use the get recording job API in order to check what is the status of the bulk job. Once the status is Ready, the execute action PUT API can be used
   - title: Execute Job
     content: |
-      The user will specify the job_id and use the PUT for excuting the bulk job
+      The user will specify the job_id and use the PUT for executing the bulk job
   - title: Cancel Job
     content: |
         The user will specify the job_id and use the DELETE for canceling the bulk job
@@ -35,33 +35,33 @@ languages:
     displayName: Python
     steps:
       - file: "python/recordings-bulk-action.py"
-        highlight: "0-91"
+        highlight: "0-100"
       - file: "python/recordings-bulk-action.py"
-        highlight: "10-23"
+        highlight: "11-20"
       - file: "python/recordings-bulk-action.py"
-        highlight: "25-44"
+        highlight: "25-46"
       - file: "python/recordings-bulk-action.py"
-        highlight: "46-57"
+        highlight: "46-60"
       - file: "python/recordings-bulk-action.py"
-        highlight: "59-67"
+        highlight: "61-71"
       - file: "python/recordings-bulk-action.py"
-        highlight: "69-77"
+        highlight: "72-80"
       - file: "python/recordings-bulk-action.py"
-        highlight: "79-91"
+        highlight: "82-95"
   nodejs:
     displayName: NodeJS
     steps:
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "0-96"
+        highlight: "0-100"
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "3-14"
+        highlight: "6-16"
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "48-61"
+        highlight: "50-63"
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "62-78"
+        highlight: "64-80"
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "80-84"
+        highlight: "82-86"
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "30-32"
+        highlight: "31-37"
       - file: "nodejs/recordings-bulk-action.js"
-        highlight: "86-96"
+        highlight: "88-97"

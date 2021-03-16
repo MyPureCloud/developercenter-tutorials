@@ -1,17 +1,19 @@
 const platformClient = require('purecloud-platform-client-v2');
 
+// Globals
+let newJob = null;
+
 // Credentials
-const clientId = '-- id here --';
-const clientSecret = '-- secret here --';
+const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const GENESYS_CLOUD_ENVIRONMENT = 'mypurecloud.com';
 
 // API Instances
 const recordingApi = new platformClient.RecordingApi();
 
-// Globals
-let newJob = null;
-
 const client = platformClient.ApiClient.instance;
-client.loginClientCredentialsGrant(clientId,clientSecret)
+client.setEnvironment(GENESYS_CLOUD_ENVIRONMENT)
+client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
 .then(()=> {
     return createRecordingBulkJob();
 })
@@ -47,7 +49,7 @@ client.loginClientCredentialsGrant(clientId,clientSecret)
 
 function createRecordingBulkJob(){
     return recordingApi.postRecordingJobs({
-        action: 'DELETE', // set to "EXPORT" for export action
+        action: 'EXPORT', // set to "EXPORT" for export action
         actionDate: '2029-01-01T00:00:00.000Z',
         integrationId: '-- integration id here --', // Only required when action is EXPORT
         includeScreenRecordings: true,
@@ -85,10 +87,10 @@ function executeJob(id){
 
 function getRecordingJobs(){
     return recordingApi.getRecordingJobs({
-        pageeSize: 25,
+        pageSize: 25,
         pageNumber: 1,
         sortBy: 'userId', // or 'dateCreated'
-        state: 'READY', // valid values FULFILLED, PENDING, READY, PROCESSING, CANCELLED, FAILED
+        state: 'CANCELLED', // valid values FULFILLED, PENDING, READY, PROCESSING, CANCELLED, FAILED
         showOnlyMyJobs: true,
         jobType: 'EXPORT' // or 'DELETE'
     })
