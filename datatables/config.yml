@@ -45,9 +45,9 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "1-154"
+      highlight: "1-157"
     - file: "nodejs/index.js"
-      highlight: "136-139"
+      highlight: "136-142"
     - file: "nodejs/index.js"
       highlight: "11-49"
     - file: "nodejs/index.js"

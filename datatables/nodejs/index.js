@@ -27,7 +27,7 @@ const dataTableSchema = {
                 '$id': '/properties/available',
                 'default': false
             },
-            'quantity': {
+            'expiration': {
                 'title': 'expiration',
                 'type': 'integer',
                 '$id': '/properties/expiration',
@@ -134,9 +134,12 @@ function convertToType(val, header){
 }
 
 // Authenticate
-const clientId = process.env.GENESYS_CLOUD_CLIENT_ID;
-const clientSecret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-client.loginClientCredentialsGrant(clientId, clientSecret)
+const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const GENESYS_CLOUD_CLIENT_REGION = 'mypurecloud.com';
+
+client.setEnvironment(GENESYS_CLOUD_CLIENT_REGION);
+client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
 .then(()=> {
     return createDataTable();
 })
