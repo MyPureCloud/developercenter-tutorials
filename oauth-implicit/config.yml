@@ -65,12 +65,11 @@ languages:
     displayName: Python
     steps:
     - file: "python/server.py"
-      highlight: "0-62"
-      note: In Python, we start a server via listening on a socket and open a web browser that displays the authorization page to the end user.
+      highlight: "0-68"
+      note: In Python, we start a server using the http.server module and open a web browser that displays the authorization page to the end user.
     - file: "python/implicit.html"
       highlight: "29-35"
+    - file: "python/implicit.html"
+      highlight: "16-26"
     - file: "python/server.py"
-      highlight: "51-55"
-      note: We post the token to the server for use in the server.
-    - file: "python/server.py"
-      highlight: "3-21"
+      highlight: "33-53"
