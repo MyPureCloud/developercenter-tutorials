@@ -72,20 +72,20 @@ languages:
   csharp:
     displayName: ASP.NET
     steps:
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "0-95"
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "16-16"
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "44-49"
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "59-73"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "1-98"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "18-25"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "49-53"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "58-71"
       note: The ASP.NET example does not redirect the user after this step. Instead, the user remains on the main page.
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "75-81"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "73-78"
       note: The ASP.NET example is not using cookies and instead sets the Authorization header with the bearer token. This request is made server-side, but could be made client-side using JavaScript.
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "75-81"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "73-78"
   python:
     displayName: Python
     steps:
