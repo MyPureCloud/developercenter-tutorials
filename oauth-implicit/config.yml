@@ -48,19 +48,6 @@ languages:
       highlight: "55-66"
     - file: "csharp/MainForm.cs"
       highlight: "36-52"
-  ruby:
-    displayName: Ruby
-    steps:
-    - file: "ruby/script.rb"
-      highlight: "0-100"
-      note: In Ruby, we start a Sinatra server and open a web browser that displays the authorization page to the end user.
-    - file: "ruby/script.rb"
-      highlight: "28-41"
-    - file: "ruby/script.rb"
-      highlight: "16-27"
-      note: We post the token to the server for use in the server.
-    - file: "ruby/script.rb"
-      highlight: "8-14"
   python:
     displayName: Python
     steps:

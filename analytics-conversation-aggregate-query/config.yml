@@ -43,23 +43,6 @@ steps:
   content: |
     Here is an example response containing the results of the query. For this query, we can see that the only media type presented in the queue were chats, there were 5 calls offered as well as details on the talk time and answer time.
 languages: 
-  ruby:
-    displayName: Ruby
-    steps:
-    - file: ruby/query.rb
-    - file: ruby/query.rb
-      highlight: 24-44
-    - file: ruby/query.rb
-      highlight: 16-22
-    - file: ruby/query.rb
-      highlight: 27
-    - file: ruby/query.rb
-      highlight: 28
-    - file: ruby/query.rb
-      highlight: 29-42
-    - file: ruby/query.rb
-      highlight: 46-49
-    - file: results.json
   javascript:
     displayName: JavaScript
     steps:

@@ -27,15 +27,6 @@ steps:
     The response of the POST contains the access token. Include this token in the authorization header of API calls.
 
 languages:
-  ruby:
-    displayName: Ruby
-    steps:
-    - file: "ruby/script.rb"
-      highlight: "0-100"
-    - file: "ruby/script.rb"
-      highlight: "5-15"
-    - file: "ruby/script.rb"
-      highlight: "17-21"
   nodejs:
     displayName: NodeJS
     steps:
