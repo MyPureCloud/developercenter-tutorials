@@ -4,7 +4,7 @@
   <title>Auto Send SMS</title>
   
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>  
-  <script src="https://sdk-cdn.mypurecloud.com/javascript/49.0.0/purecloud-platform-client-v2.min.js"></script>
+  <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
  
 </head>
 
@@ -26,17 +26,19 @@
   const notificationsApi = new platformClient.NotificationsApi();
   
   // Initialize variables
-  let redirectUri = 'http://localhost:8080/';
-  let clientId = 'babbc081-0761-4f16-8f56-071aa402ebcb';
-  let queueId = '4d3af653-b60c-42f1-b373-7cf2c99610fc';
-  let dropOffMessage = 'Message sent upon dropping off the call.';
-  let userPresenceTopic = 'v2.routing.queues.'+ queueId +'.conversations.calls';
-  let message, CustomerInfo, webSocket, customerAddress, conversationId,
-  communicationId, callState, customerSmsAttr, usingMobilePhone, 
-  callConversationId, channelId, connectionUri;
+  let clientId = '--- IMPLICT GRANT CLIENT ID ---';
+  let queueId = '--- QUEUE ID ---';
+  let redirectUri = 'http://localhost:8080/index.html';
 
-  // jQuery call this function when DOM's ready
+  let dropOffMessage = 'Message sent upon dropping off the call.';
+  let sendAttemptOngoing = false;
+  let conversationId, communicationId, callState, callConversationId, participantId, userPresenceTopic;
+
   $(document).ready(function() {
+    // Genesys Cloud Authorization
+    client.setEnvironment(platformClient.PureCloudRegionHosts.us_east_1);
+    client.setPersistSettings(true, 'sample-app');
+
     client.loginImplicitGrant(clientId, redirectUri)
       .then(() => {
         console.log('Logged in');
@@ -45,68 +47,74 @@
       return notificationsApi.postNotificationsChannels();
       })
       .then((data) => {
-        channelId = data.id;
-        connectionUri = data.connectUri;        
+        let channelId = data.id;
+        let connectionUri = data.connectUri;     
+        userPresenceTopic = `v2.routing.queues.${queueId}.conversations.calls`;
+
+        // Create a new webSocket object
+        let webSocket = new WebSocket(connectionUri);
+        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.';  
+
+        // If a message is recieve notificationMesssage function will be called      
+        webSocket.onmessage = notificationMessage;
         
         // Subscribe to a topic
         let body = [{
           'id': userPresenceTopic
         }]; 
         notificationsApi.putNotificationsChannelSubscriptions(channelId, body);
-        
-        // Create a new webSocket object
-        webSocket = new WebSocket(connectionUri);
-        document.getElementById('stateVal').innerHTML = 'No incoming call at the moment.';  
-
-        // If a message is recieve notificationMesssage function will be called      
-        webSocket.onmessage = notificationMessage;
-    })
-    .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   })
 
   // Call this function when the webSocket recieves a message
   function notificationMessage(message) { 
-    notification = JSON.parse(message.data);		
+    let notification = JSON.parse(message.data);		
     console.log(notification);
     
     // Check notification topicname
     if (notification.topicName.toLowerCase() === userPresenceTopic.toLowerCase()) {  
-      CustomerInfo = notification.eventBody.participants.find(participant => participant.purpose === 'customer');       
+      let customerInfo = notification.eventBody
+                        .participants.find(participant => 
+                          participant.purpose === 'customer');     
+      if(!customerInfo) return;
+                          
       callConversationId = notification.eventBody.id;     
       callState = notification.eventBody.participants[0].state;    
-      usingMobilePhone = CustomerInfo.attributes.usingMobilePhone;
-      participantId = CustomerInfo.id;
-      customerAddress = CustomerInfo.address;
+      participantId = customerInfo.id;
+      customerAddress = customerInfo.address;
       customerAddress = customerAddress.slice(4, customerAddress.length);
       
       document.getElementById('stateVal').innerHTML = callState + ' to ' + customerAddress;	
 
       // Check if messageSent attribute has been added
-      if(('messageSent' in CustomerInfo.attributes) === true) {
-        customerSmsAttr = true;
-      }
-      else {
-        customerSmsAttr = false;
-      }
-      
+      let messageSent = customerInfo.attributes.messageSent? true : false;
+
       // Check if all attributes are align
-      if (callState === 'disconnected' && usingMobilePhone === 'true' && customerSmsAttr === false){
+      if (callState === 'disconnected' && !messageSent && !sendAttemptOngoing){
+        sendAttemptOngoing = true;
+
         // Call sms sending function
-        sendSms();
+        sendSms(customerAddress)
+        .then(() => {
+          sendAttemptOngoing = false;
+        });
       }
     }
   }
 
   // Call this function to send SMS
-  function sendSms(){
+  function sendSms(toAddress){
     let body = {
       'queueId': queueId,
-      'toAddress': customerAddress,
+      'toAddress': toAddress,
       'toAddressMessengerType': 'sms',
       'useExistingConversation': true
     };
+    console.log('Sending SMS...')
+
     // Create interaction
-    conversationsApi.postConversationsMessages(body)
+    return conversationsApi.postConversationsMessages(body)
       .then((data) => {						
         conversationId = data.id;
         console.log(conversationId);
@@ -115,7 +123,9 @@
         return conversationsApi.getConversation(conversationId); 
       })
       .then((data) => {
-        communicationId = CustomerInfo.messages[0].id;
+        let agent = data.participants.find(p => 
+                          p.purpose === 'agent');   
+        communicationId = agent.messages[0].id;
 
         let body = {
           'textBody': dropOffMessage
@@ -132,7 +142,10 @@
         };
         
         console.log(callConversationId+ '  ' + participantId);
-        conversationsApi.patchConversationParticipantAttributes(callConversationId, participantId, body);
+        return conversationsApi.patchConversationParticipantAttributes(callConversationId, participantId, body);
+      })
+      .then(() => {
+        console.log("Successfully update conversation.");
       })
       .catch((err) => console.log(err));		
   }
