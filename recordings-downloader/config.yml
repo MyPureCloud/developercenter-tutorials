@@ -8,11 +8,11 @@ steps:
   content: |
     This tutorial walks through the steps to download recordings in bulk within a given date interval.
     For this tutorial, Genesys Cloud SDK will be used.
-- title: Input
+- title: Authorization
   content: |
-    For this tutorial, the user will be asked to input the credentials through a simple console input.
+    For this tutorial, the user should replace the variables for Client ID and Client Secret.
 
-    The user will be also asked for the date interval of the recordings. Please take note of the format for the date input YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss.
+    Dates are also predefined in the dates variable. User can modify it to their desired date.  Please take note of the format for the date input YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss.
 - title: Configure SDK Settings
   content: |
     Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
@@ -86,23 +86,23 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-175"
+      highlight: "0-151"
     - file: "nodejs/index.js"
-      highlight: "18-36"
+      highlight: "16-23"
     - file: "nodejs/index.js"
-      highlight: "42-43"
+      highlight: "21-22"
     - file: "nodejs/index.js"
-      highlight: "42-43"
+      highlight: "21-22"
     - file: "nodejs/index.js"
-      highlight: "14-16"
+      highlight: "12-14"
     - file: "nodejs/index.js"
-      highlight: "56-95"
+      highlight: "32-72"
     - file: "nodejs/index.js"
-      highlight: "97-140"
+      highlight: "74-91"
     - file: "nodejs/index.js"
-      highlight: "142-158"
+      highlight: "119-135"
     - file: "nodejs/index.js"
-      highlight: "160-174"
+      highlight: "137-151"
   csharp:
     displayName: C#
     steps:
