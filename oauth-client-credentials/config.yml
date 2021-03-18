@@ -33,9 +33,9 @@ languages:
     - file: "nodejs/script.js"
       highlight: "0-100"
     - file: "nodejs/script.js"
-      highlight: "20-28"
+      highlight: "31-42"
     - file: "nodejs/script.js"
-      highlight: "3-18"
+      highlight: "8-28"
   powershell:
     displayName: PowerShell
     steps:
