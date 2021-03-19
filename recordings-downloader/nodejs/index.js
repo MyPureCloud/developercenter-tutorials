@@ -14,8 +14,8 @@ const conversationsApi = new platformClient.ConversationsApi();
 const recordingApi = new platformClient.RecordingApi();
 
 // Get client credentials from environment variables
-const GENESYS_CLOUD_CLIENT_ID = "57209236-a47e-485c-99c7-ce0695c93614";
-const GENESYS_CLOUD_CLIENT_SECRET = "GhFS_Lo8wGeGAuOu1NTyiAuSILv9Cf0h1d2-0O0I5EM";
+const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLIENT_ID;
+const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
 
 // OAuth input
     client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
