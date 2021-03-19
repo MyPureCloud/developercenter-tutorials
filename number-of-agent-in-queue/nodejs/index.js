@@ -65,7 +65,9 @@ function checkEntities(routingQueuesData) {
   } else if ((routingQueuesData.entities).length > 1) {
     console.log("Found more than one queue with the name. Getting the first one.")
   } else {
-    queueId = routingQueuesData.entities[0].id, console.log("queueId: " + queueId), postAnalyticsQueues()
+    queueId = routingQueuesData.entities[0].id, 
+    console.log("queueId: " + queueId), 
+    postAnalyticsQueues()
   }
 
 }
@@ -81,7 +83,7 @@ function postAnalyticsQueues() {
           type: "dimension",
           dimension: "queueId",
           operator: "matches",
-          value: "ca92d6cb-e387-45d7-aac1-808844748445"
+          value: queueId
         }]
       }]
     },
@@ -96,8 +98,15 @@ function postAnalyticsQueues() {
       console.log(` Number of agents in ${queueName} : ${JSON.stringify(onQueueAgents.results[0].data[0].stats.count)}`)
     })
     .catch((err) => {
-      console.log('There was a failure calling postAnalyticsQueuesObservationsQuery');
-      console.error(err);
+
+      if(onQueueAgents.results[0].data[0].stats.count ==0){
+        console.log("There's no available agents on queue")
+      }
+      else{
+        console.log('There was a failure calling postAnalyticsQueuesObservationsQuery');
+        console.error(err);
+      }
+      
     });
 }
 

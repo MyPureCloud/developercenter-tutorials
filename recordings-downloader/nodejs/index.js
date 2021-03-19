@@ -1,119 +1,151 @@
-// Set Genesys cloud objects
-const platformClient = require('purecloud-platform-client-v2');
-const client = platformClient.ApiClient.instance;
+// Import built in libraries needed.
+const http = require('https');
+const fs = require('fs');
 
-// Import library to use for input in NPM
-const prompt = require('prompt');
-
-// Get client credentials from environment variables
-const CLIENT_ID = process.env.GENESYS_CLIENT_ID;
-const CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
-
-// Instantiate API
-let routingApi = new platformClient.RoutingApi();
-
-// Declare global variables
-let queueId = "";
-let queueName = "";
-
-
-// Properties of input
-let schema = {
-  properties: {
-    queueName: {
-      message: 'Name of queue',
-      required: true
-    }
-  }
+let batchRequestBody = {
+    batchDownloadRequestList: []
 };
 
-// Start the prompt
-function inputQueue() {
-  prompt.start();
-  prompt.get(schema, function (_err, result) {
-    queueName = result.queueName
-    listQueues(queueName)
-  });
+// Set Genesys Cloud objects
+const platformClient = require('purecloud-platform-client-v2');
+const client = platformClient.ApiClient.instance;
+// Create API instances
+const conversationsApi = new platformClient.ConversationsApi();
+const recordingApi = new platformClient.RecordingApi();
+
+// Get client credentials from environment variables
+const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLIENT_ID;
+const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
+
+// OAuth input
+    client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
+        .then(() => {
+            let dates = "2021-03-09T13:00:00.000Z/2021-03-10T00:00:00.000Z";
+            downloadAllRecordings(dates);
+        })
+
+        .catch((err) => {
+            // Handle failure response
+            console.log(err);
+        });
+
+// Process and build the request for downloading the recordings
+// Get the conversations within the date interval and start adding them to batch request
+function downloadAllRecordings (dates) {
+    console.log('Start batch request process');
+
+    let body = {
+        interval: dates
+    }; // Object | query
+
+    conversationsApi.postAnalyticsConversationsDetailsQuery(body)
+        .then((conversationDetails) => {
+            let conversationDetail = [];
+            for (conversations of conversationDetails.conversations) {
+                conversationDetail.push(addConversationRecordingsToBatch(conversations.conversationId));
+            }
+            return Promise.all(conversationDetail);
+        })
+        // Send a batch request and start polling for updates
+        .then(() => {
+            return recordingApi.postRecordingBatchrequests(batchRequestBody);
+        })
+        // Start downloading the recording files individually
+        .then((result) => {
+            return getRecordingStatus(result);
+        })
+        .then((completedBatchStatus) => {
+            for (recording of completedBatchStatus.results) {
+                // If there is an errorMsg skip the recording download
+                if (recording.errorMsg) {
+                    console.log("Skipping this recording. Reason:  " + recording.errorMsg)
+                    continue;
+                } else {
+                    downloadRecording(recording);
+                }
+            }
+        })
+        .catch((err) => {
+            console.log('There was an error: ');
+            console.error(err);
+        });
 }
 
-// Display all the queues in the org base on the parameters
-function listQueues(queueName) {
-  let opts = {
-    'pageSize': 100, // Number | Page size
-    'pageNumber': 1, // Number | Page number
-    'sortBy': "name", // String | Sort by
-    'name': queueName // String | Name
-  };
+// Get all the recordings metadata of the conversation and add it to the global batch request object
+function addConversationRecordingsToBatch (conversationId) {
+    return recordingApi.getConversationRecordingmetadata(conversationId)
+        .then((recordingsData) => {
+            // Iterate through every result, check if there are one or more recordingIds in every conversation
+            for (recording of recordingsData) {
+                let batchRequest = {};
+                batchRequest.conversationId = recording.conversationId;
+                batchRequest.recordingId = recording.id;
+                batchRequestBody.batchDownloadRequestList.push(batchRequest);
+                console.log('Added ' + recording.conversationId + ' to batch request');
+            }
+        })
+        .catch((err) => {
+            console.log('There was a failure calling getConversationRecordingmetadata');
+            console.error(err);
+        });
+}
 
-  routingApi.getRoutingQueues(opts)
-    .then((routingQueuesData) => {
-      console.log(`getRoutingQueues success! data: ${JSON.stringify(routingQueuesData, null, 2)}`);
-      checkEntities(routingQueuesData);
-    })
-    .catch((err) => {
-      console.log('There was a failure calling getRoutingQueues');
-      console.error(err);
+// Plot conversationId and recordingId to request for batchdownload Recordings
+function getRecordingStatus (recordingBatchRequest) {
+    return new Promise((resolve, reject) => {
+        let recursiveRequest = () => {
+            recordingApi.getRecordingBatchrequest(recordingBatchRequest.id)
+                .then((result) => {
+                    if (result.expectedResultCount !== result.resultCount) {
+                        console.log('Batch Result Status:' + result.resultCount + '/' + result.expectedResultCount)
+
+                        // Simple polling through recursion
+                        setTimeout(() => recursiveRequest(), 5000);
+                    } else {
+                        // Once result count reach expected.
+                        resolve(result);
+                    }
+                })
+                .catch((err) => {
+                    console.log('There was a failure calling getRecordingBatchrequest');
+                    console.error(err);
+                    reject(err);
+                });
+        };
+        recursiveRequest();
     });
-
 }
 
-// Check for the number of entities returned and Search for the routing id of the queue
-function checkEntities(routingQueuesData) {
+// Get extension of every recording
+function getExtension (recording) {
+    // Store the contentType to a variable that will be used later to determine the extension of recordings
+    let contentType = recording.contentType;
+    // Split the text and gets the extension that will be used for the recording
+    let ext = contentType.split('/').slice(-1);
+    ext = String(ext);
 
-  if ((routingQueuesData.entities).length < 1) {
-    console.log("Queue not found.")
-  } else if ((routingQueuesData.entities).length > 1) {
-    console.log("Found more than one queue with the name. Getting the first one.")
-  } else {
-    queueId = routingQueuesData.entities[0].id, 
-    console.log("queueId: " + queueId), 
-    postAnalyticsQueues()
-  }
-
+    // For the JSON special case
+    if (ext.length >= 4) {
+        console.log('length' + ext.length);
+        ext = ext.substring(0, 4);
+        return ext;
+    } else {
+        return ext;
+    }
 }
 
-// Execute post analytics query base on the given values
-function postAnalyticsQueues() {
-  let body = {
-    filter: {
-      type: "or",
-      clauses: [{
-        type: "or",
-        predicates: [{
-          type: "dimension",
-          dimension: "queueId",
-          operator: "matches",
-          value: queueId
-        }]
-      }]
-    },
-    metrics: [
-      "oOnQueueUsers"
-    ]
-  }; // Object | query
+// Download Recordings
+function downloadRecording (recording) {
+    console.log('Downloading now. Please wait...');
+    let ext = getExtension(recording);
+    let conversationId = recording.conversationId;
+    let recordingId = recording.recordingId;
+    let sourceURL = recording.resultUrl;
+    let targetDirectory = '.';
+    let fileName = conversationId + '_' + recordingId;
 
-  // Execute the analytics query. Count the 'on-queue' agents on the queue.
-  routingApi.postAnalyticsQueuesObservationsQuery(body)
-    .then((onQueueAgents) => {
-      console.log(` Number of agents in ${queueName} : ${JSON.stringify(onQueueAgents.results[0].data[0].stats.count)}`)
-    })
-    .catch((err) => {
-
-      if(onQueueAgents.results[0].data[0].stats.count ==0){
-        console.log("There's no available agents on queue")
-      }
-      else{
-        console.log('There was a failure calling postAnalyticsQueuesObservationsQuery');
-        console.error(err);
-      }
-      
+    const file = fs.createWriteStream((targetDirectory + fileName + '.' + ext));
+    http.get(sourceURL, function (response) {
+        response.pipe(file);
     });
 }
-
-// Authenticate with genesys cloud
-client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
-  .then(() => {
-    console.log('Authentication successful!');
-    inputQueue();
-  })
-  .catch((err) => console.log(err));
