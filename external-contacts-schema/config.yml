@@ -38,19 +38,19 @@ steps:
 
 
 languages:
-  javascript:
-    displayName: Javascript
+  nodejs:
+    displayName: NodeJS
     steps:
-    - file: "javascript/index.js"
+    - file: "nodejs/index.js"
       highlight: "0-244"
-    - file: "javascript/index.js"
+    - file: "nodejs/index.js"
       highlight: "38-39"
-    - file: "javascript/index.js"
+    - file: "nodejs/index.js"
       highlight: "59-201"
-    - file: "javascript/index.js"
+    - file: "nodejs/index.js"
       highlight: "205-215"
-    - file: "javascript/index.js"
+    - file: "nodejs/index.js"
       highlight: "218-228"
-    - file: "javascript/index.js"
+    - file: "nodejs/index.js"
       highlight: "230-244"
 
