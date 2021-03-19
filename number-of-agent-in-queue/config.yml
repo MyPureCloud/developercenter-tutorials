@@ -54,10 +54,10 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-110"
+      highlight: "1-111"
     - file: "nodejs/index.js"
-      highlight: "105-110"
+      highlight: "94-98"
     - file: "nodejs/index.js"
-      highlight: "12-13"
+      highlight: "13-15"
     - file: "nodejs/index.js"
-      highlight: "39-102"
+      highlight: "43-92"

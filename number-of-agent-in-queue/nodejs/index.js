@@ -6,114 +6,108 @@ const client = platformClient.ApiClient.instance;
 const prompt = require('prompt');
 
 // Get client credentials from environment variables
-const CLIENT_ID = process.env.GENESYS_CLIENT_ID;
-const CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ENVIRONMENT = 'mypurecloud.com';
 
 // Instantiate API
 let routingApi = new platformClient.RoutingApi();
+let analyticsApi = new platformClient.AnalyticsApi();
 
 // Declare global variables
-let queueId = "";
-let queueName = "";
-
+let queueId = '';
+let queueName = '';
 
 // Properties of input
 let schema = {
-  properties: {
-    queueName: {
-      message: 'Name of queue',
-      required: true
+    properties: {
+        queueName: {
+            message: 'Name of queue',
+            required: true
+        }
     }
-  }
 };
 
 // Start the prompt
-function inputQueue() {
-  prompt.start();
-  prompt.get(schema, function (_err, result) {
-    queueName = result.queueName
-    listQueues(queueName)
-  });
-}
+function inputQueueName() {
+    return new Promise((resolve, reject) => {
+        prompt.start();
+        prompt.get(schema, (_err, result) => {
+            if (_err) reject(err);
 
-// Display all the queues in the org base on the parameters
-function listQueues(queueName) {
-  let opts = {
-    'pageSize': 100, // Number | Page size
-    'pageNumber': 1, // Number | Page number
-    'sortBy': "name", // String | Sort by
-    'name': queueName // String | Name
-  };
-
-  routingApi.getRoutingQueues(opts)
-    .then((routingQueuesData) => {
-      console.log(`getRoutingQueues success! data: ${JSON.stringify(routingQueuesData, null, 2)}`);
-      checkEntities(routingQueuesData);
-    })
-    .catch((err) => {
-      console.log('There was a failure calling getRoutingQueues');
-      console.error(err);
+            resolve(result.queueName);
+        });
     });
-
 }
 
-// Check for the number of entities returned and Search for the routing id of the queue
-function checkEntities(routingQueuesData) {
+// Get Queue ID from name
+function getQueueId(name){
+    return routingApi.getRoutingQueues({
+                pageSize: 100, pageNumber: 1, sortBy: 'name', name: queueName})
+    .then((data) => {
+        let queues = data.entities;
 
-  if ((routingQueuesData.entities).length < 1) {
-    console.log("Queue not found.")
-  } else if ((routingQueuesData.entities).length > 1) {
-    console.log("Found more than one queue with the name. Getting the first one.")
-  } else {
-    queueId = routingQueuesData.entities[0].id, 
-    console.log("queueId: " + queueId), 
-    postAnalyticsQueues()
-  }
-
-}
-
-// Execute post analytics query base on the given values
-function postAnalyticsQueues() {
-  let body = {
-    filter: {
-      type: "or",
-      clauses: [{
-        type: "or",
-        predicates: [{
-          type: "dimension",
-          dimension: "queueId",
-          operator: "matches",
-          value: queueId
-        }]
-      }]
-    },
-    metrics: [
-      "oOnQueueUsers"
-    ]
-  }; // Object | query
-
-  // Execute the analytics query. Count the 'on-queue' agents on the queue.
-  routingApi.postAnalyticsQueuesObservationsQuery(body)
-    .then((onQueueAgents) => {
-      console.log(` Number of agents in ${queueName} : ${JSON.stringify(onQueueAgents.results[0].data[0].stats.count)}`)
+        if (queues.length < 1) {
+            throw new Error('Queue not found.');
+        } else if (queues.length > 1) {
+            console.log('Found more than one queue with the name. Getting the first one.')
+        }
+            
+        queueId = queues[0].id;
+        console.log('queueId: ' + queueId);
     })
-    .catch((err) => {
+    .catch((err) => console.error(err));
+}
 
-      if(onQueueAgents.results[0].data[0].stats.count ==0){
-        console.log("There's no available agents on queue")
-      }
-      else{
-        console.log('There was a failure calling postAnalyticsQueuesObservationsQuery');
-        console.error(err);
-      }
-      
-    });
+
+// Get the number of on-queue agents
+function getOnQueueAgentsCount() {
+    let body = {
+        filter: {
+            type: 'or',
+            clauses: [{
+                type: 'or',
+                predicates: [{
+                    type: 'dimension',
+                    dimension: 'queueId',
+                    operator: 'matches',
+                    value: queueId
+                }]
+            }]
+        },
+        metrics: [
+            'oOnQueueUsers'
+        ]
+    }; 
+
+    // Execute the analytics query. Count the 'on-queue' agents on the queue.
+    return analyticsApi.postAnalyticsQueuesObservationsQuery(body)
+    .then((data) => {
+        let count = data.results[0].data?.[0].stats.count;
+        if(!count) count = 0;
+        
+        return count;
+    })
+    .catch((err) => console.error(err));
 }
 
 // Authenticate with genesys cloud
+client.setEnvironment(ENVIRONMENT);
 client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
-  .then(() => {
+.then(() => {
     console.log('Authentication successful!');
-    inputQueue();
-  })
-  .catch((err) => console.log(err));
+    
+    return inputQueueName();
+})
+.then((_queueName) => {
+    queueName = _queueName;
+
+    return getQueueId(queueName);
+})
+.then(() => {
+    return getOnQueueAgentsCount();
+})
+.then((count) => {
+    console.log(`Number of On-Queue Agents (${queueName}): ${count}`);
+})
+.catch((err) => console.log(err));
