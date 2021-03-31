@@ -26,26 +26,26 @@ public class Main {
     private static ApiClient apiClient;
     private static String clientId;
     private static String clientSecret;
-    private static String dates;
+    private static String dates = "2021-03-09T13:00:00.000Z/2021-03-10T00:00:00.000Z";
     private static BatchDownloadJobSubmission batchRequestBody = new BatchDownloadJobSubmission();
 
     private static void authenticate(){
         System.out.println("authenticate");
-        // Input
-        Scanner s = new Scanner(System.in);
-        System.out.print("Client ID: ");
-        clientId = s.nextLine();
-        System.out.print("Client secret: ");
-        clientSecret = s.nextLine();
-        System.out.print("Dates: ");
-        dates = s.nextLine();
 
-        //Set Region
-        PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
+        // Define your OAuth client credentials
+        final String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
+        final String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
+        // orgRegion value example: us_east_1
+        final String orgRegion = System.getenv("GENESYS_CLOUD_REGION");
+
+        // Set Region
+        PureCloudRegionHosts region = PureCloudRegionHosts.valueOf(orgRegion);
 
         apiClient = ApiClient.Builder.standard().withBasePath(region).build();
         try {
             ApiResponse<AuthResponse> authResponse = apiClient.authorizeClientCredentials(clientId, clientSecret);
+
+            Configuration.setDefaultApiClient(apiClient);
         } catch (Exception e){
             System.err.println("Exception when authenticating.");
             e.printStackTrace();

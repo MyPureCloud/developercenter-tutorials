@@ -23,7 +23,7 @@ namespace Recordings
         private static ApiClient apiClient;
         private static String clientId;
         private static String clientSecret;
-        private static String dates;
+        private static String dates = "2021-03-09T13:00:00.000Z/2021-03-10T00:00:00.000Z";
         private static BatchDownloadJobSubmission batchRequestBody = new BatchDownloadJobSubmission();
         private static List<BatchDownloadRequest> batchDownloadRequestList = new List<BatchDownloadRequest>();
 
@@ -43,20 +43,14 @@ namespace Recordings
 
         public static void authentication()
         {
-            //OAuth input
-            Console.Write("Enter Client ID: ");
-            clientId = Console.ReadLine();
-            Console.Write("Enter Client Secret: ");
-            clientSecret = Console.ReadLine();
+            //OAuth
+            clientId = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_ID");
+            clientSecret = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_SECRET");
+            // orgRegion values example: us_east_1
+            string orgRegion = Environment.GetEnvironmentVariable("GENESYS_CLOUD_REGION");
 
-            // Get the Date Interval
-            Console.Write("Enter Date Interval (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss): ");
-            dates = Console.ReadLine();
-
-            Console.WriteLine("Working...");
-
-            //Set Region
-            PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
+            // Set Region
+            PureCloudRegionHosts region = Enum.Parse<PureCloudRegionHosts>(orgRegion);
             Configuration.Default.ApiClient.setBasePath(region);
 
             // Configure SDK Settings
@@ -66,6 +60,8 @@ namespace Recordings
             // Create API instances
             conversationsApi = new ConversationsApi();
             recordingApi = new RecordingApi();
+
+            Console.WriteLine("Working...");
         }
 
         public static void downloadAllRecordings(string dates)

@@ -10,14 +10,22 @@ print('-----------------------------------------------------------------')
 region = PureCloudPlatformClientV2.PureCloudRegionHosts.us_east_1
 PureCloudPlatformClientV2.configuration.host = region.get_api_host()
 
-# Authenticate with Genesys Cloud
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient() \
-    .get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'],
-                                  os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
+# OAuth when using Client Credentials
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
 
 # Create an instance of the Routing API and Analytics API
-routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)
-analytics_api = PureCloudPlatformClientV2.AnalyticsApi(apiClient)
+routing_api = PureCloudPlatformClientV2.RoutingApi(api_client)
+analytics_api = PureCloudPlatformClientV2.AnalyticsApi(api_client)
 
 
 def get_on_queue_agents(queue_name):

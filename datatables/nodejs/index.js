@@ -134,12 +134,16 @@ function convertToType(val, header){
 }
 
 // Authenticate
-const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
-const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-const GENESYS_CLOUD_CLIENT_REGION = 'mypurecloud.com';
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
 
-client.setEnvironment(GENESYS_CLOUD_CLIENT_REGION);
-client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
+
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 .then(()=> {
     return createDataTable();
 })

@@ -21,14 +21,18 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
-            String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
+            // Define your OAuth client credentials
+            final String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
+            final String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
+            // orgRegion value example: us_east_1
+            final String orgRegion = System.getenv("GENESYS_CLOUD_REGION");
 
             // Set Region
-            PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
-            ApiClient apiClient = ApiClient.Builder.standard()
-                    .withBasePath(region)
-                    .build();
+            PureCloudRegionHosts region = PureCloudRegionHosts.valueOf(orgRegion);
+
+            ApiClient apiClient = ApiClient.Builder.standard() 
+                                .withBasePath(region)
+                                .build();
 
             ApiResponse<AuthResponse> authResponse = apiClient.authorizeClientCredentials(clientId, clientSecret);
 

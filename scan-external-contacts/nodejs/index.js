@@ -7,9 +7,11 @@ const { retry } = require('@lifeomic/attempt');
 const platformClient = require('purecloud-platform-client-v2');
 
 // OAuth Client Grant Credentials
-const apiClientId = '-- id here --';
-const apiClientSecret = '-- secret here --';
-const apiClientRegion = '-- genesys cloud region here - ex: mypurecloud.com --';
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
 
 // Script Sample Settings
 
@@ -41,11 +43,14 @@ const DefaultOutputFilename = "GenesysCloud_ExternalContacts_Export_001.csv";
    The Bearer token will be used for all of the Javascript Platform API calls.
 */
 async function login(clientId, clientSecret, clientRegion) {
-    const apiClient = platformClient.ApiClient.instance;
+    const client = platformClient.ApiClient.instance;
 
     try {
-        apiClient.setEnvironment(clientRegion);
-        return await apiClient.loginClientCredentialsGrant(clientId, clientSecret);
+        // Set environment
+        const environment = platformClient.PureCloudRegionHosts[clientRegion];
+        if(environment) client.setEnvironment(environment);
+
+        return await client.loginClientCredentialsGrant(clientId, clientSecret);
     } catch (e) {
         console.error('Authentication error has occurred.', e);
         return null
@@ -229,7 +234,7 @@ async function contactsExportToFile(filename, filetype) {
         outputFilename = process.argv[2];
     }
 
-    const creds = await login(apiClientId, apiClientSecret, apiClientRegion);
+    const creds = await login(CLIENT_ID, CLIENT_SECRET, ORG_REGION);
 
     if (creds) {
         console.log('Login Success. Token will expire on: ', creds.tokenExpiryTimeString);

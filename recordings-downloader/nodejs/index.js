@@ -14,20 +14,25 @@ const conversationsApi = new platformClient.ConversationsApi();
 const recordingApi = new platformClient.RecordingApi();
 
 // Get client credentials from environment variables
-const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLIENT_ID;
-const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 // OAuth input
-    client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
-        .then(() => {
-            let dates = "2021-03-09T13:00:00.000Z/2021-03-10T00:00:00.000Z";
-            downloadAllRecordings(dates);
-        })
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
+    .then(() => {
+        let dates = "2021-03-09T13:00:00.000Z/2021-03-10T00:00:00.000Z";
+        downloadAllRecordings(dates);
+    })
 
-        .catch((err) => {
-            // Handle failure response
-            console.log(err);
-        });
+    .catch((err) => {
+        // Handle failure response
+        console.log(err);
+    });
 
 // Process and build the request for downloading the recordings
 // Get the conversations within the date interval and start adding them to batch request

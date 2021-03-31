@@ -1,29 +1,26 @@
-// Import library to use for input in NPM
+const platformClient = require('purecloud-platform-client-v2');
 const prompt = require('prompt');
-// Import built in libraries needed.
-const http = require('https');
-const fs = require('fs');
-
 
 // Set Genesys Cloud objects
-const platformClient = require('purecloud-platform-client-v2');
 const client = platformClient.ApiClient.instance;
+
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
+
 // Create API instances
 const externalContactsApi = new platformClient.ExternalContactsApi();
-let body = "";
+
+let body = '';
 
 // Properties of input
 let schemaInput = {
     properties: {
-        clientIdInput: {
-            message: 'Enter Client ID:',
-            required: true
-        },
-
-        clientSecretInput: {
-            message: 'Enter Client Secret: ',
-            required: true
-        },
         // Get customization type
         customization: {
             message: 'Customize contact types (C), customize organization types(O), delete custom contact/organization types(X)',
@@ -36,7 +33,7 @@ let schemaInput = {
 prompt.start();
 // OAuth input
 prompt.get(schemaInput, function (_err, result) {
-    client.loginClientCredentialsGrant(result.clientIdInput, result.clientSecretInput)
+    client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
         .then(() => {
             let input = result.customization;
             if (input == 'C'){

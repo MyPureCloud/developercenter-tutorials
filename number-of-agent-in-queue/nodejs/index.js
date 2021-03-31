@@ -8,7 +8,7 @@ const prompt = require('prompt');
 // Get client credentials from environment variables
 const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
 const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-const ENVIRONMENT = 'mypurecloud.com';
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
 
 // Instantiate API
 let routingApi = new platformClient.RoutingApi();
@@ -91,8 +91,10 @@ function getOnQueueAgentsCount() {
     .catch((err) => console.error(err));
 }
 
-// Authenticate with genesys cloud
-client.setEnvironment(ENVIRONMENT);
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
+
 client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 .then(() => {
     console.log('Authentication successful!');

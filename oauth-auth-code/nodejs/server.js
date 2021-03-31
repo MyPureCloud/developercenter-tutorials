@@ -8,18 +8,24 @@ const { URLSearchParams } = require('url');
 var app = express();
 
 // OAuth Code Authorization Credentials
-var client_id = process.env.GENESYS_CLOUD_CLIENT_ID;
-var client_secret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+var clientId = process.env.GENESYS_CLOUD_CLIENT_ID;
+var clientSecret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+var environment = process.env.GENESYS_CLOUD_ENVIRONMENT; // eg. 'mypurecloud.com'
 
+/**
+ * This function is used as an express middleware and will be invoked in
+ * every HTTP request that hits the webserver. If there is no session with 
+ * Genesys Cloud, redirect the user to the Genesys Cloud login page.
+ */
 var authvalidation = function(req, res, next) {
     console.log('\n['+req.method+' '+req.url+']');
     //if we don't have a session then redirect them to the login page
     if((req.cookies && !(req.cookies.session && sessionMap[req.cookies.session])) &&
             req.url.indexOf('oauth') == -1){
         //redirect the user to authorize with Genesys Cloud
-        var redirectUri = 'https://login.mypurecloud.com/oauth/authorize?' +
+        var redirectUri = `https://login.${environment}/oauth/authorize?` +
                     'response_type=code' +
-                    '&client_id=' + client_id +
+                    '&client_id=' + clientId +
                     '&redirect_uri=http://localhost:8085/oauth2/callback';
 
         console.log('redirecting to ' + redirectUri);
@@ -33,6 +39,7 @@ var authvalidation = function(req, res, next) {
     next();
 }
 
+// Registration of express middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(authvalidation);
@@ -56,11 +63,11 @@ app.get('/oauth2/callback', async function(req,res){
     params.append('code', authCode);
     params.append('redirect_uri', 'http://localhost:8085/oauth2/callback');
 
-    fetch('https://login.mypurecloud.com/oauth/token', { 
+    fetch(`https://login.${environment}/oauth/token`, { 
         method: 'POST',
         headers: {
            'Content-Type': 'application/x-www-form-urlencoded',
-           'Authorization': `Basic ${Buffer.from(client_id + ':' + client_secret).toString('base64')}`
+           'Authorization': `Basic ${Buffer.from(clientId + ':' + clientSecret).toString('base64')}`
         },
         body: params
     })
@@ -87,7 +94,7 @@ app.get('/me', function(req, res){
     //get the session from map using the cookie
     var oauthId = sessionMap[req.cookies.session];
 
-    fetch('https://api.mypurecloud.com/api/v2/users/me', {
+    fetch(`https://api.${environment}/api/v2/users/me`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

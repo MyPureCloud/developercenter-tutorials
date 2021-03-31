@@ -3,7 +3,8 @@ import com.mypurecloud.sdk.v2.ApiException;
 import com.mypurecloud.sdk.v2.Configuration;
 import com.mypurecloud.sdk.v2.PureCloudRegionHosts;
 import com.mypurecloud.sdk.v2.api.ArchitectApi;
-import com.mypurecloud.sdk.v2.model.*;
+import com.mypurecloud.sdk.v2.model.DataTable;
+import com.mypurecloud.sdk.v2.model.JsonSchemaDocument;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.*;
@@ -63,15 +64,18 @@ public class Main {
     );
 
     public static void main(String[] args) throws IOException, CsvValidationException {
-        // OAuth Credentials
-        final String clientId = System.getenv("PURECLOUD_CLIENT_ID");
-        final String clientSecret = System.getenv("PURECLOUD_CLIENT_SECRET");
+        // Define your OAuth client credentials
+        final String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
+        final String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
+        // orgRegion value example: us_east_1
+        final String orgRegion = System.getenv("GENESYS_CLOUD_REGION");
 
-        //Set Region
-        PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
+        // Set Region
+        PureCloudRegionHosts region = PureCloudRegionHosts.valueOf(orgRegion);
 
         // Authenticate
         ApiClient apiClient;
+        
         try {
             apiClient = ApiClient.Builder.standard().withBasePath(region).build();
             apiClient.authorizeClientCredentials(clientId, clientSecret);

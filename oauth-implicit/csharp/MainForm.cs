@@ -20,10 +20,16 @@ namespace implicit_winform
             webBrowser1.BringToFront();
             webBrowser1.Visible = true;
 
+            // Implicit Grant Credentials
+            string clientId = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_ID");
+            
+            // expected format: mypurecloud.com
+            string environment = Environment.GetEnvironmentVariable("GENESYS_CLOUD_ENVIRONMENT");
+
             //Redirect the browser to the login window.
-            webBrowser1.Url = new Uri( "https://login.mypurecloud.com/oauth/authorize?" +
+            webBrowser1.Url = new Uri( $"https://login.{environment}/oauth/authorize?" +
                                             "response_type=token" +
-                                            "&client_id=bfadf7a0-3364-4f65-9fda-00d37877113f" +
+                                            $"&client_id={clientId}" +
                                             "&redirect_uri=http://localhost:8085/oauth2/callback");
 
         }
@@ -33,7 +39,7 @@ namespace implicit_winform
             webBrowser1.Visible = false;
 
             //Make a request to /api/v2/users/me
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.mypurecloud.com/api/v2/users/me");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://api.{environment}/api/v2/users/me");
             request.Method = "GET";
             request.Headers.Add("Authorization", "Bearer " + bearerToken);
 

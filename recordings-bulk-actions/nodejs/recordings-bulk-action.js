@@ -1,19 +1,22 @@
 const platformClient = require('purecloud-platform-client-v2');
+const client = platformClient.ApiClient.instance;
 
 // Globals
 let newJob = null;
 
-// Credentials
-const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
-const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-const GENESYS_CLOUD_ENVIRONMENT = 'mypurecloud.com';
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 // API Instances
 const recordingApi = new platformClient.RecordingApi();
 
-const client = platformClient.ApiClient.instance;
-client.setEnvironment(GENESYS_CLOUD_ENVIRONMENT)
-client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 .then(()=> {
     return createRecordingBulkJob();
 })

@@ -1,12 +1,13 @@
 const platformClient = require('purecloud-platform-client-v2');
 var WebSocketClient = require('websocket').client;
-
-// Genesys Cloud Credentials
-const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
-const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-const GENESYS_CLOUD_ENVIRONMENT = 'mypurecloud.com';
-
 const client = platformClient.ApiClient.instance;
+
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+
 const websocketClient = new WebSocketClient();
 
 // API instances
@@ -15,7 +16,6 @@ const notificationsApi = new platformClient.NotificationsApi();
 // Additional configuration variables
 const queueId = '--- QUEUE ID HERE ---';
 const subscriptionTopic = `v2.routing.queues.${queueId}.conversations`;
-
 
 // Define the callbacks for the websocket listener
 websocketClient.on('connect', connection => {
@@ -59,9 +59,12 @@ websocketClient.on('connectFailed', function(error) {
 });
 
 
-// Authenticate with Genesys Cloud
-client.setEnvironment(GENESYS_CLOUD_ENVIRONMENT);
-client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
+
+// Log in with Client Credentials
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 .then(() => {
     console.log('Authentication successful');
 

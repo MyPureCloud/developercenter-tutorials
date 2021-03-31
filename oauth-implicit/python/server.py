@@ -1,5 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import re, requests, webbrowser
+import re, requests, webbrowser, os
+
+# Genesys Cloud configuration
+ENVIRONMENT = os.environ['GENESYS_CLOUD_ENVIRONMENT']  # eg. mypurecloud.com
 
 HOST_NAME = "localhost"
 PORT = 8080
@@ -37,7 +40,7 @@ def validate_token(token):
     }
 
     # Get user
-    response = requests.get('https://api.mypurecloud.com/api/v2/users/me', headers=request_headers)
+    response = requests.get(f'https://api.{ENVIRONMENT}/api/v2/users/me', headers=request_headers)
 
     # Check response
     if response.status_code == 200:

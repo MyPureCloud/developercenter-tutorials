@@ -18,9 +18,13 @@ namespace authorization_code_aspdotnet.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private string host = "mypurecloud.com";
-        private string clientId = "--- CLIENT ID HERE ---";
-        private string clientSecret = "--- CLIENT SECRET HERE ---";
+
+        // Authorization Code credentials
+        private string clientId = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_ID");
+        private string clientSecret = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_SECRET");
+        // expected format for environment: mypurecloud.com
+        private string environment = Environment.GetEnvironmentVariable("GENESYS_CLOUD_ENVIRONMENT");
+
         private string redirectUri = "http://localhost:5000/";
 
         public HomeController(ILogger<HomeController> logger) {
@@ -47,7 +51,7 @@ namespace authorization_code_aspdotnet.Controllers
             }
 
             if (string.IsNullOrEmpty(authToken)) {
-                return Redirect("https://login." + host + "/oauth/authorize?client_id=" + clientId +
+                return Redirect($"https://login.{environment}/oauth/authorize?client_id=" + clientId +
                                 "&response_type=code&redirect_uri=" +
                                 UrlEncoder.Default.Encode(redirectUri));
             }
@@ -65,7 +69,7 @@ namespace authorization_code_aspdotnet.Controllers
             });
             var basicAuth = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(clientId + ":" + clientSecret));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);
-            var response = await client.PostAsync("https://login." + host + "/oauth/token", content);
+            var response = await client.PostAsync($"https://login.{environment}/oauth/token", content);
             var token = JObject.Parse(await response.Content.ReadAsStringAsync())["access_token"].ToString();
             return token;
         }
@@ -73,7 +77,7 @@ namespace authorization_code_aspdotnet.Controllers
         private async Task<JObject> GetUserInfo(string accessToken) {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync("https://api." + host + "/api/v2/users/me");
+            var response = await client.GetAsync($"https://api.{environment}/api/v2/users/me");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 

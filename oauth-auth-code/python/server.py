@@ -4,6 +4,7 @@ import os, base64, requests, uuid, urllib.parse, webbrowser
 # Genesys Cloud Code Authorization credentials
 CLIENT_ID = os.environ["GENESYS_CLOUD_CLIENT_ID"]
 CLIENT_SECRET = os.environ["GENESYS_CLOUD_CLIENT_SECRET"]
+ENVIRONMENT = os.environ["GENESYS_CLOUD_ENVIRONMENT"] # Expected format: mypurecloud.com
 
 # Server constants
 HOST_NAME = "localhost"
@@ -21,7 +22,7 @@ class SampleServer(BaseHTTPRequestHandler):
         if session is None:
             self.send_response(303)
             self.send_header("Content-type", "text/html")
-            self.send_header("Location", "https://login.mypurecloud.com/oauth/authorize?" +
+            self.send_header("Location", f"https://login.{ENVIRONMENT}/oauth/authorize?" +
                              "response_type=code" +
                              "&client_id=" + CLIENT_ID +
                              "&redirect_uri=" + urllib.parse.quote(redirect_uri, safe=''))
@@ -69,7 +70,7 @@ def get_me(token):
     }
 
     # Get user
-    response = requests.get("https://api.mypurecloud.com/api/v2/users/me", headers=request_headers)
+    response = requests.get(f"https://api.{ENVIRONMENT}/api/v2/users/me", headers=request_headers)
 
     # Check response
     if response.status_code == 200:
@@ -139,7 +140,7 @@ def get_token_from_code(code):
     }
 
     # Get token
-    response = requests.post("https://login.mypurecloud.com/oauth/token", data=request_body, headers=request_headers)
+    response = requests.post(f"https://login.{ENVIRONMENT}/oauth/token", data=request_body, headers=request_headers)
 
     # Check response
     if response.status_code == 200:

@@ -14,14 +14,22 @@ print("-------------------------------------------------------------")
 print("- Realtime Queues Member Analytics -")
 print("-------------------------------------------------------------")
 
-# Authenticate with Genesys Cloud
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient() \
-            .get_client_credentials_token(os.environ['CLIENT_ID'], 
-            os.environ['CLIENT_SECRET'])
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
+# OAuth when using Client Credentials
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
 
 # Create an instance of the API class
-api_instance = PureCloudPlatformClientV2.AnalyticsApi(apiClient)
-notifications_api = PureCloudPlatformClientV2.NotificationsApi(apiClient)
+api_instance = PureCloudPlatformClientV2.AnalyticsApi(api_client)
+notifications_api = PureCloudPlatformClientV2.NotificationsApi(api_client)
 
 QUEUE_ID = "QUEUE_ID"
 

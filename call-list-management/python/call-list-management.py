@@ -7,15 +7,26 @@ print("-------------------------------------------------------------")
 print("- Dialer Call List Management -")
 print("-------------------------------------------------------------")
 
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
+# OAuth when using Client Credentials
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
+
+
 # Use your own IDs here
 contact_list_id = "cc1f7deb-0ca2-422d-b152-62dc092f05cc"
 campaign_id = "af5624eb-c445-4fdf-a659-d93f61d84395"
 
-# OAuth when using Client Credentials
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
-
 # Genesys Cloud Objects
-outbound_api = PureCloudPlatformClientV2.OutboundApi(apiClient)
+outbound_api = PureCloudPlatformClientV2.OutboundApi(api_client)
 
 contact_data = [PureCloudPlatformClientV2.WritableDialerContact()]
 contact_data[0].contact_list_id = contact_list_id

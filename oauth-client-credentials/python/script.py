@@ -1,13 +1,16 @@
-import base64, requests, sys
+import base64, requests, sys, os
 
 print("---------------------------------------------------")
 print("- Genesys Cloud Python Client Credentials Example -")
 print("---------------------------------------------------")
 
-client_id = "CLIENT_ID"
-client_secret = "CLIENT_SECRET"
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ENVIRONMENT = os.environ['GENESYS_CLOUD_ENVIRONMENT'] # eg. mypurecloud.com
+
+
 # Base64 encode the client ID and client secret
-authorization = base64.b64encode(bytes(client_id + ":" + client_secret, "ISO-8859-1")).decode("ascii")
+authorization = base64.b64encode(bytes(CLIENT_ID + ":" + CLIENT_SECRET, "ISO-8859-1")).decode("ascii")
 
 # Prepare for POST /oauth/token request
 request_headers = {
@@ -19,7 +22,7 @@ request_body = {
 }
 
 # Get token
-response = requests.post("https://login.mypurecloud.com/oauth/token", data=request_body, headers=request_headers)
+response = requests.post(f"https://login.{ENVIRONMENT}/oauth/token", data=request_body, headers=request_headers)
 
 # Check response
 if response.status_code == 200:
@@ -37,7 +40,7 @@ requestHeaders = {
 }
 
 # Get roles
-response = requests.get("https://api.mypurecloud.com/api/v2/authorization/roles", headers=requestHeaders)
+response = requests.get(f"https://api.{ENVIRONMENT}/api/v2/authorization/roles", headers=requestHeaders)
 
 # Check response
 if response.status_code == 200:

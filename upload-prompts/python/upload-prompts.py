@@ -7,11 +7,21 @@ print('-------------------------------------------------------------')
 print('- Uploading Architect Prompts -')
 print('-------------------------------------------------------------')
 
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
 # OAuth when using Client Credentials
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
 
 # Genesys Cloud Objects
-architect_api = PureCloudPlatformClientV2.ArchitectApi(apiClient)
+architect_api = PureCloudPlatformClientV2.ArchitectApi(api_client)
 
 # Create new prompt
 print("Creating new prompt...")
@@ -46,7 +56,7 @@ wav_form_data = {
 }
 
 upload_response = requests.post(prompt_resource.upload_uri, files=wav_form_data,
-                                headers={"Authorization": f"bearer {apiClient.access_token}"})
+                                headers={"Authorization": f"bearer {api_client.access_token}"})
 
 print("Upload complete. Review your prompt in architect.")
 print("https://apps.mypurecloud.com/architect/#/call/userprompts")

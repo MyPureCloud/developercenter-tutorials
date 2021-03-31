@@ -6,7 +6,12 @@ import com.mypurecloud.sdk.v2.Configuration;
 import com.mypurecloud.sdk.v2.PureCloudRegionHosts;
 import com.mypurecloud.sdk.v2.api.UsersApi;
 import com.mypurecloud.sdk.v2.api.WorkforceManagementApi;
-import com.mypurecloud.sdk.v2.model.*;
+import com.mypurecloud.sdk.v2.model.UserMe;
+import com.mypurecloud.sdk.v2.model.ManagementUnit;
+import com.mypurecloud.sdk.v2.model.User;
+import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceQuery;
+import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceResponse;
+import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice;
 import com.mypurecloud.sdk.v2.extensions.notifications.*;
 import com.neovisionaries.ws.client.WebSocketException;
 

@@ -1,9 +1,8 @@
 const fetch = require('node-fetch');
 
-const client_id = process.env.GENESYS_CLOUD_CLIENT_ID;
-const client_secret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-const environment = 'mypurecloud.com';
-
+const clientId = process.env.GENESYS_CLOUD_CLIENT_ID;
+const clientSecret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const environment = process.env.GENESYS_CLOUD_ENVIRONMENT; // expected format: mypurecloud.com
 
 // Test token by getting role definitions in the organization.
 function handleTokenCallback(body){
@@ -36,7 +35,7 @@ fetch(`https://login.${environment}/oauth/token`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(client_id + ':' + client_secret).toString('base64')}`
+        'Authorization': `Basic ${Buffer.from(clientId + ':' + clientSecret).toString('base64')}`
     },
     body: params
 })

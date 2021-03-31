@@ -4,18 +4,20 @@ const axios = require('axios');
 const FormData = require('form-data');
 
 // Get client credentials from environment variables
-const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
-const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
 
 // Set Genesys Cloud objects
 const client = platformClient.ApiClient.instance;
 const architectApi = new platformClient.ArchitectApi();
 
-// Set Genesys Cloud settings
-client.setEnvironment('mypurecloud.com');
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 // Authenticate with Genesys Cloud
-client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 	.then(() => {
 		console.log('Authenticated with Genesys Cloud');
 
