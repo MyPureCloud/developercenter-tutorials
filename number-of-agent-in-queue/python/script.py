@@ -6,10 +6,6 @@ print('-----------------------------------------------------------------')
 print('- Python3 Get Number of On-Queue Agents using Genesys Cloud SDK -')
 print('-----------------------------------------------------------------')
 
-# Set the Genesys Cloud environment
-region = PureCloudPlatformClientV2.PureCloudRegionHosts.us_east_1
-PureCloudPlatformClientV2.configuration.host = region.get_api_host()
-
 # Credentials
 CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
 CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']

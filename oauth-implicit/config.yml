@@ -31,11 +31,11 @@ languages:
     - file: "javascript/example.html"
       highlight: "0-100"
     - file: "javascript/example.html"
-      highlight: "29-35"
+      highlight: "36-42"
     - file: "javascript/example.html"
-      highlight: "6-15"
+      highlight: "13-22"
     - file: "javascript/example.html"
-      highlight: "17-24"
+      highlight: "24-31"
   csharp:
     displayName: C#
     steps:
@@ -43,20 +43,20 @@ languages:
       highlight: "0-100"
       note: In a C# desktop application, we host the login window in a web browser control and watch for the navigation event.  When this occurs, we pull the access_token from the URL.
     - file: "csharp/MainForm.cs"
-      highlight: "20-28"
+      highlight: "20-34"
     - file: "csharp/MainForm.cs"
-      highlight: "55-66"
+      highlight: "63-70"
     - file: "csharp/MainForm.cs"
-      highlight: "36-52"
+      highlight: "37-59"
   python:
     displayName: Python
     steps:
     - file: "python/server.py"
-      highlight: "0-68"
+      highlight: "0-70"
       note: In Python, we start a server using the http.server module and open a web browser that displays the authorization page to the end user.
     - file: "python/implicit.html"
-      highlight: "29-35"
+      highlight: "36-42"
     - file: "python/implicit.html"
       highlight: "16-26"
     - file: "python/server.py"
-      highlight: "33-53"
+      highlight: "36-56"

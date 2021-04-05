@@ -45,9 +45,9 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "1-157"
+      highlight: "1-160"
     - file: "nodejs/index.js"
-      highlight: "136-142"
+      highlight: "136-147"
     - file: "nodejs/index.js"
       highlight: "11-49"
     - file: "nodejs/index.js"
@@ -58,25 +58,25 @@ languages:
     displayName: Python
     steps:
     - file: "python/datatables.py"
-      highlight: "1-98"
+      highlight: "1-105"
     - file: "python/datatables.py"
-      highlight: "10-14"
+      highlight: "10-21"
     - file: "python/datatables.py"
-      highlight: "18-56"
+      highlight: "26-64"
     - file: "python/datatables.py"
-      highlight: "58-64"
+      highlight: "66-72"
     - file: "python/datatables.py"
-      highlight: "66-97"
+      highlight: "74-105"
   java:
     displayName: Java
     steps:
     - file: "java/main/java/Main.java"
-      highlight: "1-146"
+      highlight: "1-149"
     - file: "java/main/java/Main.java"
-      highlight: "66-85"
+      highlight: "66-88"
     - file: "java/main/java/Main.java"
-      highlight: "18-56"
+      highlight: "19-56"
     - file: "java/main/java/Main.java"
-      highlight: "89-97"
+      highlight: "93-101"
     - file: "java/main/java/Main.java"
-      highlight: "99-143"
+      highlight: "103-147"

@@ -68,7 +68,7 @@ languages:
     displayName: Java
     steps:
     - file: "java/src/com/genesys/Main.java"
-      highlight: "0-92"
+      highlight: "0-104"
     - file: "java/src/com/genesys/Main.java"
       highlight: "28-63"
     - file: "java/src/com/genesys/Main.java"
@@ -78,4 +78,4 @@ languages:
       highlight: "1-1"
       note: The java example currently does not implement presence notifications.
     - file: "java/src/com/genesys/Main.java"
-      highlight: "72-84"
+      highlight: "80-99"

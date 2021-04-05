@@ -57,12 +57,12 @@ languages:
     displayName: Python
     steps:
     - file: "python/index.py"
-      highlight: "0-96"
+      highlight: "0-104"
     - file: "python/index.py"
-      highlight: "17-20"
+      highlight: "17-28"
     - file: "python/index.py"
-      highlight: "28-65"
+      highlight: "36-73"
     - file: "python/index.py"
-      highlight: "67-93"
+      highlight: "75-101"
     - file: "python/response.json"
       highlight: "0-128"

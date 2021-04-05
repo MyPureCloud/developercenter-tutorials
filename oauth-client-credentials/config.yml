@@ -49,11 +49,11 @@ languages:
     displayName: Python
     steps:
     - file: "python/script.py"
-      highlight: "0-54"
+      highlight: "0-57"
     - file: "python/script.py"
       highlight: "7-22"
     - file: "python/script.py"
-      highlight: "31-52"
+      highlight: "37-57"
   go:
     displayName: Go
     steps: 

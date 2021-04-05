@@ -43,18 +43,18 @@ languages:
     displayName: Python
     steps:
     - file: "python/script.py"
-      highlight: "0-76"
+      highlight: "0-84"
     - file: "python/script.py"
-      highlight: "9-16"
+      highlight: "9-20"
     - file: "python/script.py"
-      highlight: "18-20"
+      highlight: "22-24"
     - file: "python/script.py"
-      highlight: "23-70"
+      highlight: "27-74"
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "1-111"
+      highlight: "1-115"
     - file: "nodejs/index.js"
       highlight: "94-98"
     - file: "nodejs/index.js"
