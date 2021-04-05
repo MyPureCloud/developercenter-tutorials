@@ -7,9 +7,9 @@ steps:
 - title: Introduction
   content: |
     Programmatically uploading prompts is done in three steps: 
-      1) creating the prompt object, 
-      2) creating the prompt's resource, and 
-      3) uploading the prompt's media file.
+      1) Creating the prompt object, 
+      2) Creating the prompt's resource, and 
+      3) Uploading the prompt's media file.
 
 - title: Authenticate with Genesys Cloud
   content: |
