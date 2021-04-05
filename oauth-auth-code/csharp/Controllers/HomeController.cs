@@ -19,6 +19,9 @@ namespace authorization_code_aspdotnet.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        // Update the values below for your Genesys Cloud Environment Credentials
+        // and the redirectUri to be used.
+
         // Authorization Code credentials
         private string clientId = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_ID");
         private string clientSecret = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_SECRET");
