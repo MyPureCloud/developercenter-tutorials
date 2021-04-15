@@ -7,13 +7,23 @@ print("-------------------------------------------------------------")
 print("- Python3 Create an Outbound Dialing Campaign -")
 print("-------------------------------------------------------------")
 
-# Get Authorization Token
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
+# OAuth when using Client Credentials
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
 
 # Genesys Cloud Objects
-outbound_api = PureCloudPlatformClientV2.OutboundApi(apiClient)
-scripts_api = PureCloudPlatformClientV2.ScriptsApi(apiClient)
-routing_api = PureCloudPlatformClientV2.RoutingApi(apiClient)
+outbound_api = PureCloudPlatformClientV2.OutboundApi(api_client)
+scripts_api = PureCloudPlatformClientV2.ScriptsApi(api_client)
+routing_api = PureCloudPlatformClientV2.RoutingApi(api_client)
 
 # Set your own values here
 CONTACT_LIST_NAME = "A List"

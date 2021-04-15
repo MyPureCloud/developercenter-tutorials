@@ -49,44 +49,44 @@ languages:
     displayName: Java
     steps:
     - file: "java/src/com/genesys/Main.java"
-      highlight: "0-49"
+      highlight: "0-58"
     - file: "java/src/com/genesys/Main.java"
-      highlight: "0-15"
+      highlight: "14-25"
     - file: "java/src/com/genesys/Main.java"
-      highlight: "20-27"
+      highlight: "27-37"
       note: You need to make sure to build the basePath for the correct Genesys Cloud region you are working in. See https://developer.mypurecloud.com/api/rest/
     - file: "java/src/com/genesys/Main.java"
-      highlight: "29-43"
+      highlight: "39-53"
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-34"
+      highlight: "0-40"
     - file: "nodejs/index.js"
-      highlight: "0-11"
+      highlight: "8-15"
     - file: "nodejs/index.js"
-      highlight: "12-15"
+      highlight: "17-18"
     - file: "nodejs/index.js"
-      highlight: "16-32"
+      highlight: "21-37"
   csharp:
     displayName: C#
     steps:
     - file: "csharp/Program.cs"
       highlight: "0-52"
     - file: "csharp/Program.cs"
-      highlight: "24-28"
+      highlight: "13-21"
     - file: "csharp/Program.cs"
-      highlight: "30-33"
+      highlight: "23-26"
     - file: "csharp/Program.cs"
-      highlight: "38-49"
+      highlight: "28-42"
   python:
     displayName: Python
     steps:
     - file: "python/agentless-sms-notifications.py"
-      highlight: "0-30"
+      highlight: "0-40"
     - file: "python/agentless-sms-notifications.py"
-      highlight: "10-13"
+      highlight: "10-17"
     - file: "python/agentless-sms-notifications.py"
-      highlight: "10-13"
+      highlight: "19-21"
     - file: "python/agentless-sms-notifications.py"
-      highlight: "15-30"
+      highlight: "23-38"

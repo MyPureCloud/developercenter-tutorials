@@ -6,13 +6,14 @@ const client = platformClient.ApiClient.instance;
 const notificationsApi = new platformClient.NotificationsApi();
 const conversationsApi = new platformClient.ConversationsApi();
 
-// Set Genesys Cloud settings
-client.setEnvironment('mypurecloud.com');
-client.setPersistSettings(true, 'test_app');
-
 // Get client credentials from environment variables
-const GENSYS_CLOUD_CLIENT_ID = process.env.GENSYS_CLOUD_CLIENT_ID;
-const GENSYS_CLOUD_CLIENT_SECRET = process.env.GENSYS_CLOUD_CLIENT_SECRET;
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 // Use your own data here
 const PROVIDER_NAME = 'Developer Center Tutorial';
@@ -23,7 +24,7 @@ let conversationsTopic = null;
 let webSocket = null;
 
 // Authenticate with Genesys Cloud
-client.loginClientCredentialsGrant(GENSYS_CLOUD_CLIENT_ID, GENSYS_CLOUD_CLIENT_SECRET)
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 	.then(() => {
 		console.log('Authenticated with Genesys Cloud');
 

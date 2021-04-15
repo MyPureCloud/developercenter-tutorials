@@ -11,9 +11,10 @@ steps:
     With historical adherence queries specifically, after your initial request your results will begin processing.
     After your query has finished processing, an event will be returned that can be caught if subscribed to historical adherence query notifications.
     The body of this event contains the results of your query, including the downloadUrls with the historical adherence of each user for the range of time you queried.
-- title: Client Credential Authentication
+- title: Authentication
   content: |
-    Authenticate using Client Credentials
+    Authenticate using an existing Token.
+    The sample code requires access to the current user and so we'd need a token generated from either a Code Authorization or Implicit Grant authorization process.
     For more information on how to authenticate your api client, [here is a useful resource.](/api/rest/client-libraries/java/index.html#authenticating)
 - title: Retrieving Your User ID
   content: |
@@ -76,24 +77,24 @@ languages:
     displayName: Java
     steps:
     - file: "java/Main.java"
-      highlight: "0-211"
+      highlight: "0-208"
     - file: "java/Main.java"
-      highlight: "34-48"
+      highlight: "29-37"
     - file: "java/Main.java"
-      highlight: "48-53"
+      highlight: "39-42"
     - file: "java/Main.java"
-      highlight: "53-68"
+      highlight: "45-63"
     - file: "java/Main.java"
-      highlight: "163-210"
+      highlight: "159-206"
     - file: "java/Main.java"
-      highlight: "68-80"
+      highlight: "65-75"
     - file: "java/Main.java"
-      highlight: "80-89"
+      highlight: "77-84"
     - file: "java/Main.java"
-      highlight: "89-110"
+      highlight: "86-105"
     - file: "java/Main.java"
-      highlight: "110-119"
+      highlight: "107-115"
     - file: "java/Main.java"
-      highlight: "146-162"
+      highlight: "143-157"
     - file: "java/Main.java"
-      highlight: "119-144"
+      highlight: "116-139"

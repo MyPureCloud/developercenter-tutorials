@@ -7,11 +7,21 @@ print('-------------------------------------------------------------')
 print('- Python3 External Contacts -')
 print('-------------------------------------------------------------')
 
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
 # OAuth when using Client Credentials
-apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENESYS_CLOUD_CLIENT_ID'], os.environ['GENESYS_CLOUD_CLIENT_SECRET'])
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
 
 # Create an instance of the External Contacts API API
-external_contacts_api = PureCloudPlatformClientV2.ExternalContactsApi(apiclient)
+external_contacts_api = PureCloudPlatformClientV2.ExternalContactsApi(api_client)
 
 # Define a new External Organization
 new_org = PureCloudPlatformClientV2.ExternalOrganization()

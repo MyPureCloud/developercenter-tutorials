@@ -1,55 +1,46 @@
 import com.google.common.base.Stopwatch;
 import com.mypurecloud.sdk.v2.ApiClient;
 import com.mypurecloud.sdk.v2.ApiException;
+import com.mypurecloud.sdk.v2.ApiResponse;
 import com.mypurecloud.sdk.v2.Configuration;
 import com.mypurecloud.sdk.v2.PureCloudRegionHosts;
 import com.mypurecloud.sdk.v2.api.UsersApi;
 import com.mypurecloud.sdk.v2.api.WorkforceManagementApi;
-import com.mypurecloud.sdk.v2.extensions.notifications.NotificationHandler;
-import com.mypurecloud.sdk.v2.extensions.notifications.NotificationListener;
-import com.mypurecloud.sdk.v2.model.User;
 import com.mypurecloud.sdk.v2.model.UserMe;
-import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice;
+import com.mypurecloud.sdk.v2.model.ManagementUnit;
+import com.mypurecloud.sdk.v2.model.User;
 import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceQuery;
 import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceResponse;
+import com.mypurecloud.sdk.v2.model.WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice;
+import com.mypurecloud.sdk.v2.extensions.notifications.*;
 import com.neovisionaries.ws.client.WebSocketException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
-public class Main {
+public class HistoricalAdherenceQuery {
 
     public static void main(String[] args) throws IOException, ApiException, InterruptedException, WebSocketException,
-        TimeoutException {
+            TimeoutException {
 
-        // Set client credentials
-        String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
-        String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
+        // Token should be generated from Authorization with user context (Implicit Grant or Code Authorization).
+        String accessToken = "--- ACCESS TOKEN ---";
 
-        // Set Region
+        // Set environment and configure Api Client with Token.
         PureCloudRegionHosts region = PureCloudRegionHosts.us_east_1;
-        ApiClient apiClient = ApiClient.Builder.standard()
-            .withBasePath(region)
-            .build();
-
-        ApiResponse<AuthResponse> authResponse = apiClient.authorizeClientCredentials(clientId, clientSecret);
-
-        // Set the ApiClient instance as your default api client
-        Configuration.setDefaultApiClient(apiClient);
+        Configuration.setDefaultApiClient(ApiClient.Builder.standard()
+                .withAccessToken(accessToken)
+                .withBasePath(region)
+                .build());
 
         // Create an instance of UsersApi to retrieve your own userId
         UsersApi usersApi = new UsersApi();
-        UserMe me = usersApi.getUsersMe(Collections.emptyList());
-        String myId = me.getId()
+        UserMe me = usersApi.getUsersMe(Collections.emptyList(), null);
+        String myId = me.getId();
+
 
         // Create an instance of the notification handler
         NotificationHandler notificationHandler = new NotificationHandler();
@@ -57,8 +48,13 @@ public class Main {
         // Create an instance of your historical adherence event listener
         HistoricalAdherenceEventListener historicalAdherenceEventListener = new HistoricalAdherenceEventListener(myId);
 
-        // Subscribe to the listener
-        notificationHandler.addSubscription(historicalAdherenceEventListener);
+        try {
+            // Subscribe to the listener
+            notificationHandler.addSubscription(historicalAdherenceEventListener);
+        } catch (ApiException e){
+            System.err.println(e.getRawBody());
+            System.exit(1);
+        }
 
         // Connect to the web socket
         notificationHandler.connect(true);
@@ -74,7 +70,7 @@ public class Main {
 
         // Get a list of management units
         List<ManagementUnit> managementUnits = wfmApiInstance.getWorkforcemanagementManagementunits(1, 1,"", "", divisionId).getEntities();
-        
+
         // Get the ID of the management unit
         String managementUnitId = managementUnits.get(0).getId();
 
@@ -146,23 +142,23 @@ public class Main {
 
     // This is a simple example of a helper method to check if the request is completed
     private static void waitUntil(Supplier<Boolean> isDone, int maxTimeSeconds, long sleepTimeMs) throws InterruptedException,
-        TimeoutException {
+            TimeoutException {
         // Creates a stopwatch to keep track of time
         Stopwatch sw = Stopwatch.createStarted();
         while (!isDone.get()) {
             // Pauses the process for a specified number of milliseconds between checks
             Thread.sleep(sleepTimeMs);
 
-            // Thows an exception if over the set maximum time
+            // Throws an exception if over the set maximum time
             if (sw.elapsed(TimeUnit.SECONDS) > maxTimeSeconds) {
                 throw new TimeoutException(String.format("Timed out waiting after %s seconds", maxTimeSeconds));
             }
         }
     }
 
-    public class HistoricalAdherenceEventListener implements
+    public static class HistoricalAdherenceEventListener implements
         NotificationListener<WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice> {
-        private String topic;
+        private final String topic;
         private HashMap<String, WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice> resultMap = new HashMap<>();
 
         public Class<WfmHistoricalAdherenceCalculationsCompleteTopicWfmHistoricalAdherenceCalculationsCompleteNotice> getEventBodyClass() {
@@ -209,3 +205,4 @@ public class Main {
         }
     }
 }
+

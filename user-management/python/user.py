@@ -3,10 +3,21 @@ import PureCloudPlatformClientV2, os
 from PureCloudPlatformClientV2.rest import ApiException
 from pprint import pprint
 
-# OAuth when using Client Credentials
-apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['PURECLOUD_CLIENT_ID'], os.environ['PURECLOUD_CLIENT_SECRET'])
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
 
-api_instance = PureCloudPlatformClientV2.UsersApi(apiClient)
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
+# OAuth when using Client Credentials
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
+
+api_instance = PureCloudPlatformClientV2.UsersApi(api_client)
+
 newuser = PureCloudPlatformClientV2.CreateUser() 
 newuser.name = "Tutorial User"
 newuser.email = "tutorial35@example.com"

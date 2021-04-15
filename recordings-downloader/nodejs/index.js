@@ -1,5 +1,3 @@
-// Import library to use for input in NPM
-const prompt = require('prompt');
 // Import built in libraries needed.
 const http = require('https');
 const fs = require('fs');
@@ -15,41 +13,26 @@ const client = platformClient.ApiClient.instance;
 const conversationsApi = new platformClient.ConversationsApi();
 const recordingApi = new platformClient.RecordingApi();
 
-// Properties of input
-let schemaInput = {
-    properties: {
-        clientIdInput: {
-            message: 'Enter Client ID:',
-            required: true
-        },
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
 
-        clientSecretInput: {
-            message: 'Enter Client Secret: ',
-            required: true
-        },
-        // Get the Date Interval
-        dateInput: {
-            message: 'Enter Date Interval (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss): ',
-            required: true
-        }
-    }
-};
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
-// Start the prompt
-prompt.start();
 // OAuth input
-prompt.get(schemaInput, function (_err, result) {
-    client.loginClientCredentialsGrant(result.clientIdInput, result.clientSecretInput)
-        .then(() => {
-            let dates = result.dateInput;
-            downloadAllRecordings(dates);
-        })
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
+    .then(() => {
+        let dates = "2021-03-09T13:00:00.000Z/2021-03-10T00:00:00.000Z";
+        downloadAllRecordings(dates);
+    })
 
-        .catch((err) => {
-            // Handle failure response
-            console.log(err);
-        });
-});
+    .catch((err) => {
+        // Handle failure response
+        console.log(err);
+    });
 
 // Process and build the request for downloading the recordings
 // Get the conversations within the date interval and start adding them to batch request
@@ -78,10 +61,9 @@ function downloadAllRecordings (dates) {
         })
         .then((completedBatchStatus) => {
             for (recording of completedBatchStatus.results) {
-
                 // If there is an errorMsg skip the recording download
-                if (recording.errorMsg !== '') {
-                    console.log("Skipping this recording. Reason:  " + recording.errorMsg);
+                if (recording.errorMsg) {
+                    console.log("Skipping this recording. Reason:  " + recording.errorMsg)
                     continue;
                 } else {
                     downloadRecording(recording);

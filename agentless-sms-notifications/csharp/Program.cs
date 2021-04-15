@@ -1,19 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Diagnostics;
 using PureCloudPlatform.Client.V2.Api;
 using PureCloudPlatform.Client.V2.Client;
 using PureCloudPlatform.Client.V2.Extensions;
-using PureCloudPlatform.Client.V2.Extensions.Notifications;
 using PureCloudPlatform.Client.V2.Model;
-using Newtonsoft.Json;
 
 namespace csharp
 {
@@ -21,12 +10,16 @@ namespace csharp
     {
         static void Main(string[] args)
         {
-            // OAuth input
-            Console.Write("Enter Client ID: ");
-            string clientId = Console.ReadLine();
-            Console.Write("Enter Client Secret: ");
-            string clientSecret = Console.ReadLine();
+            // OAuth Credentials
+            string clientId = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_ID");
+            string clientSecret = Environment.GetEnvironmentVariable("GENESYS_CLOUD_CLIENT_SECRET");
+            // orgRegion value example: us_east_1
+            string orgRegion = Environment.GetEnvironmentVariable("GENESYS_CLOUD_REGION");
 
+            // Set Region
+            PureCloudRegionHosts region = Enum.Parse<PureCloudRegionHosts>(orgRegion);
+            Configuration.Default.ApiClient.setBasePath(region);
+            
             // Configure SDK Settings
             var accessTokenInfo = Configuration.Default.ApiClient.PostToken(clientId, clientSecret);
             string accessToken = accessTokenInfo.AccessToken;

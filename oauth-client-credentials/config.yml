@@ -27,24 +27,15 @@ steps:
     The response of the POST contains the access token. Include this token in the authorization header of API calls.
 
 languages:
-  ruby:
-    displayName: Ruby
-    steps:
-    - file: "ruby/script.rb"
-      highlight: "0-100"
-    - file: "ruby/script.rb"
-      highlight: "5-15"
-    - file: "ruby/script.rb"
-      highlight: "17-21"
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/script.js"
       highlight: "0-100"
     - file: "nodejs/script.js"
-      highlight: "20-28"
+      highlight: "31-42"
     - file: "nodejs/script.js"
-      highlight: "3-18"
+      highlight: "8-28"
   powershell:
     displayName: PowerShell
     steps:
@@ -58,11 +49,11 @@ languages:
     displayName: Python
     steps:
     - file: "python/script.py"
-      highlight: "0-54"
+      highlight: "0-57"
     - file: "python/script.py"
       highlight: "7-22"
     - file: "python/script.py"
-      highlight: "31-52"
+      highlight: "37-57"
   go:
     displayName: Go
     steps: 

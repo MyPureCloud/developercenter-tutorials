@@ -8,11 +8,11 @@ steps:
   content: |
     This tutorial walks through the steps to download recordings in bulk within a given date interval.
     For this tutorial, Genesys Cloud SDK will be used.
-- title: Input
+- title: Authorization
   content: |
-    For this tutorial, the user will be asked to input the credentials through a simple console input.
+    For this tutorial, the user should replace the variables for Client ID and Client Secret.
 
-    The user will be also asked for the date interval of the recordings. Please take note of the format for the date input YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss.
+    Dates are also predefined in the dates variable. User can modify it to their desired date.  Please take note of the format for the date input YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss.
 - title: Configure SDK Settings
   content: |
     Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
@@ -86,55 +86,55 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-175"
+      highlight: "0-156"
     - file: "nodejs/index.js"
-      highlight: "18-36"
+      highlight: "16-23"
     - file: "nodejs/index.js"
-      highlight: "42-43"
+      highlight: "21-23"
     - file: "nodejs/index.js"
-      highlight: "42-43"
+      highlight: "25-26"
     - file: "nodejs/index.js"
-      highlight: "14-16"
+      highlight: "12-14"
     - file: "nodejs/index.js"
-      highlight: "56-95"
+      highlight: "37-77"
     - file: "nodejs/index.js"
-      highlight: "97-140"
+      highlight: "79-96"
     - file: "nodejs/index.js"
-      highlight: "142-158"
+      highlight: "124-140"
     - file: "nodejs/index.js"
-      highlight: "160-174"
+      highlight: "142-156"
   csharp:
     displayName: C#
     steps:
     - file: "csharp/Program.cs"
-      highlight: "0-172"
+      highlight: "0-177"
     - file: "csharp/Program.cs"
-      highlight: "44-54"
+      highlight: "44-58"
     - file: "csharp/Program.cs"
-      highlight: "58-64"
+      highlight: "56-58"
     - file: "csharp/Program.cs"
-      highlight: "58-64"
+      highlight: "56-58"
     - file: "csharp/Program.cs"
-      highlight: "66-68"
+      highlight: "60-62"
     - file: "csharp/Program.cs"
-      highlight: "71-83"
+      highlight: "67-90"
     - file: "csharp/Program.cs"
-      highlight: "96-134"
+      highlight: "92-130"
     - file: "csharp/Program.cs"
-      highlight: "154-170"
+      highlight: "159-175"
     - file: "csharp/Program.cs"
-      highlight: "136-152"
+      highlight: "132-157"
   java:
     displayName: Java
     steps:
     - file: "java/src/main/java/Main.java"
-      highlight: "0-185"
+      highlight: "0-187"
     - file: "java/src/main/java/Main.java"
-      highlight: "32-41"
+      highlight: "35-39"
     - file: "java/src/main/java/Main.java"
-      highlight: "43-56"
+      highlight: "41-42"
     - file: "java/src/main/java/Main.java"
-      highlight: "43-56"
+      highlight: "44-53"
     - file: "java/src/main/java/Main.java"
       highlight: "58-60"
     - file: "java/src/main/java/Main.java"

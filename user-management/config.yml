@@ -34,8 +34,8 @@ languages:
     displayName: Python
     steps:
     - file: "python/user.py"
-      highlight: "0-31"
+      highlight: "0-41"
     - file: "python/user.py"
-      highlight: "9-15"
+      highlight: "21-28"
     - file: "python/user.py"
-      highlight: "19-30"
+      highlight: "30-41"

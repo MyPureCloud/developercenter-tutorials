@@ -23,7 +23,7 @@
         * **appId** - For this tutorial, **samplePremiumApp** is our sample **appId**. Multiple appIds may be requested in a single GET request by adding a comma between appIds without a space. Example: **samplePremiumApp,secondSamplePremiumApp**
 
       With the **apiKey** and **appId** provided, start by calling the first Usage API. 
-  - title: Overall Customer Count
+  - title: Get Region Summaries
     content: |
       The first API call returns customer counts that uses **samplePremiumApp** per Genesys Cloud region.
       The sample code will loop through the payload and for each region with **organizationCounts**  greater than zero, the program will call the next Usage API function. 
@@ -122,14 +122,14 @@
       displayName: NodeJS
       steps:
       - file: "nodejs/index.js"
-        highlight: "0-69"
+        highlight: "1-113"
       - file: "nodejs/index.js"
-        highlight: "1-8"
+        highlight: "3-4"
       - file: "nodejs/index.js"
-        highlight: "10-32"
+        highlight: "6-27"
       - file: "nodejs/index.js"
-        highlight: "34-53"
+        highlight: "29-51"
       - file: "nodejs/index.js"
-        highlight: "55-69"
+        highlight: "53-76"
       - file: "nodejs/result.json"
         highlight: "1-122"

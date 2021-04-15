@@ -6,6 +6,10 @@ import view from './view.js';
 const platformClient = require('platformClient');
 const client = platformClient.ApiClient.instance;
 
+// Implicit Grant credentials
+const clientId = '';
+const environment = 'mypurecloud.com'
+
 // API instances
 const usersApi = new platformClient.UsersApi();
 const conversationsApi = new platformClient.ConversationsApi();
@@ -297,9 +301,10 @@ function addSubscription(topic, callback){
 /** --------------------------------------------------------------
  *                       INITIAL SETUP
  * -------------------------------------------------------------- */
-client.loginImplicitGrant(
-    'e7de8a75-62bb-43eb-9063-38509f8c21af',
-    window.location.href)
+
+client.setEnvironment(environment);
+client.setPersistSettings(true, 'test_app');
+client.loginImplicitGrant(clientId, window.location.href)
 .then(data => {
     console.log(data);
     
