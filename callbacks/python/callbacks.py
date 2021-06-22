@@ -29,6 +29,8 @@ body.routing_data.queue_id = "QUEUE_ID"
 body.script_id = "SCRIPT_ID"
 body.callback_user_name = "Tutorial Callback"
 body.callback_numbers = ["3172222222"]
+body.caller_id = "+13175555555"
+body.caller_id_name = "John Doe"
 body.data = {
     'customDataAttribute': 'custom value'
 }
