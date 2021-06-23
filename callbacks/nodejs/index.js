@@ -30,7 +30,9 @@ client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 			],
 			data:{
 				customDataAttribute: 'custom value'
-			}
+			},
+			callerId: '+13175555555',
+			callerIdName: 'John Doe'
 		};
 
 		// Create callback
