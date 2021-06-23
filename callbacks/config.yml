@@ -22,21 +22,21 @@ languages:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-42"
+      highlight: "0-45"
     - file: "nodejs/index.js"
       highlight: "3-17"
     - file: "nodejs/index.js"
-      highlight: "21-34"
+      highlight: "21-36"
     - file: "nodejs/index.js"
-      highlight: "36-40"
+      highlight: "38-42"
   python:
     displayName: Python
     steps:
     - file: "python/callbacks.py"
-      highlight: "0-41"
+      highlight: "0-44"
     - file: "python/callbacks.py"
       highlight: "10-21"
     - file: "python/callbacks.py"
-      highlight: "26-34"
+      highlight: "26-36"
     - file: "python/callbacks.py"
-      highlight: "36-41"
+      highlight: "38-43"
