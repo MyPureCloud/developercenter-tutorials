@@ -9,11 +9,12 @@
   },
   "author": "",
   "license": "MIT",
-  "dependencies":{
-      "express" :"*",
-      "uuid" :"*",
-      "request" :"*",
-      "cookie-parser" :"*",
-      "body-parser" :"*"
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "express": "*",
+    "node-fetch": "^2.6.1",
+    "request": "*",
+    "uuid": "*"
   }
 }
