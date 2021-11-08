@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Implicit Login</title>
+        <script src="https://sdk-cdn.mypurecloud.com/external/go-cli/axios/0.23.0/axios.min.js"></script>
+        <script>
+            const CLIENT_ID = "your_genesys_cloud_client_id";
+            const ENVIRONMENT = "your_genesys_cloud_environment"; // e.g mypurecloud.com or mypurecloud.ie
+            const REDIRECT_URI = "uri_the_authorization_server_redirects_to"; // e.g http://localhost:5000/
+            const RESPONSE_TYPE = "token";
+
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                const regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.hash);
+                return results === null
+                    ? ""
+                    : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+
+            if (window.location.hash) {
+                if (location.hash.includes("error")) {
+                    axios.get("/error/" + getParameterByName("error"));
+                }
+                axios.get(
+                    "/access_token/" + getParameterByName("access_token")
+                );
+                location.hash = "";
+            } else {
+                const queryStringData = {
+                    response_type: RESPONSE_TYPE,
+                    client_id: CLIENT_ID,
+                    redirect_uri: REDIRECT_URI,
+                };
+                const encodedURL = new URLSearchParams(queryStringData);
+                window.location.replace(
+                    `https://login.${ENVIRONMENT}/oauth/authorize?` +
+                        encodedURL.toString()
+                );
+            }
+        </script>
+    </head>
+    <body>
+        authentication complete!
+    </body>
+</html>
