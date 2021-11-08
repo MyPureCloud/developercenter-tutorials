@@ -48,7 +48,7 @@ func main() {
 func validateToken(token string) (string, error) {
 	environment := os.Getenv("GENESYS_CLOUD_ENVIRONMENT")
 
-	client := &http.Client{Timeout: time.Duration(5) * time.Second}
+	client := &http.Client{Timeout: time.Duration(2) * time.Second}
 
 	// create a new request for GET api/v2/users/me
 	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.%s/api/v2/users/me", environment), nil)

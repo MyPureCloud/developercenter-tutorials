@@ -60,7 +60,7 @@ languages:
         highlight: "16-26"
       - file: "python/server.py"
         highlight: "36-56"
-  golang:
+  go:
     displayName: Go
     steps:
       - file: "go/main.go"
