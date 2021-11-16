@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -13,7 +12,11 @@ import (
 )
 
 func main() {
-	openBrowser("http://localhost:5000/")
+	const host = "localhost"
+	const port = "5000"
+	URL := fmt.Sprintf("http://%s:%s/", host, port)
+
+	openBrowser(URL)
 
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		http.ServeFile(writer, request, "index.html")
@@ -35,10 +38,12 @@ func main() {
 
 	http.HandleFunc("/error/", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+		writer.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(writer, "<html><p> 404. Not found. </p></html>")
 	})
 
-	err := http.ListenAndServe(":5000", nil)
+	address := fmt.Sprintf(":%s", port)
+	err := http.ListenAndServe(address, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,17 +51,20 @@ func main() {
 
 // validates the access token returned from the implicit grant login
 func validateToken(token string) (string, error) {
-	environment := os.Getenv("GENESYS_CLOUD_ENVIRONMENT")
+	const environment = "mypurecloud.com"
 
-	client := &http.Client{Timeout: time.Duration(2) * time.Second}
+	client := &http.Client{Timeout: time.Duration(10) * time.Second}
 
-	// create a new request for GET api/v2/users/me
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.%s/api/v2/users/me", environment), nil)
+	URL := fmt.Sprintf("https://api.%s/api/v2/users/me", environment)
+
+	// create a new request GET api/v2/users/me
+	req, err := http.NewRequest(http.MethodGet, URL, nil)
 	if err != nil {
 		return "", fmt.Errorf("got error %s", err.Error())
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	bearerToken := fmt.Sprintf("Bearer %s", token)
+	req.Header.Set("Authorization", bearerToken)
 	// make the request
 	response, err := client.Do(req)
 	if err != nil {
