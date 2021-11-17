@@ -2,61 +2,73 @@
 title: OAuth Implicit Grant Login Flow
 description: Implicit grant login without a client library.
 categories:
-- OAuth
+  - OAuth
 steps:
-- title: Introduction
-  content: |
-    This tutorial walks through how to use the OAuth implicit code grant.  For more information on the implicit grant, see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html)
+  - title: Introduction
+    content: |
+      This tutorial walks through how to use the OAuth implicit code grant.  For more information on the implicit grant, see [Use an Implicit Grant](http://developer.mypurecloud.com/api/rest/authorization/use-implicit-grant.html)
 
-- title: Redirect to Genesys Cloud to Handle Authentication
-  content: |
-    When the page loads, we redirect the page to the authorization url and specify:
+  - title: Redirect to Genesys Cloud to Handle Authentication
+    content: |
+      When the page loads, we redirect the page to the authorization url and specify:
 
-    **response_type**: Use _token_ since this is an implicit (token) grant.
-    **client_id**: The client ID for this application.
-    **redirect_uri**: The URI to which the user is redirected after login.
+      **response_type**: Use _token_ since this is an implicit (token) grant.
+      **client_id**: The client ID for this application.
+      **redirect_uri**: The URI to which the user is redirected after login.
 
-- title: Get the Access Token Out of the Url
-  content: |
-    After the user follows the redirect, the URI contains a hash (#) with the access token as a parameter.  We strip the parameter and save it in the token variable.
+  - title: Get the Access Token Out of the Url
+    content: |
+      After the user follows the redirect, the URI contains a hash (#) with the access token as a parameter.  We strip the parameter and save it in the token variable.
 
-- title: Make API Calls
-  content: |
-    Now that we have the bearer token, we can make an Ajax call to Genesys Cloud, setting the value of the **Authorization** parameter to **bearer** _token_, where _token_ is the value from the hash.
+  - title: Make API Calls
+    content: |
+      Now that we have the bearer token, we can make an Ajax call to Genesys Cloud, setting the value of the **Authorization** parameter to **bearer** _token_, where _token_ is the value from the hash.
 
-languages: 
+languages:
   javascript:
     displayName: Javascript
     steps:
-    - file: "javascript/example.html"
-      highlight: "0-100"
-    - file: "javascript/example.html"
-      highlight: "36-42"
-    - file: "javascript/example.html"
-      highlight: "13-22"
-    - file: "javascript/example.html"
-      highlight: "24-31"
+      - file: "javascript/example.html"
+        highlight: "0-100"
+      - file: "javascript/example.html"
+        highlight: "36-42"
+      - file: "javascript/example.html"
+        highlight: "13-22"
+      - file: "javascript/example.html"
+        highlight: "24-31"
   csharp:
     displayName: C#
     steps:
-    - file: "csharp/MainForm.cs"
-      highlight: "0-100"
-      note: In a C# desktop application, we host the login window in a web browser control and watch for the navigation event.  When this occurs, we pull the access_token from the URL.
-    - file: "csharp/MainForm.cs"
-      highlight: "20-34"
-    - file: "csharp/MainForm.cs"
-      highlight: "63-70"
-    - file: "csharp/MainForm.cs"
-      highlight: "37-59"
+      - file: "csharp/MainForm.cs"
+        highlight: "0-100"
+        note: In a C# desktop application, we host the login window in a web browser control and watch for the navigation event.  When this occurs, we pull the access_token from the URL.
+      - file: "csharp/MainForm.cs"
+        highlight: "20-34"
+      - file: "csharp/MainForm.cs"
+        highlight: "63-70"
+      - file: "csharp/MainForm.cs"
+        highlight: "37-59"
   python:
     displayName: Python
     steps:
-    - file: "python/server.py"
-      highlight: "0-70"
-      note: In Python, we start a server using the http.server module and open a web browser that displays the authorization page to the end user.
-    - file: "python/implicit.html"
-      highlight: "36-42"
-    - file: "python/implicit.html"
-      highlight: "16-26"
-    - file: "python/server.py"
-      highlight: "36-56"
+      - file: "python/server.py"
+        highlight: "0-70"
+        note: In Python, we start a server using the http.server module and open a web browser that displays the authorization page to the end user.
+      - file: "python/implicit.html"
+        highlight: "36-42"
+      - file: "python/implicit.html"
+        highlight: "16-26"
+      - file: "python/server.py"
+        highlight: "36-56"
+  go:
+    displayName: Go
+    steps:
+      - file: "go/main.go"
+        highlight: "0-92"
+        note: In Go, we open the web browser and start a server using the net/http package that displays the authorization page to the end user.
+      - file: "go/index.html"
+        highlight: "30-39"
+      - file: "go/index.html"
+        highlight: "12-28"
+      - file: "go/main.go"
+        highlight: "48-74"
