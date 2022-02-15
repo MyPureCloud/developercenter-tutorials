@@ -29,6 +29,7 @@ print(currentuser.id)
 
 updateuser = PureCloudPlatformClientV2.UpdateUser() 
 updateuser.name = "Tutorial User New Name"
+# Take note that version is a required value in updating user
 updateuser.version = currentuser.version
 
 newaddress = PureCloudPlatformClientV2.Contact()
