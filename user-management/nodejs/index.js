@@ -14,6 +14,7 @@ apiInstance.postUsers(newuser)
   .then(function(currentuser) {
     console.log(currentuser.id);
     var updateUser = {
+        // TAKE NOTE THAT VERSION IS REQUIRED VALUE IN UPDATING A USER
         version: currentuser.version,
         name: "Tutorial User New Name",
         addresses:[
