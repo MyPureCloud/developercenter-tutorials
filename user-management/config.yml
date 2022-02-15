@@ -38,4 +38,4 @@ languages:
     - file: "python/user.py"
       highlight: "21-28"
     - file: "python/user.py"
-      highlight: "30-41"
+      highlight: "30-42"
