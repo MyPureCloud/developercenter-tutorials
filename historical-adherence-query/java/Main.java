@@ -49,7 +49,7 @@ public class Main {
         // Create an instance of UsersApi to retrieve your own userId
         UsersApi usersApi = new UsersApi();
         UserMe me = usersApi.getUsersMe(Collections.emptyList());
-        String myId = me.getId()
+        String myId = me.getId() // When not operating in the context of a user use the oauth client ID instead
 
         // Create an instance of the notification handler
         NotificationHandler notificationHandler = new NotificationHandler();
