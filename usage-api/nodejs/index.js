@@ -1,62 +1,112 @@
-// Get variables needed from environment variables
-require('dotenv').config();
-let apiKey = process.env.APIKEY;
-let contentType = 'application/json'
-let appId = encodeURIComponent(process.env.APPID);
-let region = encodeURIComponent(process.env.REGION);
-let orgId = encodeURIComponent(process.env.ORGID);
+const axios = require('axios');
 
-let request = require('request');
+const apiKey = process.env.APIKEY;
+const appId = encodeURIComponent(process.env.APPID);
 
-// Function calls to different usage api
-overallCustomerCount();
-usagePerCustomerWithinRegion();
-individualCustomerSubscription();
-
-// Function to get the overall customer count 
-function overallCustomerCount() {
-    let options = {
-        'method': 'GET',
-        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions?appIds=' + appId,
-        'headers': {
-            'Content-Type': contentType,
+/**
+ * Get summary of all regions and the number of orgs
+ * with the premium app.
+ * @returns {Promise}
+ */
+function getRegionSummaries() {
+    return axios.get(`https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions?appIds=${appId}`, {
+        headers: {
+            'Content-Type': 'application/json',
             'x-api-key': apiKey
         }
-    };
-    request(options, function (error, response) { 
-        if (error) throw new Error(error);
-        console.log("Return for overallCustomerCount() function:\n" + response.body);
-    });
+    })
+    .then((res) => {
+        let data = res.data;
+
+        console.log(`--- OVERALL CUSTOMER COUNT ---`);
+        console.log(data);
+
+        return data;
+    })
+    .catch(e => console.error(e));
 }
 
-// Function to get the organization and the usage count per region
-function usagePerCustomerWithinRegion() {
-    let options = {
-        'method': 'GET',
-        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/' + region + '/organizations?appIds=' + appId,
-        'headers': {
-            'Content-Type': contentType,
+/**
+ * Get summary of all organizations within a region
+ * and the usage quantity for each.
+ * @param {String} regionId eg. us-east-1
+ * @returns {Promise} Response from endpoint
+ */
+function getCustomersWithinRegion(regionId) {
+    return axios.get(`https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/${regionId}/organizations?appIds=${appId}`, {
+        headers: {
+            'Content-Type': 'application/json',
             'x-api-key': apiKey
         }
-    };
-    request(options, function (error, response) { 
-        if (error) throw new Error(error);
-        console.log("Return for usagePerCustomerWithinRegion() function:\n" + response.body);
-    });
+    })
+    .then((res) => {
+        let data = res.data;
+
+        console.log(`--- CUSTOMERS FROM REGION ${regionId} ---`);
+        console.log(data);
+
+        return data;
+    })
+    .catch(e => console.error(e));
 }
 
-// Function to get the subscription details of an organization
-function individualCustomerSubscription() {
-    let options = {
-        'method': 'GET',
-        'url': 'https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/' + region + '/organizations/' + orgId + '?appIds=' + appId,
-        'headers': {
-            'Content-Type': contentType,
+/**
+ * Prints the detailed info on a premium app subscription for a
+ * specific org.
+ * @param {String} regionId eg us-east-1
+ * @param {String} orgId Genesys Cloud org id
+ * @returns {Promise}
+ */
+function printOrgSubscription(regionId, orgId) {
+    return axios.get(`https://billable-vendor-usage-api.usw2.pure.cloud/v1/regions/${regionId}/organizations/${orgId}?appIds=${appId}`, {
+        headers: {
+            'Content-Type': 'application/json',
             'x-api-key': apiKey
         }
-    };
-    request(options, function (error, response) { 
-        if (error) throw new Error(error);
-        console.log("Return for individualCustomerSubscription() function:\n" + response.body);
-    });
+    })
+    .then((res) => {
+        let data = res.data;
+
+        console.log(`--- SUBSCRIPTION FROM REGION ${regionId}, FROM ORG ${orgId} ---`);
+        console.log(data);
+
+        return data;
+    })
+    .catch(e => console.error(e));
 }
+
+
+
+// Run all the functions in series.
+// (Will print all subscription info of all orgs from all regions)
+getRegionSummaries()
+.then((data) => {
+    let regionPromisesArr = [];
+
+    // Get all customers through all the regions
+    for (let region of data.regions) {
+        regionPromisesArr.push(getCustomersWithinRegion(region.id));
+    }
+
+    return Promise.all(regionPromisesArr);
+})
+.then((allRegionsData) => {
+    let allOrgsPromiseArr = [];
+
+    // Go customer orgs per region
+    for(let regionData of allRegionsData){
+        let organizations = regionData.organizations;
+
+        // Get subscription info from the org
+        organizations.forEach(org => {
+            allOrgsPromiseArr.push(printOrgSubscription(regionId, org.orgId));
+        })
+    }   
+    
+    return Promise.all(allOrgsPromiseArr);
+})
+.then(() => {
+    // After all org subscription has been printed
+    console.log('--- DONE ---');
+})
+.catch((e) => console.error(e));

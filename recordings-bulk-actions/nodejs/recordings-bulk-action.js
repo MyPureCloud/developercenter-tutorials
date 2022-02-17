@@ -1,17 +1,22 @@
 const platformClient = require('purecloud-platform-client-v2');
-
-// Credentials
-const clientId = '-- id here --';
-const clientSecret = '-- secret here --';
-
-// API Instances
-const recordingApi = new platformClient.RecordingApi();
+const client = platformClient.ApiClient.instance;
 
 // Globals
 let newJob = null;
 
-const client = platformClient.ApiClient.instance;
-client.loginClientCredentialsGrant(clientId,clientSecret)
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
+
+// API Instances
+const recordingApi = new platformClient.RecordingApi();
+
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 .then(()=> {
     return createRecordingBulkJob();
 })
@@ -47,7 +52,7 @@ client.loginClientCredentialsGrant(clientId,clientSecret)
 
 function createRecordingBulkJob(){
     return recordingApi.postRecordingJobs({
-        action: 'DELETE', // set to "EXPORT" for export action
+        action: 'EXPORT', // set to "EXPORT" for export action
         actionDate: '2029-01-01T00:00:00.000Z',
         integrationId: '-- integration id here --', // Only required when action is EXPORT
         includeScreenRecordings: true,
@@ -85,10 +90,10 @@ function executeJob(id){
 
 function getRecordingJobs(){
     return recordingApi.getRecordingJobs({
-        pageeSize: 25,
+        pageSize: 25,
         pageNumber: 1,
         sortBy: 'userId', // or 'dateCreated'
-        state: 'READY', // valid values FULFILLED, PENDING, READY, PROCESSING, CANCELLED, FAILED
+        state: 'CANCELLED', // valid values FULFILLED, PENDING, READY, PROCESSING, CANCELLED, FAILED
         showOnlyMyJobs: true,
         jobType: 'EXPORT' // or 'DELETE'
     })

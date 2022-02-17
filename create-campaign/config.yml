@@ -35,10 +35,10 @@ languages:
     displayName: Python
     steps:
     - file: "python/create-campaign.py"
-      highlight: "0-81"
+      highlight: "0-90"
     - file: "python/create-campaign.py"
-      highlight: "10-11"
+      highlight: "10-21"
     - file: "python/create-campaign.py"
-      highlight: "18-55"
+      highlight: "28-65"
     - file: "python/create-campaign.py"
-      highlight: "57-80"
+      highlight: "67-90"

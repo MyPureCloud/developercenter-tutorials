@@ -1,73 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Incoming Conversation</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client App SDK Tutorial</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.2/css/bulma.min.css" integrity="sha512-byErQdWdTqREz6DLAA9pCnLbdoGGhXfU6gm1c8bkf7F51JVmUBlayGe2A31VpXWQP+eiJ3ilTAZHCR3vmMyybA==" crossorigin="anonymous" />
 
-    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' async type='text/css'>
-    <link rel="stylesheet" href="style.css">
 
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>    
-    <script src="https://cdn.jsdelivr.net/npm/chronomouse@2.4.0/chronomouse.2.4.0.min.js"></script>
-    <script src="https://sdk-cdn.mypurecloud.com/client-apps/1.0.0/purecloud-client-app-sdk.js"></script>
-    <script src="https://sdk-cdn.mypurecloud.com/javascript/29.1.0/purecloud-platform-client-v2.min.js"></script>
+  <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
+  <script src="https://sdk-cdn.mypurecloud.com/client-apps/2.0.0/purecloud-client-app-sdk.js"></script>
+
+  <script type="text/javascript">
+    const clientId = '--- CLIENT ID HERE ---';
+    const redirectUri = 'http://localhost:8080/index.html';
+
+    const appName = 'sample_app';
+    const qParamLanguage = 'language';
+    const qParamEnvironment = 'environment';
+
+    // Default values are assigned but values should 
+    // be set on the function 'assignConfiguration'
+    let language = 'en-us';
+    let environment = 'mypurecloud.com'; 
+
+    let userDetails = null;
+
+    /**
+     * Configure both the Platform SDK and the Client App SDK
+     */
+    function setupGenesysClients(){
+      const platformClient = require('platformClient');
+      const client = platformClient.ApiClient.instance;
+      const usersApi = new platformClient.UsersApi();
+
+      // Configure Client App
+      let ClientApp = window.purecloud.apps.ClientApp;
+      let myClientApp = new ClientApp({
+          pcEnvironment: environment
+      });
+
+      // Configure and Authenticate Platform Client
+      client.setPersistSettings(true, appName);
+      client.setEnvironment(environment);
+
+      return client.loginImplicitGrant(clientId, redirectUri)
+        .then(data =>  usersApi.getUsersMe())
+        .then(data => {
+          userDetails = data;
+
+          myClientApp.alerting.showToastPopup(
+            `Hi ${userDetails.name}`, 
+            'Never gonna give you up, never gonna let you down 😊');
+        })
+        .catch(err => console.log(err));
+    }
+
+    /**
+     * Assign the language and environment for the app first through
+     * the query parameters. But if non-existent, attempt to get
+     * it from localStorage. If none, use default values.
+     */
+    function assignConfiguration(){
+      let url = new URL(window.location);
+      let searchParams = new URLSearchParams(url.search);
+
+      if(searchParams.has(qParamLanguage)){
+        language = searchParams.get(qParamLanguage);
+        localStorage.setItem(`${appName}_language`, language);
+      } else {
+        let local_lang = localStorage.getItem(`${appName}_language`);
+        if(local_lang) language = local_lang;
+      }
+
+      if(searchParams.has(qParamEnvironment)){
+        environment = searchParams.get(qParamEnvironment);
+        localStorage.setItem(`${appName}_environment`, environment);
+      } else {
+        let local_env = localStorage.getItem(`${appName}_environment`);
+        if(local_env) environment = local_env;
+      }
+    }
+
+    // After page loads...
+    window.addEventListener('load', (event) => {
+      assignConfiguration();
+      console.log(`environment: ${environment}`);
+      console.log(`language: ${language}`);
+
+      setupGenesysClients()
+      .then(() => { 
+        // Display values to the page
+        document.getElementById('span_environment').innerText = environment;
+        document.getElementById('span_language').innerText = language;
+        document.getElementById('span_name').innerText = userDetails.name;
+
+        console.log('Finished setup.');
+      })
+    });
+  </script>
 </head>
 <body>
-    <h1 id="txtIncomingCall"></h1>
-    <div>
-        <div id="txtName" class="floating field-title"></div>
-        <div id="callerName" class="floating field-value"></div>   
-    </div>
-    <div>
-        <div id="txtNumber" class="floating field-title"></div>
-        <div id="callerNumber" class="floating field-value"></div>   
-    </div>
-    <div>
-        <div id="txtStateInfo" class="floating field-title"></div>
-        <div id="callerArea" class="floating field-value"></div>   
-    </div>
+  <section class="section">
+    <h1 class="title is-3s">Hi <span id="span_name"></span>!</h1>
+    <p>Here are some awesome references to explore:</p>
+    <ul>
+      <li><a href="https://developer.mypurecloud.com/api/client-apps/">Client Apps</a></li>
+      <li><a href="https://developer.mypurecloud.com/api/client-apps/sdk/">Client App SDK</a></li>
+      <li><a href="https://github.com/MyPureCloud/client-app-sdk">Github repo with more examples.</a></li>
+    </ul>
+    <hr>
+    <p><em>Environment:&nbsp;<span id="span_environment"></span> </em></p>
+    <p><em>Language:&nbsp;<span id="span_language"></span> </em></p>
+  </section>
 
-    <script type="module">
-        import clientApp from './client_app.js';
-
-        var queryString = window.location.search.substring(1);
-        var pairs = queryString.split('&');
-        var langTag = null;
-        var pcEnv = null;
-        for (var i = 0; i < pairs.length; i++)
-        {
-            var currParam = pairs[i].split('=');
-            if(currParam[0] === 'langTag') {
-                langTag = currParam[1];
-            } else if(currParam[0] === 'pcEnvironment') {
-                pcEnv = currParam[1];
-            } else if(currParam[0] === 'environment' && pcEnv === null) {
-                pcEnv = currParam[1];
-            }
-
-            if (langTag !== null) {
-                $.getJSON('./language.json', function(data) {
-                    $("#txtIncomingCall").text("\u260E " + data[langTag].IncomingCall);
-                    $("#txtName").text(data[langTag].Name + ": ");
-                    $("#txtNumber").text(data[langTag].Number + ": ");
-                    $("#txtStateInfo").text(data[langTag].StateInfo + ": ");
-                });
-            }
-        }
-
-        if(langTag === null){
-            $.getJSON('./language.json', function(data) {
-                $("#txtIncomingCall").text("\u260E " + data["en-us"].IncomingCall);
-                $("#txtName").text(data["en-us"].Name + ": ");
-                $("#txtNumber").text(data["en-us"].Number + ": ");
-                $("#txtStateInfo").text(data["en-us"].StateInfo + ": ");
-            });
-        }
-        
-        clientApp.setup(pcEnv, langTag, "index.html");
-        clientApp.genesysCloudClientApi = new window.purecloud.apps.ClientApp();
-    </script>
-</body> 
+</body>
 </html>

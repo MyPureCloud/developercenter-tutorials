@@ -1,0 +1,68 @@
+---
+title: Real-Time Queue Observation Query
+description: Use Notification API with Analytics API to retrieve real-time observation metrics
+categories:
+- Analytics
+- Notification
+steps:
+- title: Introduction
+  content: |
+    Analytics API allows you to retrieve real-time and historical data from Genesys Cloud. This data can be viewed at three different levels of granularity: detail records, aggregate metrics and instantaneous observations. 
+    
+    We are going to cover the instantaneous perspective in this tutorial. To learn more about other analytics perspectives, visit [Analytics Overview](/api/rest/v2/analytics/overview.html). 
+    
+    Instantaneous observations metrics are pertinent data right now, no time intervals, no lagging indicators (e.g. averages), no coarser views of the world. This metrics is useful for applications that displays real-time changes of data or activity in Genesys Cloud. To allow real-time data query, we will also use Genesys Cloud [Notification API](/api/rest/v2/notifications/).
+
+- title: Authentication
+  content: |
+    First step is to authenticate with Genesys Cloud using OAuth Client Credential grant. 
+
+- title: Create a Notification Channel
+  content: |
+    Set up a notification channel and subscribe to the topic `{"id": "v2.routing.queues.{ queueID }.conversations"}`, then establish a persistent connection using a websocket. The application will now be able to detect any inbound or outbound interaction within the specified queue. 
+    
+    Each time an interaction message is received, the notification payload will be parsed to a JSON data. 
+    It is then checked if one of the participants in the array of data has a key value pair of `"purpose":"customer"`. 
+    If a value matches, the application will call the observation query function. 
+
+- title: Analytics Queue Observation Query
+  content: |
+    As previously discussed, the queue observation query is used to retrieve real-time snapshots of data in a queue in Genesys Cloud. 
+    If a customer interaction is detected, the function to display the observation metrics will be called, thus, providing real-time 
+    view of what is the current update in the given queue. To retrieve the data impertinent to the organizations' needs, 
+    the request payload must be supplied with the following information:      
+    
+      *filter - Filters the observation data by providing boolean logical predicates. Multiple queue data can be retrieved in one query, but for this sample tutorial, only one is supplied. 
+
+      *metrics - Only retrieves the metrics provided in the query. If omitted, all metrics available will be returned. The metrics observed for this tutorial is ` oUserRoutingStatuses`, this metric will provide the count of members per routing status in the given queue. Any routing status with zero count will be omitted. 
+      
+      *detailMetrics - Metrics in which to include additional detailed information. This query will get a detailed metric of all the current interactions, and for this tutorial the ` oInteracting` metric is provided, which will allow the retrieval of detailed data on current interactions.  
+    
+    Check out useful links below for more details: 
+    
+      *[Metrics](/api/rest/v2/analytics/metrics.html) 
+    
+      *[User Observation](/api/rest/v2/analytics/user_observation.html).
+
+- title: Response Data
+  content: |
+    In the response data, all the routing status of the agents in the queue has been listed down. The snapshot data shows that there are two current interactions, one idle and three off queue agents in the queue.
+    
+    After the routing status data, is the detailed metrics of the interactions. The two interactions are provided with more details such as conversation ID, session ID and more.
+    
+    To learn more about Analytics API, visit this [link](/api/rest/v2/analytics/index.html) or watch this [DevCast video](https://www.youtube.com/watch?v=K0K70FWOR4U&list=PL4anLPM52HBCRXF-OjTd66u0DsZUPMXVX&index=4&t=0s).
+
+languages: 
+  python:
+    displayName: Python
+    steps:
+    - file: "python/index.py"
+      highlight: "0-104"
+    - file: "python/index.py"
+      highlight: "17-28"
+    - file: "python/index.py"
+      highlight: "36-73"
+    - file: "python/index.py"
+      highlight: "75-101"
+    - file: "python/response.json"
+      highlight: "0-128"

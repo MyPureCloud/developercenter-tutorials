@@ -1,6 +1,8 @@
 const rrulestr = require('rrule').rrulestr;
 const moment = require('moment');
-const genesysCloud = require('purecloud-platform-client-v2');
+const platformClient = require('purecloud-platform-client-v2');
+const client = platformClient.ApiClient.instance;
+
 
 function isCurrentlyInSchedule(schedule) {
 	var rule = rrulestr('RRULE:' + schedule.rrule);
@@ -22,8 +24,9 @@ function isCurrentlyInSchedule(schedule) {
 	return moment().isBetween(start, end);
 }
 
+
 function evaluateScheduleGroup(scheduleGroup) {
-	let architectApi = new genesysCloud.ArchitectApi();
+	let architectApi = new platformClient.ArchitectApi();
 
 	let openSchedulePromises = [];
 	let closedSchedulePromises = [];
@@ -62,15 +65,20 @@ function evaluateScheduleGroup(scheduleGroup) {
 		.catch(console.log);
 }
 
-let clientSecret = process.env.GENESYS_CLOUD_CLIENT_SECRET;
-let clientId = process.env.GENESYS_CLOUD_CLIENT_ID;
 
-var client = genesysCloud.ApiClient.instance;
+// Get client credentials from environment variables
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 client
-	.loginClientCredentialsGrant(clientId, clientSecret)
+	.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 	.then(() => {
-		var architectApi = new genesysCloud.ArchitectApi();
+		var architectApi = new platformClient.ArchitectApi();
 
 		const IVR_NAME = 'Queue 1';
 		architectApi

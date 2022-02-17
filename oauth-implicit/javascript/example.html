@@ -3,6 +3,13 @@
     <title>Public Client Flow</title>
     <script src='//code.jquery.com/jquery-1.11.2.min.js'></script>
     <script>
+    // Implicit grant credentials
+    const CLIENT_ID = '--- Implicit Grant Client ID ---';
+
+    // Genesys Cloud environment
+    const ENVIRONMENT = 'mypurecloud.com';
+    
+    
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
@@ -15,7 +22,7 @@
         var token = getParameterByName('access_token');
 
         $.ajax({
-            url: "https://api.mypurecloud.com/api/v2/users/me",
+            url: `https://api.${ENVIRONMENT}/api/v2/users/me`,
             type: "GET",
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'bearer ' + token);},
             success: function(data) {
@@ -28,11 +35,11 @@
     } else {
         var queryStringData = {
             response_type : "token",
-            client_id : "bfadf7a0-3364-4f65-9fda-00d37877113f",
+            client_id : CLIENT_ID,
             redirect_uri : "http://localhost:8085/oauth2/callback"
         }
 
-        window.location.replace("https://login.mypurecloud.com/oauth/authorize?" + jQuery.param(queryStringData));
+        window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
     }
     </script>
 </head>

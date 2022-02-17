@@ -8,11 +8,11 @@ steps:
   content: |
     This tutorial walks through the steps to download recordings in bulk within a given date interval.
     For this tutorial, Genesys Cloud SDK will be used.
-- title: Input
+- title: Authorization
   content: |
-    For this tutorial, the user will be asked to input the credentials through a simple console input.
+    For this tutorial, the user should replace the variables for Client ID and Client Secret.
 
-    The user will be also asked for the date interval of the recordings. Please take note of the format for the date input (YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss)
+    Dates are also predefined in the dates variable. User can modify it to their desired date.  Please take note of the format for the date input YYYY-MM-DDThh:mm:ss/YYYY-MM-DDThh:mm:ss.
 - title: Configure SDK Settings
   content: |
     Next is the configuration of SDK setting by providing an access token which will be used in processing API calls.
@@ -24,18 +24,18 @@ steps:
     Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
 
     For this tutorial, Client Credentials Grant Type will be used as user context is not needed in acquiring the desired information
-    More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
+    More information about OAuth and Authorization could be found in the [documentation](/api/rest/authorization/).
 
 - title: Instantiate APIs
   content: |
     Instance of Conversation API and Recording API will be created and will be passed to methods that will request for the batch download.
 
     To get the recordings, separated functions were created
-    * Get Conversation IDs within a date interval.
-    * Use the Conversation IDs and and Recording IDs and request a batch download for the conversations.
-    * Get all conversations with recordings.
-    * Determine the file extension to be used depending on the contenttype.
-    * Download recordings in a directory.
+    * Get Conversation IDs within a date interval
+    * Use the Conversation IDs and and Recording IDs and request a batch download for the conversations
+    * Get all conversations with recordings
+    * Determine the file extension to be used depending on the contenttype
+    * Download recordings
 
 - title: Get Conversation IDs
   content: |
@@ -45,8 +45,11 @@ steps:
 
     The function should return the Conversation ID of the conversation which will be used in requesting the batch download of the recordings.
 
-    * The postAnalyticsConversationsDetailsQuery function accepts a search interval that does not exceed 7 days.
-    * The postAnalyticsConversationsDetailsQuery function has a default to return 25 conversations. Use the `paging` property to customize the `pageSize` and the `pageNumber`.
+    Starting December 9, 2020, [POST /api/v2/analytics/conversations/details/query](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-query) will allow querying for interval start dates up to 35 days in the past (including today) and will return a maximum of 10,000 records per query.
+
+    * The [POST /api/v2/analytics/conversations/details/query](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-query) function accepts a search interval that does not exceed 7 days.
+    * We recommend using the [POST /api/v2/analytics/conversations/details/jobs](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-jobs) for any historical queries.
+    * The [POST /api/v2/analytics/conversations/details/query](/api/rest/v2/analytics/#post-api-v2-analytics-conversations-details-query) function has a default to return 25 conversations. Use the `paging` property to customize the `pageSize` and the `pageNumber`.
       * pageSize - How many results per page
       * pageNumber - How many pages in
 
@@ -59,6 +62,7 @@ steps:
       }
     }
     ```
+
 - title: Request Batch Recordings Download
   content: |
     Create a function that will get all recordings of the conversations.
@@ -75,67 +79,69 @@ steps:
   content: |
     Create a function that will download each conversation recordings and save it in a directory.
 
+    Take note that archived recordings will only display error message and will not be downloaded.
+
 languages:
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-146"
+      highlight: "0-156"
     - file: "nodejs/index.js"
-      highlight: "17"
+      highlight: "16-23"
     - file: "nodejs/index.js"
-      highlight: "18-19"
+      highlight: "21-23"
     - file: "nodejs/index.js"
-      highlight: "18-19"
+      highlight: "25-26"
     - file: "nodejs/index.js"
-      highlight: "11-12"
+      highlight: "12-14"
     - file: "nodejs/index.js"
-      highlight: "25-36"
+      highlight: "37-77"
     - file: "nodejs/index.js"
-      highlight: "76-94"
+      highlight: "79-96"
     - file: "nodejs/index.js"
-      highlight: "112-120"
+      highlight: "124-140"
     - file: "nodejs/index.js"
-      highlight: "122-145"
+      highlight: "142-156"
   csharp:
     displayName: C#
     steps:
     - file: "csharp/Program.cs"
-      highlight: "0-214"
+      highlight: "0-177"
     - file: "csharp/Program.cs"
-      highlight: "24-32"
+      highlight: "44-58"
     - file: "csharp/Program.cs"
-      highlight: "36-38"
+      highlight: "56-58"
     - file: "csharp/Program.cs"
-      highlight: "200-212"
+      highlight: "56-58"
     - file: "csharp/Program.cs"
-      highlight: "40-41"
+      highlight: "60-62"
     - file: "csharp/Program.cs"
-      highlight: "48-51"
+      highlight: "67-90"
     - file: "csharp/Program.cs"
-      highlight: "103-122"
+      highlight: "92-130"
     - file: "csharp/Program.cs"
-      highlight: "147-160"
+      highlight: "159-175"
     - file: "csharp/Program.cs"
-      highlight: "162-197"
+      highlight: "132-157"
   java:
     displayName: Java
     steps:
     - file: "java/src/main/java/Main.java"
-      highlight: "0-185"
+      highlight: "0-187"
     - file: "java/src/main/java/Main.java"
-      highlight: "31-40"
+      highlight: "35-39"
     - file: "java/src/main/java/Main.java"
-      highlight: "42-55"
+      highlight: "41-42"
     - file: "java/src/main/java/Main.java"
-      highlight: "42-55"
+      highlight: "44-53"
     - file: "java/src/main/java/Main.java"
-      highlight: "57-59"
+      highlight: "58-60"
     - file: "java/src/main/java/Main.java"
-      highlight: "62-75"
+      highlight: "63-77"
     - file: "java/src/main/java/Main.java"
-      highlight: "107-126"
+      highlight: "93-136"
     - file: "java/src/main/java/Main.java"
-      highlight: "148-160"
+      highlight: "138-151"
     - file: "java/src/main/java/Main.java"
-      highlight: "162-178"
+      highlight: "153-174"

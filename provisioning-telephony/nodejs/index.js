@@ -1,8 +1,8 @@
-// Import json file that will be used later for creating objects.
+
 const inputTemplate = require('./input-template.json');
-// Set Genesys cloud objects
 const platformClient = require('purecloud-platform-client-v2');
 const client = platformClient.ApiClient.instance;
+
 // Instantiate APIs
 const authorizationApi = new platformClient.AuthorizationApi();
 const telephonyProvidersEdgeApi = new platformClient.TelephonyProvidersEdgeApi();
@@ -13,11 +13,16 @@ let locationInfo = null;
 let siteId = null;
 
 // Get client credentials from environment variables
-const CLIENT_ID = process.env.GENESYS_CLIENT_ID;
-const CLIENT_SECRET = process.env.GENESYS_CLIENT_SECRET;
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 // Authenticate with Genesys cloud
-client.loginClientCredentialsGrant(process.env.GENESYS_CLIENT_ID, process.env.GENESYS_CLIENT_SECRET)
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
     .then(() => {
         console.log('Authentication successful!');
         checkBYOC();
@@ -103,24 +108,23 @@ function createSite(awsItem) {
         name: inputTemplate.site.name, // Ex: My Site Name
         primarySites: [{
             id: awsItem.id,
-            name: awsItem.name,
             selfUri: awsItem.selfUri,
         }],
         secondarySites: [{
             id: awsItem.id,
-            name: awsItem.name,
             selfUri: awsItem.selfUri,
         }],
         edgeAutoUpdateConfig: {
             timeZone: inputTemplate.site.timeZone, // Ex: America/New_York
             rrule: 'FREQ=DAILY',
             start: startTime,   // Start and end date time is represented as an ISO-8601 string without a timezone. 
-            end: endTime        // example: yyyy-MM-ddTHH:mm:ss.SSS
+            end: endTime        // Example: yyyy-MM-ddTHH:mm:ss.SSS
         },
         location: locationInfo,
         ntpSettings: {
             servers: [],
         },
+        mediaModel: "Cloud" // Allowable values are: Premises, Cloud
     };
 
     telephonyProvidersEdgeApi.postTelephonyProvidersEdgesSites(body)

@@ -39,67 +39,52 @@ steps:
     An alternative to this approach would be when the my_info.html page was requested, the web server could have made the request and automatically put the users information in the page that was sent back.
 
 languages:
-  ruby:
-    displayName: Ruby
-    steps:
-    - file: "ruby/server.rb"
-      highlight: "0-100"
-    - file: "ruby/server.rb"
-      highlight: "1-13"
-    - file: "ruby/server.rb"
-      highlight: "24-45"
-    - file: "ruby/server.rb"
-      highlight: "53-70"
-    - file: "ruby/my_info.html"
-      highlight: "8-16"
-    - file: "ruby/server.rb"
-      highlight: "72-77"
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/server.js"
       highlight: "0-150"
     - file: "nodejs/server.js"
-      highlight: "108-109"
+      highlight: "114-116"
     - file: "nodejs/server.js"
-      highlight: "13-33"
+      highlight: "15-40"
     - file: "nodejs/server.js"
-      highlight: "46-86"
+      highlight: "54-90"
     - file: "nodejs/my_info.html"
       highlight: "8-16"
     - file: "nodejs/server.js"
-      highlight: "89-106"
+      highlight: "92-112"
   csharp:
     displayName: ASP.NET
     steps:
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "0-95"
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "16-16"
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "44-49"
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "59-73"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "1-102"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "1-102"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "39-51"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "62-75"
       note: The ASP.NET example does not redirect the user after this step. Instead, the user remains on the main page.
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "75-81"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "77-82"
       note: The ASP.NET example is not using cookies and instead sets the Authorization header with the bearer token. This request is made server-side, but could be made client-side using JavaScript.
-    - file: "csharp/authorization_code_aspdotnet/Controllers/HomeController.cs"
-      highlight: "75-81"
+    - file: "csharp/Controllers/HomeController.cs"
+      highlight: "77-82"
   python:
     displayName: Python
     steps:
     - file: "python/server.py"
       highlight: "0-166"
     - file: "python/server.py"
-      highlight: "98-133"
+      highlight: "154-166"
     - file: "python/server.py"
-      highlight: "124-133"
+      highlight: "83-126"
     - file: "python/server.py"
-      highlight: "28-94"
+      highlight: "129-151"
       note: The python example does not use cookies to track sessions and instead generates a random GUID to identify the session between the browser and the python server. This GUID is passed back and forth in the sessionKey query string parameter.
     - file: "python/my_info.html"
       highlight: "19-29"
       note: The python example does not use cookies and instead makes use of the sessionKey GUID created in the previous step.
     - file: "python/server.py"
-      highlight: "12-26"
+      highlight: "66-80"

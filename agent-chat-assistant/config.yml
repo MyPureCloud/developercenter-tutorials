@@ -16,7 +16,7 @@ steps:
   content: |
     Start by making a POST call to https://login.mypurecloud.com/oauth/token to request a token. Some SDKs will include helper functions to obtain the token using the Client ID and Client Secret, while on other SDKs, the HTTP Request and Response needs to be manually handled to obtain the token.
     
-    For this tutorial, Implicit Grant Type will be used as user context is not needed in acquiring the desired information.
+    For this tutorial, Implicit Grant Type will be used as user context is needed in acquiring the desired information.
     
     More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
 - title: Instantiate APIs
@@ -63,6 +63,12 @@ steps:
     This handles the logic when an agent has existing chat interaction/s when the app loads.
     
     This calls the getConversationsChats function of the Conversations API to get the conversation details. Then adds a subscription to the topic `v2.conversations.chats.${conversationId}.messages`. And finally calls the populateActiveChatList to display the current customer interactions as tabs.
+- title: index.html file
+  content: /
+    This is the HTML file used in this tutorial
+- title: style.css file
+  content: /
+    All CSS styles used in the HTML file
 - title: view.js file
   content: |
     All HTML related codes are placed in this JavaScript module.
@@ -74,36 +80,40 @@ languages:
     displayName: JavaScript
     steps:
     - file: "javascript/scripts/main.js"
-      highlight: "0-324"
+      highlight: "0-326"
     - file: "javascript/scripts/main.js"
-      highlight: "300-302"
+      highlight: "305-306"
     - file: "javascript/scripts/main.js"
-      highlight: "300-302"
+      highlight: "307-309"
     - file: "javascript/scripts/main.js"
-      highlight: "9-12"
+      highlight: "13-16"
     - file: "javascript/scripts/main.js"
-      highlight: "306-312"
+      highlight: "311-312"
     - file: "javascript/scripts/main.js"
-      highlight: "215-222"
+      highlight: "216-226"
     - file: "javascript/scripts/main.js"
-      highlight: "196-210"
+      highlight: "196-214"
     - file: "javascript/scripts/main.js"
-      highlight: "219-220"
+      highlight: "223-224"
     - file: "javascript/scripts/main.js"
-      highlight: "229-278"
+      highlight: "228-282"
     - file: "javascript/scripts/main.js"
-      highlight: "247-262"
+      highlight: "250-266"
     - file: "javascript/scripts/main.js"
-      highlight: "266-268"
+      highlight: "268-272"
     - file: "javascript/scripts/main.js"
-      highlight: "75-112"
+      highlight: "75-116"
     - file: "javascript/scripts/main.js"
-      highlight: "118-128"
+      highlight: "118-132"
     - file: "javascript/scripts/main.js"
-      highlight: "271-277"
+      highlight: "274-281"
     - file: "javascript/scripts/main.js"
-      highlight: "161-185"
+      highlight: "160-189"
+    - file: "javascript/index.html"
+      highlight: "1-43"
+    - file: "javascript/styles/style.css"
+      highlight: "1-103"
     - file: "javascript/scripts/view.js"
-      highlight: "0"
+      highlight: "1-214"
     - file: "javascript/scripts/agent-assistant-service.js"
-      highlight: "0"
+      highlight: "1-53"

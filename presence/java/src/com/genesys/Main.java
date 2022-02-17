@@ -1,34 +1,48 @@
-package com.genesys;
-
 import com.mypurecloud.sdk.v2.ApiClient;
 import com.mypurecloud.sdk.v2.Configuration;
 import com.mypurecloud.sdk.v2.api.PresenceApi;
 import com.mypurecloud.sdk.v2.api.UsersApi;
+import com.mypurecloud.sdk.v2.PureCloudRegionHosts;
 import com.mypurecloud.sdk.v2.api.request.GetPresencedefinitionsRequest;
-import com.mypurecloud.sdk.v2.model.*;
+import com.mypurecloud.sdk.v2.model.User;
+import com.mypurecloud.sdk.v2.model.OrganizationPresenceEntityListing;
+import com.mypurecloud.sdk.v2.model.PresenceDefinition;
+import com.mypurecloud.sdk.v2.model.OrganizationPresence;
+import com.mypurecloud.sdk.v2.model.UserPresence;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class Main {
+public class Presence {
 
     public static void main(String[] args) {
         try {
-            // Configure SDK settings
-            String accessToken = "nzdoJHtTSLVB9GRiBFddTDqQWa7NgvYrU_CNnr3AK7mMYChBNu2vqnpwFipLErCQgH4Wh5lJZb09NnSddV8TEg";
-            Configuration.setDefaultApiClient(ApiClient.Builder.standard()
-                    .withAccessToken(accessToken)
-                    .withBasePath("https://api.mypurecloud.com")
-                    .build());
+            // Define your OAuth client credentials
+            final String clientId = System.getenv("GENESYS_CLOUD_CLIENT_ID");
+            final String clientSecret = System.getenv("GENESYS_CLOUD_CLIENT_SECRET");
+            // orgRegion value example: us_east_1
+            final String orgRegion = System.getenv("GENESYS_CLOUD_REGION");
+
+            // User ID to use
+            final String userId = " --- USER ID HERE ---";
+
+            // Set Region
+            PureCloudRegionHosts region = PureCloudRegionHosts.valueOf(orgRegion);
+
+            ApiClient apiClient = ApiClient.Builder.standard().withBasePath(region).build();
+            apiClient.authorizeClientCredentials(clientId, clientSecret);
+
+            Configuration.setDefaultApiClient(apiClient);
 
             // Instantiate APIs
             UsersApi usersApi = new UsersApi();
             PresenceApi presenceApi = new PresenceApi();
 
-            // Validate token with GET /api/v2/users/me (throws an exception if unauthorized)
-            UserMe me = usersApi.getUsersMe(Arrays.asList("presence"));
-            System.out.println("Hello " + me.getName());
+            // Validate token with GET /api/v2/user (throws an exception if unauthorized)
+            // (userId, Arrays.asList("presence"), null);
+            User user = usersApi.getUser(userId, Arrays.asList("presence"), null, "active");
+            System.out.println("Hello " + user.getName());
 
             // Get presences
             GetPresencedefinitionsRequest presencedefinitionsRequest = GetPresencedefinitionsRequest.builder()
@@ -71,7 +85,7 @@ public class Main {
             // Set presence to Available
             UserPresence body = new UserPresence();
             body.setPresenceDefinition(availablePresence);
-            UserPresence presenceResponse = presenceApi.patchUserPresence(me.getId(), "PURECLOUD", body);
+            UserPresence presenceResponse = presenceApi.patchUserPresence(user.getId(), "PURECLOUD", body);
 
             // Wait for user input
             System.out.print("Press enter to set status to break");
@@ -80,7 +94,7 @@ public class Main {
             // Set presence to Available
             body = new UserPresence();
             body.setPresenceDefinition(breakPresence);
-            presenceResponse = presenceApi.patchUserPresence(me.getId(), "PURECLOUD", body);
+            presenceResponse = presenceApi.patchUserPresence(user.getId(), "PURECLOUD", body);
 
             System.out.print("Application complete");
         } catch (Exception e) {

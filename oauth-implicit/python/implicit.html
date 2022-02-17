@@ -6,6 +6,13 @@
   <script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
   <script>
+  // Implicit grant credentials
+  const CLIENT_ID = '--- Implicit Grant Client ID ---';
+
+  // Genesys Cloud environment
+  const ENVIRONMENT = 'mypurecloud.com';
+
+
   function getParameterByName(name) {
       name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
       var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
@@ -28,11 +35,11 @@
     } else {
         var queryStringData = {
             response_type : "token",
-            client_id : "babbc081-0761-4f16-8f56-071aa402ebcb",
+            client_id : CLIENT_ID,
             redirect_uri : "http://localhost:8080/"
         }
 
-        window.location.replace("https://login.mypurecloud.com/oauth/authorize?" + jQuery.param(queryStringData));
+        window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
     }
   </script>
 </head>

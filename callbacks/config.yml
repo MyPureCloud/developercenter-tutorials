@@ -17,37 +17,26 @@ steps:
 - title: Create the callback
   content: |
     Lastly, make the call to the [ConversationsApi.postConversationsCallbacks()](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/ConversationsApi.html#postConversationsCallbacks) function to create the callback. The `CreateCallbackResponse` that is returned on success will contain the conversation id for the callback.
-languages: 
-  ruby:
-    displayName: Ruby
-    steps:
-    - file: "ruby/script.rb"
-      highlight: "0-100"
-    - file: "ruby/script.rb"
-      highlight: "3-6"
-    - file: "ruby/script.rb"
-      highlight: "9-19"
-    - file: "ruby/script.rb"
-      highlight: "22-23"          
+languages:          
   nodejs:
     displayName: NodeJS
     steps:
     - file: "nodejs/index.js"
-      highlight: "0-41"
+      highlight: "0-45"
     - file: "nodejs/index.js"
-      highlight: "4-16"
+      highlight: "3-17"
     - file: "nodejs/index.js"
-      highlight: "20-33"
+      highlight: "21-36"
     - file: "nodejs/index.js"
-      highlight: "35-40"
+      highlight: "38-42"
   python:
     displayName: Python
     steps:
     - file: "python/callbacks.py"
-      highlight: "0-32"
+      highlight: "0-44"
     - file: "python/callbacks.py"
-      highlight: "10-11"
+      highlight: "10-21"
     - file: "python/callbacks.py"
-      highlight: "16-24"
+      highlight: "26-36"
     - file: "python/callbacks.py"
-      highlight: "26-31"
+      highlight: "38-43"

@@ -1,13 +1,13 @@
 ---
 title: Subscribe to Queue
-description: See how to subscribe to conversation notifications in a queue.
+description: Subscribe to conversation notifications of a particular queue
 categories:
 - Conversations
 - Notifications
 steps:
 - title: Introduction
   content: |
-    This tutorial walks through the steps how to integrate with Genesys Cloud Client App SDK to get notifications on all conversations within a queue. The goal is to step through the cases when handling conversation notification on the API and will skip over authentication.
+    This tutorial walks through the steps on how get conversation notifications of a given queue. 
 
     The main topics that will be covered in the tutorial are the following:
 
@@ -15,13 +15,15 @@ steps:
     * Subscribe to Queue
     * Handle websocket messages
 
+- title: Authenticate with Genesys Cloud
+  content: |
+    The OAuth Client Credentials are retrieved from environment variables and used to authenticate with Genesys Cloud.
+
+    For more information on authorization see this [page](/api/rest/authorization/)
+
 - title: Create a Notification Channel
   content: |
     In order to subscribe to a queue, we need to create a notification channel by calling the postNotificationsChannels() method of the Notifications API.
-
-- title: Store Channel ID for Future Use
-  content: |
-    After calling the postNotificationsChannels() method, we will then store the Channel ID returned by the method to be able to use it in the postNotificationsChannelSubscriptions() method call.
 
 - title: Subscribe to Queue
   content: |
@@ -40,16 +42,16 @@ steps:
     Once the Topic ID has been validated, we can now proceed in consuming the conversation details however the app needs us to do.      
 
 languages: 
-  javascript:
-    displayName: Javascript
+  nodejs:
+    displayName: NodeJS
     steps:
-    - file: "javascript/client_app.js"
-      highlight: "0-536"               
-    - file: "javascript/client_app.js"
-      highlight: "37-37"
-    - file: "javascript/client_app.js"
-      highlight: "40-40"
-    - file: "javascript/client_app.js"
-      highlight: "137-142"
-    - file: "javascript/client_app.js"
-      highlight: "251-265"
+    - file: "nodejs/main.js"
+      highlight: "1-100"               
+    - file: "nodejs/main.js"
+      highlight: "62-69"
+    - file: "nodejs/main.js"
+      highlight: "71-74"
+    - file: "nodejs/main.js"
+      highlight: "76-85"
+    - file: "nodejs/main.js"
+      highlight: "23-53"

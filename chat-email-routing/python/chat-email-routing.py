@@ -16,12 +16,22 @@ print("-------------------------------------------------------------")
 QUEUE_ID = "QUEUE_ID"
 PROVIDER_NAME = "Developer Center Tutorial"
 
+# Credentials
+CLIENT_ID = os.environ['GENESYS_CLOUD_CLIENT_ID']
+CLIENT_SECRET = os.environ['GENESYS_CLOUD_CLIENT_SECRET']
+ORG_REGION = os.environ['GENESYS_CLOUD_REGION']  # eg. us_east_1
+
+# Set environment
+region = PureCloudPlatformClientV2.PureCloudRegionHosts[ORG_REGION]
+PureCloudPlatformClientV2.configuration.host = region.get_api_host()
+
 # OAuth when using Client Credentials
-apiclient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(os.environ['GENSYS_CLOUD_CLIENT_ID'], os.environ['GENSYS_CLOUD_CLIENT_SECRET'])
+api_client = PureCloudPlatformClientV2.api_client.ApiClient() \
+            .get_client_credentials_token(CLIENT_ID, CLIENT_SECRET)
 
 # Set Genesys Cloud Objects
-notifications_api = PureCloudPlatformClientV2.NotificationsApi(apiclient)
-conversations_api = PureCloudPlatformClientV2.ConversationsApi(apiclient)
+notifications_api = PureCloudPlatformClientV2.NotificationsApi(api_client)
+conversations_api = PureCloudPlatformClientV2.ConversationsApi(api_client)
 
 try:
     # Create a new channel

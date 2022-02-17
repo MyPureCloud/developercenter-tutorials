@@ -1,0 +1,251 @@
+{
+    "organizationId": "12345abc-1234-123a-5678-abc123xyz",
+    "conversationId": "12345abc-1234-123a-5678-abc123xyz",
+    "communicationId": "12345abc-1234-123a-5678-abc123xyz",
+    "transcripts": [
+      {
+        "transcriptId": "12345abc-1234-123a-5678-abc123xyz",
+        "language": "en-US",
+        "programId": "",
+        "startTime": 1610679598066,
+        "duration": {
+          "milliseconds": 42000
+        },
+        "phrases": [
+          {
+            "text": "hello Jane Doe",
+            "stability": 1,
+            "startTimeMs": 1610679608966,
+            "duration": {
+              "milliseconds": 3600
+            },
+            "words": [
+              {
+                "word": "hello",
+                "confidence": 0.69,
+                "startTimeMs": 1610679609256,
+                "duration": {
+                  "milliseconds": 1000
+                }
+              },
+              {
+                "word": "Jane",
+                "confidence": 0.7,
+                "startTimeMs": 1610679611486,
+                "duration": {
+                  "milliseconds": 330
+                }
+              },
+              {
+                "word": "Doe",
+                "confidence": 0.78,
+                "startTimeMs": 1610679612216,
+                "duration": {
+                  "milliseconds": 240
+                }
+              }
+            ],
+            "alternatives": [],
+            "participantPurpose": "internal"
+          },
+          {
+            "text": "how are you",
+            "stability": 1,
+            "startTimeMs": 1610679614466,
+            "duration": {
+              "milliseconds": 900
+            },
+            "words": [
+              {
+                "word": "how",
+                "confidence": 0.93,
+                "startTimeMs": 1610679614466,
+                "duration": {
+                  "milliseconds": 90
+                }
+              },
+              {
+                "word": "are",
+                "confidence": 0.93,
+                "startTimeMs": 1610679614556,
+                "duration": {
+                  "milliseconds": 360
+                }
+              },
+              {
+                "word": "you",
+                "confidence": 0.39,
+                "startTimeMs": 1610679615166,
+                "duration": {
+                  "milliseconds": 140
+                }
+              }
+            ],
+            "alternatives": [],
+            "participantPurpose": "internal"
+          },
+          {
+            "text": "i'm fine how about you",
+            "stability": 1,
+            "startTimeMs": 1610679614866,
+            "duration": {
+              "milliseconds": 2000
+            },
+            "words": [
+              {
+                "word": "i'm",
+                "confidence": 0.78,
+                "startTimeMs": 1610679614906,
+                "duration": {
+                  "milliseconds": 150
+                }
+              },
+              {
+                "word": "fine",
+                "confidence": 0.63,
+                "startTimeMs": 1610679615056,
+                "duration": {
+                  "milliseconds": 370
+                }
+              },
+              {
+                "word": "how",
+                "confidence": 0.59,
+                "startTimeMs": 1610679615666,
+                "duration": {
+                  "milliseconds": 300
+                }
+              },
+              {
+                "word": "about",
+                "confidence": 0.84,
+                "startTimeMs": 1610679616126,
+                "duration": {
+                  "milliseconds": 340
+                }
+              },
+              {
+                "word": "you",
+                "confidence": 0.81,
+                "startTimeMs": 1610679616546,
+                "duration": {
+                  "milliseconds": 290
+                }
+              }
+            ],
+            "alternatives": [],
+            "participantPurpose": "external"
+          },
+          {
+            "text": "okay",
+            "stability": 1,
+            "startTimeMs": 1610679615766,
+            "duration": {
+              "milliseconds": 600
+            },
+            "words": [
+              {
+                "word": "okay",
+                "confidence": 0.81,
+                "startTimeMs": 1610679615766,
+                "duration": {
+                  "milliseconds": 570
+                }
+              }
+            ],
+            "alternatives": [],
+            "participantPurpose": "internal"
+          },
+          {
+            "text": "thank you goodbye",
+            "stability": 1,
+            "startTimeMs": 1610679647566,
+            "duration": {
+              "milliseconds": 1400
+            },
+            "words": [
+              {
+                "word": "thank",
+                "confidence": 1,
+                "startTimeMs": 1610679647566,
+                "duration": {
+                  "milliseconds": 350
+                }
+              },
+              {
+                "word": "you",
+                "confidence": 1,
+                "startTimeMs": 1610679647916,
+                "duration": {
+                  "milliseconds": 280
+                }
+              },
+              {
+                "word": "goodbye",
+                "confidence": 0.54,
+                "startTimeMs": 1610679648386,
+                "duration": {
+                  "milliseconds": 400
+                }
+              }
+            ],
+            "alternatives": [],
+            "participantPurpose": "internal"
+          },
+        ],
+        "analytics": {
+          "sentiment": []
+        }
+      }
+    ],
+    "participants": [
+      {
+        "participantPurpose": "customer",
+        "initialDirection": "inbound",
+        "queueId": "a6f03f8d-bb75-4bcf-8304-2d73a0f21572",
+        "divisionId": "0edd806a-1a02-45f9-bc3a-32f430151b65",
+        "ani": "tel:+163288406444",
+        "dnis": "tel:+18443572040",
+        "startTimeMs": 1610679597477,
+        "endTimeMs": 1610679650389
+      },
+      {
+        "participantPurpose": "ivr",
+        "initialDirection": "inbound",
+        "flowId": "3901d79a-4148-4921-af03-24deaa0d0c71",
+        "divisionId": "0edd806a-1a02-45f9-bc3a-32f430151b65",
+        "ani": "tel:+163288406444",
+        "dnis": "tel:+18443572040",
+        "startTimeMs": 1610679597375,
+        "endTimeMs": 1610679608178
+      },
+      {
+        "participantPurpose": "acd",
+        "initialDirection": "inbound",
+        "queueId": "a6f03f8d-bb75-4bcf-8304-2d73a0f21572",
+        "divisionId": "0edd806a-1a02-45f9-bc3a-32f430151b65",
+        "ani": "tel:+163288406444",
+        "dnis": "tel:+18443572040",
+        "startTimeMs": 1610679608191,
+        "endTimeMs": 1610679612014
+      },
+      {
+        "participantPurpose": "agent",
+        "userId": "6ade8ef8-bbc5-4f05-9ad5-31be015fda25",
+        "initialDirection": "inbound",
+        "queueId": "a6f03f8d-bb75-4bcf-8304-2d73a0f21572",
+        "divisionId": "0edd806a-1a02-45f9-bc3a-32f430151b65",
+        "ani": "tel:+163288406444",
+        "dnis": "tel:+18443572040",
+        "startTimeMs": 1610679612011,
+        "endTimeMs": 1610679650388
+      }
+    ],
+    "uri": "/transcript/v1/organizations/03671e89-0883-48b0-8284-cd5260c38745/conversations/74a9811f-9eee-4b75-b53b-2cb4959b90f1/communications/778a72f3-4d31-48fc-8adc-bd52c0939e37",
+    "startTime": 1610679598066,
+    "duration": {
+      "milliseconds": 42000
+    },
+    "mediaType": "call",
+    "conversationStartTime": 1610679597052
+  }

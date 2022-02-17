@@ -1,0 +1,56 @@
+---
+title: Create and Delete External Contacts Schema
+description: Step by step procedure on how to create and delete schema for contact and organization type in external contact.
+categories:
+- Contacts
+steps:
+- title: Introduction
+  content: |
+    This tutorial covers a step by step procedure on how to create and delete custom fields for external contacts.
+
+    For more information about external contacts and organization customization, you can refer to the [Resource Center.](https://help.mypurecloud.com/articles/customize-external-contacts-and-organizations/)
+
+- title: Authenticate with Genesys Cloud
+  content: |
+    The user will be asked to input the client credentials through a console, that will be used to authenticate in Genesys Cloud.
+
+    More information about OAuth and Authorization could be found in the [documentation](https://developer.mypurecloud.com/api/rest/authorization/)
+
+- title: Populate
+  content: |
+    All customizable fields are listed in the body. Corresponding explanation per field is also given. User can choose what fields they want to include in the process.
+
+    Note that the same body is used for creating a schema for custom contact and organization.
+
+- title: Customize Contacts
+  content: |
+    The value of body variable will be passed to customizeContact function and the chosen fields will be created.  
+
+- title: Customize Organization
+  content: |
+    The value of body variable will be passed to customizeOrganization function and the chosen fields will be created. 
+
+- title: Delete Schema
+  content: |
+    Deleting a schema feature is not available in Genesys Cloud. It is a good to know for the users to know how to delete a schema. 
+
+    Schema ID is a required field for this feature.
+
+
+languages:
+  nodejs:
+    displayName: NodeJS
+    steps:
+    - file: "nodejs/index.js"
+      highlight: "0-244"
+    - file: "nodejs/index.js"
+      highlight: "36-37"
+    - file: "nodejs/index.js"
+      highlight: "56-198"
+    - file: "nodejs/index.js"
+      highlight: "202-212"
+    - file: "nodejs/index.js"
+      highlight: "214-225"
+    - file: "nodejs/index.js"
+      highlight: "227-241"
+

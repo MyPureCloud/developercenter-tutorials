@@ -1,21 +1,22 @@
 const platformClient = require('purecloud-platform-client-v2');
 const CSV = require('csv-string');
 const fs = require('fs');
+const client = platformClient.ApiClient.instance;
 
 // Get client credentials from environment variables
-const GENESYS_CLOUD_CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
-const GENESYS_CLOUD_CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const CLIENT_ID = process.env.GENESYS_CLOUD_CLIENT_ID;
+const CLIENT_SECRET = process.env.GENESYS_CLOUD_CLIENT_SECRET;
+const ORG_REGION = process.env.GENESYS_CLOUD_REGION; // eg. us_east_1
+
+// Set environment
+const environment = platformClient.PureCloudRegionHosts[ORG_REGION];
+if(environment) client.setEnvironment(environment);
 
 // Set Genesys Cloud objects
-const client = platformClient.ApiClient.instance;
 const externalContactsApi = new platformClient.ExternalContactsApi();
 
-// Set Genesys Cloud settings
-client.setEnvironment('mypurecloud.com');
-// client.setDebugLog(console.log, 100);
-
 // Authenticate with Genesys Cloud
-client.loginClientCredentialsGrant(GENESYS_CLOUD_CLIENT_ID, GENESYS_CLOUD_CLIENT_SECRET)
+client.loginClientCredentialsGrant(CLIENT_ID, CLIENT_SECRET)
 	.then(() => {
 		console.log('Authenticated with Genesys Cloud');
 

@@ -6,7 +6,10 @@ categories:
 steps:
 - title: Introduction
   content: |
-    Programmatically uploading prompts is done in three steps: 1) creating the prompt object, 2) creating the prompt's resource, and 3) uploading the prompt's media file.
+    Programmatically uploading prompts is done in three steps: 
+      1) Creating the prompt object, 
+      2) Creating the prompt's resource, and 
+      3) Uploading the prompt's media file.
 
 - title: Authenticate with Genesys Cloud
   content: |
@@ -31,23 +34,23 @@ languages:
     - file: "nodejs/index.js"
       highlight: "0-100"
     - file: "nodejs/index.js"
-      highlight: "5-19"
+      highlight: "6-22"
     - file: "nodejs/index.js"
-      highlight: "21-31"
+      highlight: "24-32"
     - file: "nodejs/index.js"
-      highlight: "33-42"
+      highlight: "34-39"
     - file: "nodejs/index.js"
-      highlight: "44-60"
+      highlight: "40-58"
   python:
     displayName: Python
     steps:
     - file: "python/upload-prompts.py"
-      highlight: "0-54"
+      highlight: "0-63"
     - file: "python/upload-prompts.py"
-      highlight: "10-11"
+      highlight: "10-21"
     - file: "python/upload-prompts.py"
-      highlight: "16-27"
+      highlight: "26-37"
     - file: "python/upload-prompts.py"
-      highlight: "29-39"
+      highlight: "39-49"
     - file: "python/upload-prompts.py"
-      highlight: "41-54"
+      highlight: "51-64"
