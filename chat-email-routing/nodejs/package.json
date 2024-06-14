@@ -8,6 +8,6 @@
     "websocket": "^1.0.26"
   },
   "devDependencies": {
-    "nodemon": "^1.17.5"
+    "nodemon": "^3.1.3"
   }
 }
